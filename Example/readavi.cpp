@@ -85,8 +85,11 @@ int ch,n;
   return 0;
 }
 
-static int parse_idx1(FILE *in, int chunk_len)
+static int parse_idx1(void *hdl, FILE *in, int chunk_len)
 {
+	videoobject *mp4 = (videoobject *)hdl;
+	if (mp4 == NULL) return 0;
+
 struct index_entry_t index_entry;
 int t,framenum = 0;
 
@@ -105,18 +108,18 @@ int t,framenum = 0;
 
 	if (0 == strcmp(index_entry.ckid, "00dc") || 0 == strcmp(index_entry.ckid, "00db")) //video frame compressed or baseband
 	{
-		if (metaoffsets)
+		if (mp4->metaoffsets)
 		{
-			metaoffsets[framenum] = movi_offset + 4 + (uint64_t)index_entry.dwChunkOffset;
-			metasizes[framenum] = (uint64_t)index_entry.dwChunkLength;
+			mp4->metaoffsets[framenum] = movi_offset + 4 + (uint64_t)index_entry.dwChunkOffset;
+			mp4->metasizes[framenum] = (uint64_t)index_entry.dwChunkLength;
 			framenum++;
 		}
 	}
 
 
-	indexcount = framenum;
-	trak_clockcount = meta_clockcount = clockcount = indexcount * basemetadataduration;
-	videolength = metadatalength = (float)clockcount / (float)clockdemon;
+	mp4->indexcount = framenum;
+	mp4->trak_clockcount = mp4->meta_clockcount = mp4->clockcount = mp4->indexcount * mp4->basemetadataduration;
+	mp4->videolength = mp4->metadatalength = (float)mp4->clockcount / (float)mp4->clockdemon;
 
 
 #if PRINT_AVI_STRUCTURE
@@ -133,8 +136,11 @@ int t,framenum = 0;
   return 0;
 }
 
-static int read_avi_header(FILE *in,struct avi_header_t *avi_header)
+static int read_avi_header(void *hdl, FILE *in,struct avi_header_t *avi_header)
 {
+  videoobject *mp4 = (videoobject *)hdl;
+  if (mp4 == NULL) return 0;
+
   avi_header->TimeBetweenFrames=read_long(in);
   avi_header->MaximumDataRate=read_long(in);
   avi_header->PaddingGranularity=read_long(in);
@@ -169,14 +175,16 @@ static int read_avi_header(FILE *in,struct avi_header_t *avi_header)
 #endif
 
 
-  indexcount = avi_header->TotalNumberOfFrames;  
-  basemetadataduration = avi_header->TimeBetweenFrames;
-  trak_clockdemon = meta_clockdemon = clockdemon = 1000000;
-  trak_clockcount = meta_clockcount = clockcount = indexcount * basemetadataduration;
-  videolength = metadatalength = (float)clockcount / (float)clockdemon;
 
-  metasizes = (uint32_t *)malloc(indexcount * 4);
-  metaoffsets = (uint64_t *)malloc(indexcount * 8);
+  mp4->indexcount = avi_header->TotalNumberOfFrames;
+  mp4->basemetadataduration = avi_header->TimeBetweenFrames;
+  mp4->trak_clockdemon = mp4->meta_clockdemon = mp4->clockdemon = 1000000;
+  mp4->trak_clockcount = mp4->meta_clockcount = mp4->clockcount = mp4->indexcount * mp4->basemetadataduration;
+  mp4->videolength = mp4->metadatalength = (float)mp4->clockcount / (float)mp4->clockdemon;
+
+  mp4->metasizes = (uint32_t *)malloc(mp4->indexcount * 4);
+  mp4->metasize_count = mp4->indexcount;
+  mp4->metaoffsets = (uint64_t *)malloc(mp4->indexcount * 8);
 
   return 0;
 }
@@ -435,7 +443,7 @@ int stream_type=0;     // 0=video 1=sound
   return 0;
 }
 
-static int parse_hdrl(FILE *in,struct avi_header_t *avi_header, struct stream_header_t *stream_header, struct stream_format_t *stream_format, unsigned int size)
+static int parse_hdrl(void *hdl, FILE *in,struct avi_header_t *avi_header, struct stream_header_t *stream_header, struct stream_format_t *stream_format, unsigned int size)
 {
 char chunk_id[5];
 int chunk_size;
@@ -456,7 +464,7 @@ long offset=ftell(in);
     end_of_chunk=end_of_chunk+(4-(end_of_chunk%4));
   }
 
-  read_avi_header(in,avi_header);
+  read_avi_header(hdl, in,avi_header);
 
 #if PRINT_AVI_STRUCTURE
   printf("      }\n");
@@ -471,8 +479,9 @@ long offset=ftell(in);
   return 0;
 }
 
-static int parse_riff(FILE *in)
+static int parse_riff(void *hdl)
 {
+FILE *in;
 char chunk_id[5];
 int chunk_size;
 char chunk_type[5];
@@ -480,7 +489,15 @@ int end_of_chunk,end_of_subchunk;
 struct avi_header_t avi_header;
 struct stream_header_t stream_header;
 struct stream_format_t stream_format={0};
-long offset=ftell(in);
+long offset;
+
+videoobject *mp4 = (videoobject *)hdl;
+if (mp4 == NULL) return 0;
+
+in = mp4->mediafp;
+offset= ftell(in);
+
+
 
   read_chars(in,chunk_id,4);
   chunk_size=read_long(in);
@@ -546,7 +563,7 @@ long offset=ftell(in);
       else
     if (STRINGCASECOMPARE("hdrl",chunk_type)==0)
     {
-      parse_hdrl(in,&avi_header,&stream_header,&stream_format, chunk_size);
+      parse_hdrl(hdl, in,&avi_header,&stream_header,&stream_format, chunk_size);
       /* skip_chunk(in); */
     }
       else
@@ -567,7 +584,7 @@ long offset=ftell(in);
     if (STRINGCASECOMPARE("idx1",chunk_id)==0)
     {
       fseek(in,ftell(in)-4,SEEK_SET);
-      parse_idx1(in,chunk_size);
+      parse_idx1(hdl, in,chunk_size);
     }
       else
     {
@@ -596,30 +613,28 @@ long offset=ftell(in);
   return 0;
 }
 
-float OpenAVISource(char *filename, uint32_t traktype, uint32_t subtype)
+void *OpenAVISource(char *filename, uint32_t traktype, uint32_t subtype)
 {
-	metasizes = NULL;
-	metaoffsets = NULL;
-	indexcount = 0;
-	videolength = 0.0;
-	metadatalength = 0.0;
-	basemetadataduration = 0;
-	basemetadataoffset = 0;
+	videoobject *mp4 = (videoobject *)malloc(sizeof(videoobject));
+	if (mp4 == NULL) return NULL;
+
+	memset(mp4, 0, sizeof(videoobject));
+
 
 #ifdef _WINDOWS
-	fopen_s(&mediafp, filename, "rb");
+	fopen_s(&mp4->mediafp, filename, "rb");
 #else
 	mediafp = fopen(filename, "rb");
 #endif
 
-  if (mediafp == 0)
+  if (mp4->mediafp == 0)
   {
     printf("Could not open %s for input\n", filename);
     exit(1);
   }
 
-  parse_riff(mediafp);
+  parse_riff((void *)mp4);
 
-  return videolength;
+  return (void *)mp4;
 }
 

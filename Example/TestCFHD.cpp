@@ -41,9 +41,10 @@
 #define QBIST_UNIQUE			1  //slower, but each frame get unique art to encode
 #define OUTPUT_CFHD				0
 #define DO_DECODE				1
+
+#define OUTPUT_3D_TYPE			STEREO3D_TYPE_DEFAULT	
 #if DO_DECODE
   #define DO_PSNR				1
-  #define OUTPUT_3D_TYPE		STEREO3D_TYPE_DEFAULT	 
   #if DO_PSNR  
     #define DECODE_FORMAT		pixelFormat			// Current encoding format, PSNR needs match pixel formats
     #define PPM_EXPORT_BELOW	40
@@ -312,7 +313,8 @@ CFHD_Error DecodeFrame(void **frameDecBuffer,
 #endif
 
 		CFHD_MetadataTrack metadataTrack;
-		metadataTrack = METADATATYPE_MODIFIED; //METADATATYPE_ORIGINAL
+		//metadataTrack = METADATATYPE_MODIFIED; // Use any active metadta changes created in GoPro Studio or CineForm FirstLight
+		metadataTrack = METADATATYPE_ORIGINAL; // Don't use external active metadata, only internal corrections.
 		error = CFHD_InitSampleMetadata(metadataDecRef,
 			metadataTrack,
 			sampleBuffer,
@@ -409,18 +411,21 @@ CFHD_Error DecodeMOVIE(char *filename, char *ext)
 	void *frameDecBuffer = NULL;
 	uint32_t AVI = 0;
 	float length;
+	void *handle;
 	
 	if (0 == stricmp("AVI", ext))  AVI = 1;
 
 	if(AVI)
-		length = OpenAVISource(filename, AVI_TRAK_TYPE, AVI_TRAK_SUBTYPE);
+		handle = OpenAVISource(filename, AVI_TRAK_TYPE, AVI_TRAK_SUBTYPE);
 	else
-		length = OpenMP4Source(filename, MOV_TRAK_TYPE, MOV_TRAK_SUBTYPE);
+		handle = OpenMP4Source(filename, MOV_TRAK_TYPE, MOV_TRAK_SUBTYPE);
+
+	length = GetDuration(handle);
 
 	if (length > 0.0)
 	{
 		int frame = 0;
-		uint32_t numframes = GetNumberPayloads();
+		uint32_t numframes = GetNumberPayloads(handle);
 
 		printf("found %.2fs of video (%d frames) within %s\n", length, numframes, filename);
 
@@ -443,8 +448,8 @@ CFHD_Error DecodeMOVIE(char *filename, char *ext)
 				uint32_t payloadsize;
 				CFHD_PixelFormat pixelFormat = TestDecodeOnlyPixelFormat[decmode];
 
-				payloadsize = GetPayloadSize(frame);
-				payload = GetPayload(payload, frame);
+				payloadsize = GetPayloadSize(handle, frame);
+				payload = GetPayload(handle, payload, frame);
 
 				if (payload == NULL)
 				{
@@ -502,7 +507,7 @@ cleanup:
 	if (decoderRef) CFHD_CloseDecoder(decoderRef);
 	if (metadataDecRef) CFHD_CloseMetadata(metadataDecRef);
 	
-	CloseSource();
+	CloseSource(handle);
 
 	return error;
 }
@@ -978,9 +983,11 @@ CFHD_Error EncodeDecodeQualityTest()
 				if(once == 0)
 					SDKVerion(decoderRef, sampleBuffer, (int)sampleSize), once++;
 				printf("Resolution:   %dx%d\n", FRAME_WIDTH, FRAME_HEIGHT);
+#ifdef DECODE_FORMAT
 				if (pixelFormat != DECODE_FORMAT)
 					printf("Pixel format: %c%c%c%c <--> %c%c%c%c\n", (pixelFormat >> 24) & 0xff, (pixelFormat >> 16) & 0xff, (pixelFormat >> 8) & 0xff, (pixelFormat >> 0) & 0xff, (DECODE_FORMAT >> 24) & 0xff, (DECODE_FORMAT >> 16) & 0xff, (DECODE_FORMAT >> 8) & 0xff, (DECODE_FORMAT >> 0) & 0xff);
 				else
+#endif
 					printf("Pixel format: %c%c%c%c\n", (pixelFormat >> 24) & 0xff, (pixelFormat >> 16) & 0xff, (pixelFormat >> 8) & 0xff, (pixelFormat >> 0) & 0xff);
 				printf("Encode:       %d\n", encodedFormat == CFHD_ENCODED_FORMAT_YUV_422 ? 422 : encodedFormat == CFHD_ENCODED_FORMAT_RGB_444 ? 444 : encodedFormat == CFHD_ENCODED_FORMAT_RGBA_4444 ? 4444 : 0);
 				printf("Decode:       %s\n", decode_res == 1 ? "Full res" : decode_res == 2 ? "Half res" : decode_res == 3 ? "Quarter res" : "none");
@@ -1063,10 +1070,11 @@ int main(int argc, char **argv)
 
 	if (argc == 1)
 	{
-		//error = EncodeSpeedTest();
-		if(error) printf("error code: %d\n", error);
-
+#if DO_DECODE
 		error = EncodeDecodeQualityTest();
+#else
+		error = EncodeSpeedTest();
+#endif
 		if (error) printf("error code: %d\n", error);
 	}
 	else
