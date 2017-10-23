@@ -50,6 +50,11 @@ WaveletDemo is just three files: wavelets.c, utils.c, utils.h so it can be easy 
 
 After building it.
 ```
+$ ./TestCFHD
+usage: ./TestCFHD [switches] or <filname.MOV|MP4|AVI>
+          -D = decoder tester
+          -E = encoder tester
+          
 $ ./TestCFHD -D
 SDK Version:  10.0.1
 Encoder Vers: 10.0.1
