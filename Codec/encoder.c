@@ -7087,7 +7087,9 @@ void EncodeQuantizedGroup(ENCODER *encoder, TRANSFORM *transform[], int num_tran
 	int subband = 0;
 
 	// Verify that the codebooks are valid
+#if DEBUG
 	assert(ValidCodebooks());
+#endif
 
 	// Verify that there are three channels
 	assert(num_transforms == 3);
@@ -7485,7 +7487,9 @@ void EncodeQuantizedGroup(ENCODER *encoder, TRANSFORM *transform[], int num_tran
 
 
 	// Verify that the codebooks are valid
-	assert(ValidCodebooks());
+#if DEBUG
+	assert(ValidCodebooks());;
+#endif
 
 	// Verify that there are three channels
 	//assert(num_transforms == 3);	//DAN06302004
@@ -10610,7 +10614,9 @@ void EncodeQuantizedGroupThreaded(ENCODER *encoder, TRANSFORM *transform[], int 
 	int subband = 0;
 
 	// Verify that the codebooks are valid
-	assert(ValidCodebooks());
+#if DEBUG
+	assert(ValidCodebooks());;
+#endif
 
 	// Verify that there are three channels
 	assert(num_transforms == 3);
@@ -10878,7 +10884,9 @@ void EncodeQuantizedChannel(ENCODER *encoder, TRANSFORM *transform, int channel,
 	int subband = 0;
 
 	// Verify that the codebooks are valid
+#if DEBUG
 	assert(ValidCodebooks());
+#endif
 
 	// Verify that there are three channels
 	//assert(num_transforms == 3);

@@ -766,11 +766,14 @@ CFHD_ReleaseEncoderPool(CFHD_EncoderPoolRef encoderPoolRef)
 	try
 	{
 		CEncoderPool *encoderPool = GetEncoderPool(encoderPoolRef);
-		delete encoderPool;
+#ifdef _WINDOWS
+		delete encoderPool;  //TODO need find out why this isn't working on Linux. 
+#endif
 		return CFHD_ERROR_OKAY;
 	}
 	catch (...)
 	{
+		printf("CFHD_ReleaseEncoderPool error\n");
 		return CFHD_ERROR_UNEXPECTED;
 	}
 }

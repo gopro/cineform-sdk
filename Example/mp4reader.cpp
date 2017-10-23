@@ -99,7 +99,7 @@ void *OpenMP4Source(char *filename, uint32_t traktype, uint32_t traksubtype)  //
 #ifdef _WINDOWS
 	fopen_s(&mp4->mediafp, filename, "rb");
 #else
-	mediafp = fopen(filename, "rb");
+	mp4->mediafp = fopen(filename, "rb");
 #endif
 
 	if (mp4->mediafp)
@@ -477,6 +477,11 @@ void *OpenMP4Source(char *filename, uint32_t traktype, uint32_t traksubtype)  //
 				break;
 			}
 		} while (len > 0);
+	}
+	else
+	{
+		printf("Could not open %s for input\n", filename);
+		exit(1);
 	}
 
 	return (void *)mp4;

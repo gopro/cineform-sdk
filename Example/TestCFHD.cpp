@@ -33,7 +33,7 @@
 #include "CFHDMetadata.h"
 
 
-#include "MP4reader.h"
+#include "mp4reader.h"
 
 #define QBIST_SEED				50
 #define ENABLE_3D				0		//2D or 3D-stereoscope encodign
@@ -69,7 +69,7 @@
 #define BASENAME_OUT		"OUTD"
 #else
 #define MAX_DEC_FRAMES		5
-#define MAX_ENC_FRAMES		250
+#define MAX_ENC_FRAMES		500
 #define MAX_QUAL_FRAMES		10
 #define	POOL_THREADS		16
 #define	POOL_QUEUE_LENGTH	24
@@ -413,7 +413,11 @@ CFHD_Error DecodeMOVIE(char *filename, char *ext)
 	float length;
 	void *handle;
 	
+#ifdef _WINDOWS
 	if (0 == stricmp("AVI", ext))  AVI = 1;
+#else
+	if (0 == strcasecmp("AVI", ext))  AVI = 1;
+#endif
 
 	if(AVI)
 		handle = OpenAVISource(filename, AVI_TRAK_TYPE, AVI_TRAK_SUBTYPE);
@@ -1066,18 +1070,23 @@ cleanup:
 
 int main(int argc, char **argv)
 {
+	int showusage = 0;
 	CFHD_Error error = CFHD_ERROR_OKAY;
 
-	if (argc == 1)
+	if (argc != 2)
 	{
-#if DO_DECODE
-		error = EncodeDecodeQualityTest();
-#else
-		error = EncodeSpeedTest();
-#endif
-		if (error) printf("error code: %d\n", error);
+		showusage = 1;
 	}
-	else
+	else if (argv[1][0] == '-')
+	{
+		if (argv[1][1] == 'd' || argv[1][1] == 'D')
+			error = EncodeDecodeQualityTest();
+		else if (argv[1][1] == 'e' || argv[1][1] == 'E')
+			error = EncodeSpeedTest();
+		else
+			showusage = 1;
+	}
+	else 
 	{
 		char ext[4] = "";
 		int len = strlen(argv[1]);
@@ -1090,6 +1099,13 @@ int main(int argc, char **argv)
 		}
 
 		error = DecodeMOVIE(argv[1], ext);
+	}
+
+	if (showusage)
+	{
+		printf("usage: %s [switches] or <filname.MOV|MP4|AVI>\n", argv[0]);
+		printf("          -D = decoder tester\n");
+		printf("          -E = encoder tester\n");
 	}
 
 	if (error) printf("error code: %d\n", error);

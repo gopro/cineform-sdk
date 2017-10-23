@@ -16,8 +16,11 @@ This code falls under the BSD license.
 #include "fileio.h"
 #include "mp4reader.h"
 
+#ifdef _WINDOWS
 #define STRINGCASECOMPARE  _stricmp
-//#define STRINGCASECOMPARE  STRINGCASECOMPARE
+#else
+#define STRINGCASECOMPARE  strcasecmp
+#endif
 
 
 #define PRINT_AVI_STRUCTURE		0
@@ -624,7 +627,7 @@ void *OpenAVISource(char *filename, uint32_t traktype, uint32_t subtype)
 #ifdef _WINDOWS
 	fopen_s(&mp4->mediafp, filename, "rb");
 #else
-	mediafp = fopen(filename, "rb");
+	mp4->mediafp = fopen(filename, "rb");
 #endif
 
   if (mp4->mediafp == 0)

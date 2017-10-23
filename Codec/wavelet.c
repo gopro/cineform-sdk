@@ -3023,8 +3023,10 @@ void TransformForwardSpatialBYR3(uint8_t *input, int input_pitch, FRAME_INFO *fr
 #endif
 
 		// Check the input dimensions
+#if DEBUG
 		assert(roi.width == frame_width);
 		assert(roi.height == frame_height);
+#endif
 
 		for (channel = 0; channel < num_channels; channel++)
 		{
@@ -3640,8 +3642,10 @@ void TransformForwardSpatialRGB30(uint8_t *input, int input_pitch, FRAME_INFO *f
 
 
 		// Check the input dimensions
+#if DEBUG
 		assert(roi.width == frame_width);
 		assert(roi.height == frame_height);
+#endif
 
 		for (channel = 0; channel < num_channels; channel++)
 		{

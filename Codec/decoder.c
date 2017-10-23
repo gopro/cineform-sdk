@@ -13146,9 +13146,10 @@ void ComputeOutputDimensions(DECODER *decoder, int frame,
 
 #if (1 && DEBUG)
 	FILE *logfile = decoder->logfile;
+#endif
 	CODEC_STATE *codec = &decoder->codec;
 	int num_channels = codec->num_channels;
-#endif
+
 	FRAME_INFO *info = &decoder->frame;
 
 	//int progressive = codec->progressive;
@@ -13177,13 +13178,17 @@ void ComputeOutputDimensions(DECODER *decoder, int frame,
 	{
 		case DECODED_RESOLUTION_FULL:
 		case DECODED_RESOLUTION_HALF_HORIZONTAL:
+#if DEBUG
 			assert(AllTransformBandsValid(transform_array, num_channels, frame));
+#endif
 			decoded_scale = 2;
 			wavelet = transform_array[0]->wavelet[0];
 			break;
 
 		case DECODED_RESOLUTION_HALF:
+#if DEBUG
 			assert(AllLowpassBandsValid(transform_array, num_channels, frame));
+#endif
 			decoded_scale = 1;
 			wavelet = transform_array[0]->wavelet[0];
 			break;
@@ -13191,7 +13196,9 @@ void ComputeOutputDimensions(DECODER *decoder, int frame,
 		case DECODED_RESOLUTION_QUARTER:
 			if(decoder->codec.encoded_format == ENCODED_FORMAT_BAYER)
 			{
+#if DEBUG
 				assert(AllLowpassBandsValid(transform_array, num_channels, frame));
+#endif
 				decoded_scale = 1;
 				wavelet = transform_array[0]->wavelet[0];
 			}
@@ -13390,7 +13397,9 @@ void ReconstructSampleFrameToBuffer(DECODER *decoder, int frame, uint8_t *output
 		{
 			case DECODED_RESOLUTION_FULL:
 			case DECODED_RESOLUTION_HALF_HORIZONTAL_DEBAYER:
+#if DEBUG
 				assert(AllTransformBandsValid(transform_array, num_channels, frame));
+#endif
 				wavelet = transform_array[0]->wavelet[0];
 				// Get the decoded frame dimensions
 				assert(wavelet != NULL);
@@ -13401,7 +13410,9 @@ void ReconstructSampleFrameToBuffer(DECODER *decoder, int frame, uint8_t *output
 				break;
 
 			case DECODED_RESOLUTION_HALF:
+#if DEBUG
 				assert(AllLowpassBandsValid(transform_array, num_channels, frame));
+#endif
 				wavelet = transform_array[0]->wavelet[0];
 				// Get the decoded frame dimensions
 				assert(wavelet != NULL);
@@ -13412,7 +13423,9 @@ void ReconstructSampleFrameToBuffer(DECODER *decoder, int frame, uint8_t *output
 				break;
 
 			case DECODED_RESOLUTION_HALF_HORIZONTAL:
+#if DEBUG
 				assert(AllLowpassBandsValid(transform_array, num_channels, frame));
+#endif
 				wavelet = transform_array[0]->wavelet[0];
 				// Get the decoded frame dimensions
 				assert(wavelet != NULL);
@@ -13425,7 +13438,9 @@ void ReconstructSampleFrameToBuffer(DECODER *decoder, int frame, uint8_t *output
 			case DECODED_RESOLUTION_QUARTER:
 				if(decoder->codec.encoded_format == ENCODED_FORMAT_BAYER)
 				{
+#if DEBUG
 					assert(AllLowpassBandsValid(transform_array, num_channels, frame));
+#endif
 					wavelet = transform_array[0]->wavelet[0];
 				}
 				else
@@ -16485,8 +16500,9 @@ void ReconstructQuarterFrame(DECODER *decoder, int num_channels,
 	PIXEL *channel_row_ptr[CODEC_MAX_CHANNELS];
 
 	// Check that there is enough space for the intermediate results from each channel
+#if DEBUG
 	assert(output_width * sizeof(PIXEL) < buffer_size);
-
+#endif
 	ComputeCube(decoder);
 
 	// Get pointers into the wavelets for each channel
@@ -21309,7 +21325,9 @@ void TransformInverseFrameToYUV(TRANSFORM *transform[], int frame_index, int num
 	assert(0 < num_channels && num_channels <= TRANSFORM_MAX_CHANNELS);
 
 	// Check that the buffer is large enough
+#if DEBUG
 	assert((2 * num_channels * temporal_row_size) <= buffer_size);
+#endif
 
 	// Allocate buffers for a single row of lowpass and highpass temporal coefficients
 	// and initialize the arrays of row pointers into the horizontal transform bands
@@ -21854,7 +21872,9 @@ void TransformInverseFrameToRow16u(DECODER *decoder, TRANSFORM *transform[], int
 
 	// Buffer must be large enough for two rows of temporal coefficients (lowpass and highpass)
 	// plus the buffer used by the inverse horizontal transform for its intermediate results
+#if DEBUG
 	assert((2 * temporal_row_size) <= buffer_size);
+#endif
 
 	// Allocate buffers for one row of lowpass and highpass temporal coefficients
 	temporal_lowpass = (PIXEL *)&buffer[0];
@@ -22452,7 +22472,9 @@ void TransformInverseFrameToBuffer(TRANSFORM *transform[], int frame_index, int 
 	// Allocate buffer space for the intermediate YUV data
 	yuv_buffer = buffer + temporal_buffer_size;
 	yuv_buffer_size = buffer_size - temporal_buffer_size;
+#if DEBUG
 	assert(yuv_buffer_size >= 2 * yuv_row_size);
+#endif
 
 	if (inverted)
 	{
@@ -24171,19 +24193,25 @@ void GetDecodedFrameDimensions(TRANSFORM **transform_array,
 	{
 		case DECODED_RESOLUTION_FULL_DEBAYER:
 		case DECODED_RESOLUTION_HALF_HORIZONTAL_DEBAYER:
+#if DEBUG
 			assert(AllTransformBandsValid(transform_array, num_channels, frame_index));
+#endif
 			decoded_scale = 2;
 			wavelet = transform_array[0]->wavelet[0];
 			break;
 
 		case DECODED_RESOLUTION_FULL:
+#if DEBUG
 			assert(AllTransformBandsValid(transform_array, num_channels, frame_index));
+#endif
 			decoded_scale = 2;
 			wavelet = transform_array[0]->wavelet[0];
 			break;
 		case DECODED_RESOLUTION_HALF_NODEBAYER:
 		case DECODED_RESOLUTION_HALF:
+#if DEBUG
 			assert(AllLowpassBandsValid(transform_array, num_channels, frame_index));
+#endif
 			decoded_scale = 1;
 			wavelet = transform_array[0]->wavelet[0];
 			break;
