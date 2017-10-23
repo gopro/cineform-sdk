@@ -50,7 +50,7 @@ WaveletDemo is just three files: wavelets.c, utils.c, utils.h so it can be easy 
 
 After building it.
 ```
-$ ./TestCFHD
+$ ./TestCFHD -D
 SDK Version:  10.0.1
 Encoder Vers: 10.0.1
 Resolution:   1920x1080
@@ -80,6 +80,7 @@ The TestCFHD defaults to using the asynchronious encoder for the greatest perfor
 
 Asynchronous performance on a 4Ghz 8 core Broadwell E system:
 ```
+$ ./TestCFHD -E
 Pixel format: YUY2
 Encode:       422
 ...............................................................
