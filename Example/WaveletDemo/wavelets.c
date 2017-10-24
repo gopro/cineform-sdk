@@ -1,4 +1,4 @@
-/*! @file waveletToy.c
+/*! @file wavelets.c
 
 *  @brief A simplistic wavelet compression modeling tool, similar to CineForm, for education purposes 
 *   and some codec design and tuning. 
