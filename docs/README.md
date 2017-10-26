@@ -13,7 +13,7 @@ Compression ratio: between 10:1 and 4:1 are typical, greater ranges are possible
 
 # Included Within This Repository
 
-* The complete source to CineForm Encoder and Decoder SDK. C and C++ with hand-optimizated SSE2 intrinsics for x86/x64 platforms, with cross platform threading.
+* The complete source to CineForm Encoder and Decoder SDK. C and C++ with hand-optimized SSE2 intrinsics for x86/x64 platforms, with cross platform threading.
 * TestCFHD - demo code for using the encoder and decoder SDKs as a guide to adding CineForm to your applications.
 * WaveletDemo - a simple educational utility for modeling the wavelet compression.
 * CMake support for building all projects. 
@@ -81,7 +81,7 @@ Within Example/TestCFHD.cpp, here are some key configuration controls:
 #define	POOL_QUEUE_LENGTH 16
 ```
 
-The TestCFHD defaults to using the asynchronious encoder for the greatest performance on multi-core systems, which encodes 'n' frames simultaneously. For the highest perfomance, the number of frames to encode at once should match the number of CPU threads available, set by **POOL_THREADS**. To keep you CPU busy, have a **POOL_QUEUE_LENGTH** greater than the number of CPUs. 
+The TestCFHD defaults to using the asynchronous encoder for the greatest performance on multi-core systems, which encodes 'n' frames simultaneously. For the highest performance, the number of frames to encode at once should match the number of CPU threads available, set by **POOL_THREADS**. To keep you CPU busy, have a **POOL_QUEUE_LENGTH** greater than the number of CPUs. 
 
 Asynchronous performance on a 4Ghz 8 core Broadwell E system:
 ```
@@ -142,7 +142,7 @@ Play with the **BITDEPTH**, to see the impact on quality. Change the number of *
 
 ![](readmegfx/CF-Logo-oldest.png) 
 
-The CineForm video codec was developed in between 2001 and 2002 as a light weight compressed alternative for DV or other consumer formats of the time. However its notority wouldn't come unto around 2003 when CineForm HD when was developed, which moved the codec a from consumer 8-bit YUV, to offering [10-bit YUV](http://cineform.com/10-bit-vs-8-bit) and [12-bit RGB/RGBA](http://cineform.com/444-vs-422) for more professional digital intermediate work. The codec was ideal for the transition to HD, as its efficiency improved with the resolution increase, a bonus of it being a native Wavelet codec. Also as wavelet's can be designed to do sub-resolution decoding at a very high rate, editing of HD would perform like SD (fast) whenever needed.
+The CineForm video codec was developed in between 2001 and 2002 as a light weight compressed alternative for DV or other consumer formats of the time. However its notoriety wouldn't come unto around 2003 when CineForm HD when was developed, which moved the codec a from consumer 8-bit YUV, to offering [10-bit YUV](http://cineform.com/10-bit-vs-8-bit) and [12-bit RGB/RGBA](http://cineform.com/444-vs-422) for more professional digital intermediate work. The codec was ideal for the transition to HD, as its efficiency improved with the resolution increase, a bonus of it being a native Wavelet codec. Also as wavelet's can be designed to do sub-resolution decoding at a very high rate, editing of HD would perform like SD (fast) whenever needed.
 
 
 ![](readmegfx/CF-Logo-OLDsm.png)
@@ -152,7 +152,7 @@ CineForm RAW was added in 2005, the first to offer substantial compression direc
 
 ![](readmegfx/CF-Logo-960.png)
 
-Active Metadata was used to enable stereoscopic 3D encoding and presentation, the third significant major feature addition to the codec core (first HD, second RAW.) The 3D support within the CineForm codec, was one of the reasons leading to the CineForm aquisition by GoPro in 2011. 
+Active Metadata was used to enable stereoscopic 3D encoding and presentation, the third significant major feature addition to the codec core (first HD, second RAW.) The 3D support within the CineForm codec, was one of the reasons leading to the CineForm acquisition by GoPro in 2011. 
 
 Over the last six years at GoPro, the CineForm codec has been licensed to Adobe, FXHome and others and was tweaked and made into a standard through SMPTE as VC-5. VC-5 is a superset of the CineForm compression engine, it is better defined and can handle more pixel formats and resolutions than CineForm, although doesn't include the Active Metadata engine, nor does it have a performance implementation for video yet. GoPro added VC-5 to their GoPro Hero5/6 Black edition cameras for compressing RAW photos -- in camera a 24MByte DNG would be stored as a 4-7MByte GPR file using VC-5 compression. 
 
@@ -189,7 +189,7 @@ Resulting in a 1 level 2D wavelet:
 
 ![](readmegfx/level1-640.png "1D Wavelet")
 
-For a two level wavelet, you repeat the same horinztal and vertical wavelet operations of the top left quadrant to provide:
+For a two level wavelet, you repeat the same horizontal and vertical wavelet operations of the top left quadrant to provide:
 
 ![](readmegfx/level2-640.png "2 Level 2D-Wavelet")
 
@@ -224,4 +224,4 @@ Reverse all the steps.
 
 # CineForm implementation
 
-While I showed that the steps involved are fairly simple, and much can be modeled in only 800 lines of source code (WavetletDemo), the CineForm SDK is currently over 160k lines of code. There are many paths through the CineForm codec that where hand-optimized, each path for different source pixel format -- back in 2003 realtime encoding of 1920x1080 was bleeding edge. There are also older bitstream formats supported by the SDK, even a 3D wavelet (volumetric, not steroscopic) from 2003 which compressed two frames into one crazy wavelet. There are old tools for handling interlaced that are quite different than progressive image encoding. Finally there is all the Active Metadata code for color developement, stereoscopic and 360 projection, which extends this codec to being a lightweight video editing engine -- all the realtime effects within GoPro Studio use this engine.
+While I showed that the steps involved are fairly simple, and much can be modeled in only 800 lines of source code (WavetletDemo), the CineForm SDK is currently over 160k lines of code. There are many paths through the CineForm codec that where hand-optimized, each path for different source pixel format -- back in 2003 realtime encoding of 1920x1080 was bleeding edge. There are also older bitstream formats supported by the SDK, even a 3D wavelet (volumetric, not stereoscopic) from 2003 which compressed two frames into one crazy wavelet. There are old tools for handling interlaced that are quite different than progressive image encoding. Finally there is all the Active Metadata code for color development, stereoscopic and 360 projection, which extends this codec to being a lightweight video editing engine -- all the realtime effects within GoPro Studio use this engine.
