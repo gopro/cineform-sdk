@@ -1,6 +1,6 @@
 # CineForm Introduction
 
-CineForm is a 12-bit, full-frame wavelet compression video codec. It is designed for speed and quality, at the expense of a very high compression size. Image compression is a balance of size, speed and quality, and you can only choose two. CineForm was the first of its type to focus on speed, while supporting higher bit depths for image quality. More recent examples would be Avid DNxHD and Apple ProRES, although both divide the image into blocks using DCT.  The full frame wavelet as a subject quality advantage over DCTs, so you can compression more without classic ringing or block artifact issues. 
+GoPro CineForm® is a 12-bit, full-frame wavelet compression video codec. It is designed for speed and quality, at the expense of a very high compression size. Image compression is a balance of size, speed and quality, and you can only choose two. CineForm was the first of its type to focus on speed, while supporting higher bit depths for image quality. More recent examples would be Avid DNxHD® and Apple ProRES®, although both divide the image into blocks using DCT.  The full frame wavelet as a subject quality advantage over DCTs, so you can compression more without classic ringing or block artifact issues. 
 
 Pixel formats supported:
 * 8/10/16-bit YUV 4:2:2 compressed as 10-bit, progressive or interlace 
