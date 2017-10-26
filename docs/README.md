@@ -225,3 +225,9 @@ Reverse all the steps.
 # CineForm implementation
 
 While I showed that the steps involved are fairly simple, and much can be modeled in only 800 lines of source code (WavetletDemo), the CineForm SDK is currently over 160k lines of code. There are many paths through the CineForm codec that where hand-optimized, each path for different source pixel format -- back in 2003 realtime encoding of 1920x1080 was bleeding edge. There are also older bitstream formats supported by the SDK, even a 3D wavelet (volumetric, not stereoscopic) from 2003 which compressed two frames into one crazy wavelet. There are old tools for handling interlaced that are quite different than progressive image encoding. Finally there is all the Active Metadata code for color development, stereoscopic and 360 projection, which extends this codec to being a lightweight video editing engine -- all the realtime effects within GoPro Studio use this engine.
+
+```
+GoPro and CineForm are trademarks of GoPro, Inc.
+Apple and ProRES are trademarks of Apple, Inc.
+Avid and DNxHD are trademarks of Avid Technology, Inc.
+```
