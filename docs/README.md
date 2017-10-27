@@ -43,7 +43,7 @@ Unless you explicitly state otherwise, any contribution intentionally submitted 
 ### Setup
 
 Clone the project from Github (git clone https://github.com/gopro/cineform-sdk).
-You will need [CMake](https://cmake.org/download/) version 3.8.2 or better for the full SDK.
+You will need [CMake](https://cmake.org/download/) version 3.5.1 or better for the full SDK.
 WaveletDemo is just three files: wavelets.c, utils.c, utils.h so it can be easy build without CMake 
 
 ### Using TestCFHD
