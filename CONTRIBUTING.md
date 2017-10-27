@@ -13,7 +13,7 @@ The [issue tracker](https://www.github.com/gopro/cineform-sdk/issues) is the bes
 
 ### Suggesting a feature
 
-- Consult the roadmap witin [projects](https://github.com/gopro/cineform-sdk/projects) to know if it is planned.
+- Consult the roadmap within [projects](https://github.com/gopro/cineform-sdk/projects) to know if it is planned.
 - Consult the list of things that **won't** be implemented.
 - Read up on what type of feature requests are accepted.
 - See if anybody has not requested the feature yet.
