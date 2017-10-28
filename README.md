@@ -93,6 +93,11 @@ Encode:       422
 1000 frames 1.08ms per frame (923.6fps)
 ```
 
+#### Decoding Existing Files
+
+As this is origin source it should decode all existing CineForm AVI or MOV files.  Two sample files have been included showing YUV 4:2:2 and RGB 4:4:4 encoding.  
+
+
 ### Using WaveletDemo
 
 After building it.
