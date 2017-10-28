@@ -2,7 +2,7 @@
 *
 *  @brief Way Too Crude MP4|MOV reader
 *
-*  @version 1.0.1
+*  @version 1.1.0
 *
 *  (C) Copyright 2017 GoPro Inc (http://gopro.com/).
 *
@@ -290,20 +290,34 @@ void *OpenMP4Source(char *filename, uint32_t traktype, uint32_t traksubtype)  //
 				{
 					if (type == traktype) // meta
 					{
+						uint32_t equalsamplesize;
+
 						len = fread(&skip, 1, 4, mp4->mediafp);
-						len += fread(&skip, 1, 4, mp4->mediafp);
+						len += fread(&equalsamplesize, 1, 4, mp4->mediafp);
 						len += fread(&num, 1, 4, mp4->mediafp);
 						mp4->metasize_count = num = BYTESWAP32(num);
 						if (mp4->metasizes) free(mp4->metasizes);
 						mp4->metasizes = (uint32_t *)malloc(num * 4);
 						if (mp4->metasizes)
 						{
-							len += fread(mp4->metasizes, 1, num * 4, mp4->mediafp);
-							do
+							if (equalsamplesize == 0)
 							{
-								num--;
-								mp4->metasizes[num] = BYTESWAP32(mp4->metasizes[num]);
-							} while (num > 0);
+								len += fread(mp4->metasizes, 1, num * 4, mp4->mediafp);
+								do
+								{
+									num--;
+									mp4->metasizes[num] = BYTESWAP32(mp4->metasizes[num]);
+								} while (num > 0);
+							}
+							else
+							{
+								equalsamplesize = BYTESWAP32(equalsamplesize);
+								do
+								{
+									num--;
+									mp4->metasizes[num] = equalsamplesize;
+								} while (num > 0);
+							}
 						}
 						LONGSEEK(mp4->mediafp, qtsize - 8 - len, SEEK_CUR); // skip over stsz
 					}
