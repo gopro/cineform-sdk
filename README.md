@@ -32,20 +32,20 @@ CineForm-SDK is licensed under either:
 
 at your option.
 
-### Contribution
+## Contribution
 
 Unless you explicitly state otherwise, any contribution intentionally submitted for inclusion in the work by you, as defined in the Apache-2.0 license, shall be dual licensed as above, without any additional terms or conditions.
 
 
-## Quick Start for Developers
+# Quick Start for Developers
 
-### Setup
+## Setup
 
 Clone the project from Github (git clone https://github.com/gopro/cineform-sdk).
 You will need [CMake](https://cmake.org/download/) version 3.5.1 or better for the full SDK.
 WaveletDemo is just three files: wavelets.c, utils.c, utils.h so it can be easy build without CMake 
 
-### Using TestCFHD
+## Using TestCFHD
 
 After building it.
 ```
@@ -70,7 +70,7 @@ Decode:       Full res
 ```
 This tool uses the just build CineForm SDK to compress and decompress a generated image, testing the codec with a range of images and pixel formats. Open TestCFHD.cpp to learn of configuration options.
 
-#### Configuring TestCFHD
+### Configuring TestCFHD
 
 Within Example/TestCFHD.cpp, here are some key configuration controls:
 ```
@@ -93,12 +93,12 @@ Encode:       422
 1000 frames 1.08ms per frame (923.6fps)
 ```
 
-#### Decoding Existing Files
+### Decoding Existing Files
 
 As this is origin source it should decode all existing CineForm AVI or MOV files.  Two sample files have been included showing YUV 4:2:2 and RGB 4:4:4 encoding.  
 
 
-### Using WaveletDemo
+## Using WaveletDemo
 
 After building it.
 
@@ -122,7 +122,7 @@ total 4153346
 1038337 testpatt-decoded.pgm  1038337 testpatt.pgm  1038337 testpatt-wavelet.pgm  1038337 testpatt-x10-diff.pgm
 ```
 
-#### Configuring WaveletDemo
+### Configuring WaveletDemo
 
 Within Example/WaveletDemo/wavelets.c: here are some key configuration controls:
 ```
