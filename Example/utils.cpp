@@ -521,6 +521,7 @@ float PSNR(void *A, void *B, int width, int height, CFHD_PixelFormat pixelFormat
 
 		mse[0] /= (width >> shift)*(height >> shift)*testchannels;
 
+		if (mse[0] == 0) return 999.0;
 		return 10.0f * (float)log10(255.0 * 255.0 / mse[0]);
 	}
 	else if (bitDepth == 10)
@@ -622,6 +623,7 @@ float PSNR(void *A, void *B, int width, int height, CFHD_PixelFormat pixelFormat
 
 		mse[0] /= (width >> shift)*(height >> shift);
 
+		if (mse[0] == 0) return 999.0;
 		return 10.0f * (float)log10(1023.0*1023.0 / mse[0]);
 	}
 	else if(bitDepth == 16)
@@ -650,6 +652,7 @@ float PSNR(void *A, void *B, int width, int height, CFHD_PixelFormat pixelFormat
 
 		mse[0] /= (width >> shift)*(height >> shift)*testchannels;
 
+		if (mse[0] == 0) return 999.0;
 		return 10.0f * (float)log10(65535.0*65535.0 / mse[0]);
 	}
 }

@@ -47,7 +47,7 @@
   #define DO_PSNR				1
   #if DO_PSNR  
     #define DECODE_FORMAT		pixelFormat			// Current encoding format, PSNR needs match pixel formats
-    #define PPM_EXPORT_BELOW	40
+    #define PPM_EXPORT_BELOW	30					// encoding 444 as 422 if a big PSNR hit
   #else
 	#define DECODE_FORMAT		pixelFormat
     //#define DECODE_FORMAT   CFHD_PIXEL_FORMAT_RG48	// Specify a decode format, indepentent of encode type
@@ -135,6 +135,7 @@ CFHD_DecodedResolution TestResolution[] =
 	CFHD_DECODED_RESOLUTION_FULL,
 	CFHD_DECODED_RESOLUTION_HALF,
 	CFHD_DECODED_RESOLUTION_QUARTER,
+//	CFHD_DECODED_RESOLUTION_THUMBNAIL,
 	CFHD_DECODED_RESOLUTION_UNKNOWN  // Stop at this
 };
 
@@ -377,6 +378,27 @@ CFHD_Error DecodeFrame(void **frameDecBuffer,
 #endif
 	}
 
+	if (resolution == CFHD_DECODED_RESOLUTION_THUMBNAIL)
+	{
+		size_t retWidth = 0;
+		size_t retHeight = 0;
+		size_t retSize = 0;
+
+		error = CFHD_GetThumbnail(decoderRef,  // This only returns a DPX0 10-bit RGB thumbnail
+			sampleBuffer,
+			sampleSize,
+			*frameDecBuffer,
+			allocSize,
+			CFHD_PIXEL_FORMAT_DPX0, // TODO: make this output other pixelformats
+			&retWidth,
+			&retHeight,
+			&retSize);
+
+		
+		if (error == 0 && outputname && outputname[0])
+			ExportPPM(outputname, NULL, *frameDecBuffer, retWidth, retHeight, retWidth*4, CFHD_PIXEL_FORMAT_DPX0);
+	}
+	else
 	{
 		double uptime;
 		double uptime2;
@@ -464,6 +486,7 @@ CFHD_Error DecodeMOVIE(char *filename, char *ext)
 				if (decode_res == 1) sprintf_s(restxt, sizeof(restxt), "FULL");
 				else if (decode_res == 2) sprintf_s(restxt, sizeof(restxt), "HALF");
 				else if (decode_res == 3) sprintf_s(restxt, sizeof(restxt), "QRTR");
+				else sprintf_s(restxt, sizeof(restxt), "THUM");
 
 				sprintf_s(outputname, sizeof(outputname), "%s-%s-%c%c%c%c-%04d.ppm", filename, restxt, (pixelFormat >> 24) & 0xff, (pixelFormat >> 16) & 0xff, (pixelFormat >> 8) & 0xff, (pixelFormat >> 0) & 0xff, frame);
 #else
@@ -471,6 +494,7 @@ CFHD_Error DecodeMOVIE(char *filename, char *ext)
 				if (decode_res == 1) sprintf(restxt, "FULL");
 				else if (decode_res == 2) sprintf(restxt, "HALF");
 				else if (decode_res == 3) sprintf(restxt, "QRTR");
+				else sprintf_s(restxt, sizeof(restxt), "THUM");
 
 				sprintf(outputname, "%s-%s-%c%c%c%c-%04d.ppm", filename, restxt, (pixelFormat >> 24) & 0xff, (pixelFormat >> 16) & 0xff, (pixelFormat >> 8) & 0xff, (pixelFormat >> 0) & 0xff, frame);
 #endif
