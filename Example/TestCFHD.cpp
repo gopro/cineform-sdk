@@ -494,7 +494,7 @@ CFHD_Error DecodeMOVIE(char *filename, char *ext)
 				if (decode_res == 1) sprintf(restxt, "FULL");
 				else if (decode_res == 2) sprintf(restxt, "HALF");
 				else if (decode_res == 3) sprintf(restxt, "QRTR");
-				else sprintf_s(restxt, sizeof(restxt), "THUM");
+				else sprintf(restxt, "THUM");
 
 				sprintf(outputname, "%s-%s-%c%c%c%c-%04d.ppm", filename, restxt, (pixelFormat >> 24) & 0xff, (pixelFormat >> 16) & 0xff, (pixelFormat >> 8) & 0xff, (pixelFormat >> 0) & 0xff, frame);
 #endif
