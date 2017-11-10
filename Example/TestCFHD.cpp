@@ -1110,6 +1110,8 @@ int main(int argc, char **argv)
 	int showusage = 0;
 	CFHD_Error error = CFHD_ERROR_OKAY;
 
+	setbuf(stdout, NULL);
+
 	if (argc != 2)
 	{
 		showusage = 1;
