@@ -58,7 +58,7 @@
 #define EXPORT_DECODES_PPM	0
 
 #ifdef _DEBUG
-#define MAX_DEC_FRAMES		1
+#define MAX_DEC_FRAMES		5
 #define MAX_ENC_FRAMES		50
 #define MAX_QUAL_FRAMES		1
 #define	POOL_THREADS		4
@@ -512,7 +512,7 @@ CFHD_Error DecodeMOVIE(char *filename, char *ext)
 				printf(".");
 				dec_tot_us += (double)dec_us;
 
-				if (frame < (int)numframes) 
+				if (frame < (int)numframes-1) 
 					frame++;
 				else
 				{
