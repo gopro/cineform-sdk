@@ -55,6 +55,7 @@
   #endif
 #endif
 
+#define EXPORT_DECODES_PPM	0
 
 #ifdef _DEBUG
 #define MAX_DEC_FRAMES		1
@@ -68,7 +69,7 @@
 #define BASENAME_IN			"FRMD"
 #define BASENAME_OUT		"OUTD"
 #else
-#define MAX_DEC_FRAMES		5
+#define MAX_DEC_FRAMES		50
 #define MAX_ENC_FRAMES		500
 #define MAX_QUAL_FRAMES		10
 #define	POOL_THREADS		16
@@ -164,6 +165,7 @@ CFHD_PixelFormat TestDecodeOnlyPixelFormat[] =
 	CFHD_PIXEL_FORMAT_UNKNOWN  // Stop at this
 };
 
+#define PRINTF_PIXELFORMAT(k)			((k) >> 24) & 0xff, ((k) >> 16) & 0xff, ((k) >> 8) & 0xff, ((k) >> 0) & 0xff
 
 
 double gettime(void)
@@ -394,9 +396,10 @@ CFHD_Error DecodeFrame(void **frameDecBuffer,
 			&retHeight,
 			&retSize);
 
-		
+#if EXPORT_DECODES_PPM
 		if (error == 0 && outputname && outputname[0])
 			ExportPPM(outputname, NULL, *frameDecBuffer, retWidth, retHeight, retWidth*4, CFHD_PIXEL_FORMAT_DPX0);
+#endif
 	}
 	else
 	{
@@ -414,8 +417,10 @@ CFHD_Error DecodeFrame(void **frameDecBuffer,
 
 		*dec_us = (int)((uptime2 - uptime)*1000000.0);
 
+#if EXPORT_DECODES_PPM
 		if(outputname && outputname[0])
 			ExportPPM(outputname, NULL, *frameDecBuffer, actualWidth, actualHeight*scaleHeight, actualPitch, pixelFormat);
+#endif
 	}
 
 	return CFHD_ERROR_OKAY;
@@ -429,6 +434,7 @@ CFHD_Error DecodeMOVIE(char *filename, char *ext)
 	CFHD_DecoderRef decoderRef = NULL;
 	CFHD_MetadataRef metadataDecRef = NULL;
 	int resmode = 0, decmode = 0, dec_us = 0;
+	double dec_tot_us = 0;
 	uint32_t *payload = NULL; //buffer to store samples from the MP4.
 	void *frameDecBuffer = NULL;
 	uint32_t AVI = 0;
@@ -503,10 +509,16 @@ CFHD_Error DecodeMOVIE(char *filename, char *ext)
 				if (error)
 					goto cleanup;
 
+				printf(".");
+				dec_tot_us += (double)dec_us;
+
 				if (frame < (int)numframes) 
 					frame++;
 				else
 				{
+					printf("\nAvg Decode time %.2fms for %c%c%c%c\n", (dec_tot_us / (double)frame)/1000.0, PRINTF_PIXELFORMAT(pixelFormat));
+					dec_tot_us = 0;
+
 					frame = 0;
 					decmode++;
 					if (TestDecodeOnlyPixelFormat[decmode] == CFHD_PIXEL_FORMAT_UNKNOWN && TestResolution[resmode + 1] != CFHD_DECODED_RESOLUTION_UNKNOWN)
@@ -515,12 +527,13 @@ CFHD_Error DecodeMOVIE(char *filename, char *ext)
 						decmode = 0;
 					}
 				}
-				printf(".");
+
+
+
 
 			} while (TestDecodeOnlyPixelFormat[decmode] != CFHD_PIXEL_FORMAT_UNKNOWN && TestResolution[resmode] != CFHD_DECODED_RESOLUTION_UNKNOWN);
 		}
 
-		printf("\n");
 	}
 
 
