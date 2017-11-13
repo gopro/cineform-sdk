@@ -1,6 +1,6 @@
 # CineForm Introduction
 
-GoPro CineForm® is a 12-bit, full-frame wavelet compression video codec. It is designed for speed and quality, at the expense of a very high compression size. Image compression is a balance of size, speed and quality, and you can only choose two. CineForm was the first of its type to focus on speed, while supporting higher bit depths for image quality. More recent examples would be Avid DNxHD® and Apple® ProRES, although both divide the image into blocks using DCT.  The full frame wavelet as a subject quality advantage over DCTs, so you can compression more without classic ringing or block artifact issues. 
+GoPro CineForm® is a 12-bit, full-frame wavelet compression video codec. It is designed for speed and quality, at the expense of a very high compression size. Image compression is a balance of size, speed and quality, and you can only choose two. CineForm was the first of its type to focus on speed, while supporting higher bit depths for image quality. More recent examples would be Avid DNxHD® and Apple ProRES®, although both divide the image into blocks using DCT. The full frame wavelet as a subject quality advantage over DCTs, so you can compression more without classic ringing or block artifact issues.
 
 Pixel formats supported:
 * 8/10/16-bit YUV 4:2:2 compressed as 10-bit, progressive or interlace 
@@ -9,20 +9,20 @@ Pixel formats supported:
 * 12/16-bit CFA Bayer RAW, log encoded and compressed at 12-bit progressive
 * Dual channel stereoscopic/3D in any of the above.
 
-Compression ratio: between 10:1 and 4:1 are typical, greater ranges are possible. CineForm is a constant quality design, bit-rates will vary as needed for the scene. Whereas most other intermediate video codecs are a constant bit-rate design, quality varies depending on the scene.  
+Compression ratio: between 10:1 and 4:1 are typical, greater ranges are possible. CineForm is a constant quality design, bit-rates will vary as needed for the scene. Whereas most other intermediate video codecs are a constant bit-rate design, quality varies depending on the scene.
 
 # Included Within This Repository
 
 * The complete source to CineForm Encoder and Decoder SDK. C and C++ with hand-optimized SSE2 intrinsics for x86/x64 platforms, with cross platform threading.
 * TestCFHD - demo code for using the encoder and decoder SDKs as a guide to adding CineForm to your applications.
 * WaveletDemo - a simple educational utility for modeling the wavelet compression.
-* CMake support for building all projects. 
+* CMake support for building all projects.
 * Tested on:
-  - OS-X High Sierra with XCode v8 
+  - macOS High Sierra with XCode v8 & v9
   - Windows 10 with Visual Studio 2015 & 2017
   - Ubuntu 16.04 with gcc v5.4
-  
-  
+
+
 # License Terms
 
 CineForm-SDK is licensed under either:
@@ -32,21 +32,20 @@ CineForm-SDK is licensed under either:
 
 at your option.
 
-### Contribution
+## Contribution
 
 Unless you explicitly state otherwise, any contribution intentionally submitted for inclusion in the work by you, as defined in the Apache-2.0 license, shall be dual licensed as above, without any additional terms or conditions.
 
 
+# Quick Start for Developers
 
-## Quick Start for Developers
-
-### Setup
+## Setup
 
 Clone the project from Github (git clone https://github.com/gopro/cineform-sdk).
 You will need [CMake](https://cmake.org/download/) version 3.5.1 or better for the full SDK.
-WaveletDemo is just three files: wavelets.c, utils.c, utils.h so it can be easy build without CMake 
+WaveletDemo is just three files: wavelets.c, utils.c, utils.h so it can be easy build without CMake.
 
-### Using TestCFHD
+## Using TestCFHD
 
 After building it.
 ```
@@ -54,7 +53,7 @@ $ ./TestCFHD
 usage: ./TestCFHD [switches] or <filname.MOV|MP4|AVI>
           -D = decoder tester
           -E = encoder tester
-          
+
 $ ./TestCFHD -D
 SDK Version:  10.0.1
 Encoder Vers: 10.0.1
@@ -71,7 +70,7 @@ Decode:       Full res
 ```
 This tool uses the just build CineForm SDK to compress and decompress a generated image, testing the codec with a range of images and pixel formats. Open TestCFHD.cpp to learn of configuration options.
 
-#### Configuring TestCFHD
+### Configuring TestCFHD
 
 Within Example/TestCFHD.cpp, here are some key configuration controls:
 ```
@@ -81,7 +80,7 @@ Within Example/TestCFHD.cpp, here are some key configuration controls:
 #define	POOL_QUEUE_LENGTH 16
 ```
 
-The TestCFHD defaults to using the asynchronous encoder for the greatest performance on multi-core systems, which encodes 'n' frames simultaneously. For the highest performance, the number of frames to encode at once should match the number of CPU threads available, set by **POOL_THREADS**. To keep you CPU busy, have a **POOL_QUEUE_LENGTH** greater than the number of CPUs. 
+The TestCFHD defaults to using the asynchronous encoder for the greatest performance on multi-core systems, which encodes 'n' frames simultaneously. For the highest performance, the number of frames to encode at once should match the number of CPU threads available, set by **POOL_THREADS**. To keep you CPU busy, have a **POOL_QUEUE_LENGTH** greater than the number of CPUs.
 
 Asynchronous performance on a 4Ghz 8 core Broadwell E system:
 ```
@@ -94,7 +93,12 @@ Encode:       422
 1000 frames 1.08ms per frame (923.6fps)
 ```
 
-### Using WaveletDemo
+### Decoding Existing Files
+
+As this is origin source it should decode all existing CineForm AVI or MOV files. Two sample files have been included showing YUV 4:2:2 and RGB 4:4:4 encoding.
+
+
+## Using WaveletDemo
 
 After building it.
 
@@ -118,7 +122,7 @@ total 4153346
 1038337 testpatt-decoded.pgm  1038337 testpatt.pgm  1038337 testpatt-wavelet.pgm  1038337 testpatt-x10-diff.pgm
 ```
 
-#### Configuring WaveletDemo
+### Configuring WaveletDemo
 
 Within Example/WaveletDemo/wavelets.c: here are some key configuration controls:
 ```
@@ -147,14 +151,14 @@ The CineForm video codec was developed in between 2001 and 2002 as a light weigh
 
 ![](readmegfx/CF-Logo-OLDsm.png)
 
-CineForm RAW was added in 2005, the first to offer substantial compression directly from CFA Bayer image sensor data. Once RAW was a compression profile, this is when CineForm stopped being like other codecs, which strive to encode (compress) and decode (decompress) to the same or as close as possible to the source image. Compressing RAW was straight forward, but decompressing back to RAW didn't help the workflow, as most video editing tools (even today) do not handle native RAW well. To support RAW workflows the CineForm decoder would "develop" the image, applying demosaicing filters, color matrices, CDL color corrections and 3D LUTs before presenting the decoded image to the NLE, compositor or video editing tool. CineForm is still the only codec that does this, it was marketed as [Active Metadata](http://cineform.com/active-metadata). 
+CineForm RAW was added in 2005, the first to offer substantial compression directly from CFA Bayer image sensor data. Once RAW was a compression profile, this is when CineForm stopped being like other codecs, which strive to encode (compress) and decode (decompress) to the same or as close as possible to the source image. Compressing RAW was straight forward, but decompressing back to RAW didn't help the workflow, as most video editing tools (even today) do not handle native RAW well. To support RAW workflows the CineForm decoder would "develop" the image, applying demosaicing filters, color matrices, CDL color corrections and 3D LUTs before presenting the decoded image to the NLE, compositor or video editing tool. CineForm is still the only codec that does this, it was marketed as [Active Metadata](http://cineform.com/active-metadata).
 
 
 ![](readmegfx/CF-Logo-960.png)
 
-Active Metadata was used to enable stereoscopic 3D encoding and presentation, the third significant major feature addition to the codec core (first HD, second RAW.) The 3D support within the CineForm codec, was one of the reasons leading to the CineForm acquisition by GoPro in 2011. 
+Active Metadata was used to enable stereoscopic 3D encoding and presentation, the third significant major feature addition to the codec core (first HD, second RAW.) The 3D support within the CineForm codec, was one of the reasons leading to the CineForm acquisition by GoPro in 2011.
 
-Over the last six years at GoPro, the CineForm codec has been licensed to Adobe, FXHome and others and was tweaked and made into a standard through SMPTE as VC-5. VC-5 is a superset of the CineForm compression engine, it is better defined and can handle more pixel formats and resolutions than CineForm, although doesn't include the Active Metadata engine, nor does it have a performance implementation for video yet. GoPro added VC-5 to their GoPro Hero5/6 Black edition cameras for compressing RAW photos -- in camera a 24MByte DNG would be stored as a 4-7MByte GPR file using VC-5 compression. 
+Over the last six years at GoPro, the CineForm codec has been licensed to Adobe, FXHome and others and was tweaked and made into a standard through SMPTE as VC-5. VC-5 is a superset of the CineForm compression engine, it is better defined and can handle more pixel formats and resolutions than CineForm, although doesn't include the Active Metadata engine, nor does it have a performance implementation for video yet. GoPro added VC-5 to their GoPro Hero5/6 Black edition cameras for compressing RAW photos -- in camera a 24MByte DNG would be stored as a 4-7MByte GPR file using VC-5 compression.
 
 There is a fourth wave for the original CineForm, as resolution goes beyond 4K, the benefits of wavelet compression are seen again. This demand for higher resolution is coming from 360° video production. GoPro's Omni 360° rig would output 8Kp30 or 6Kp60 as CineForm files, as there is little else with the efficiency and performance to encode such demanding content. The upcoming GoPro Fusion, and small form-factor 360° camera shooting over 5K, will lead to a lot more CineForm content.
 
@@ -205,7 +209,7 @@ All that grey is easy to compress. The reason there is very little information s
 
 ## Entropy Coding
 
-After the wavelet and quantization stages, you have the same number of samples as the original source. The compression is achieved as the samples are no longer evenly distributed (after wavelet and quantization.) There are many many zeros and ones, than higher values, so we can store all these values more efficiently, often up to 10 times more so.  
+After the wavelet and quantization stages, you have the same number of samples as the original source. The compression is achieved as the samples are no longer evenly distributed (after wavelet and quantization.) There are many many zeros and ones, than higher values, so we can store all these values more efficiently, often up to 10 times more so.
 
 ### Run length
 
@@ -213,11 +217,11 @@ The output of the quantization stage has a lot of zeros, and many in a row. Addi
 
 ### Variable length coding
 
-After all previous steps the high frequency samples are stored with a variable length coding scheme. In CineForm classic [Huffman coding](https://en.wikipedia.org/wiki/Huffman_coding) is used. Again a lot of theory is turned into a table which maps sample values to codewords with differing bit lengths -- not a lot of complexity. 
+After all previous steps the high frequency samples are stored with a variable length coding scheme. In CineForm classic [Huffman coding](https://en.wikipedia.org/wiki/Huffman_coding) is used. Again a lot of theory is turned into a table which maps sample values to codewords with differing bit lengths -- not a lot of complexity.
 
 The lack of complexity is what makes CineForm fast.
 
-## To Decode  
+## To Decode
 
 Reverse all the steps.
 
