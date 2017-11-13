@@ -291,6 +291,15 @@ void ExportPPM(char *filename, char *metadata, void *frameBuffer, int frameWidth
 				{
 					for (int i = 0; i < frameWidth; i++)
 					{
+						*dptr++ = (lptr[i] >> 22) & 0xff;
+						*dptr++ = (lptr[i] >> 12) & 0xff;
+						*dptr++ = (lptr[i] >> 2) & 0xff;
+					}
+				}
+				else if (pixelFormat == CFHD_PIXEL_FORMAT_AR10)
+				{
+					for (int i = 0; i < frameWidth; i++)
+					{
 						*dptr++ = (lptr[i] >> 2) & 0xff;
 						*dptr++ = (lptr[i] >> 12) & 0xff;
 						*dptr++ = (lptr[i] >> 22) & 0xff;
@@ -327,9 +336,9 @@ void ExportPPM(char *filename, char *metadata, void *frameBuffer, int frameWidth
 					dptr = line;
 					for (int i = 0; i < frameWidth * 3; i += 3)
 					{
-						*dptr++ = bptr[i + 2];
-						*dptr++ = bptr[i + 1];
 						*dptr++ = bptr[i + 0];
+						*dptr++ = bptr[i + 1];
+						*dptr++ = bptr[i + 2];
 					}
 					bptr += framePitch;
 					fwrite(line, 1, frameWidth * 3, fp);
@@ -342,9 +351,9 @@ void ExportPPM(char *filename, char *metadata, void *frameBuffer, int frameWidth
 					dptr = line;
 					for (int i = 0; i < frameWidth * 4; i += 4)
 					{
-						*dptr++ = bptr[i + 2];
-						*dptr++ = bptr[i + 1];
 						*dptr++ = bptr[i + 0];
+						*dptr++ = bptr[i + 1];
+						*dptr++ = bptr[i + 2];
 					}
 					bptr += framePitch;
 					fwrite(line, 1, frameWidth * 3, fp);
