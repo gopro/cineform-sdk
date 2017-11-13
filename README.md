@@ -18,7 +18,7 @@ Compression ratio: between 10:1 and 4:1 are typical, greater ranges are possible
 * WaveletDemo - a simple educational utility for modeling the wavelet compression.
 * CMake support for building all projects.
 * Tested on:
-  - macOS High Sierra with XCode v8
+  - macOS High Sierra with XCode v8 & v9
   - Windows 10 with Visual Studio 2015 & 2017
   - Ubuntu 16.04 with gcc v5.4
 
