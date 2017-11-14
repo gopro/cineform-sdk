@@ -24,15 +24,15 @@
 // Definitions used in the Macintosh resource file
 #define kCFHDCodecVersionMajor		10
 #define kCFHDCodecVersionMinor		0
-#define kCFHDCodecVersionRevision	1
-#define kCFHDCodecVersionBuild		691
+#define kCFHDCodecVersionRevision	2
+#define kCFHDCodecVersionBuild		692
 
-#define FILE_VERSION_NUMERIC    	10,0,1,691
-#define FILE_VERSION_STRING     	"10, 0, 1, 691\0"
+#define FILE_VERSION_NUMERIC    	10,0,2,692
+#define FILE_VERSION_STRING     	"10, 0, 2, 692\0"
 
-#define CINEFORM_DESCRIPTION_L		L"GoPro CineForm Codec v10.0.1"
-#define CINEFORM_DESCRIPTION_x64_L	L"GoPro CineForm Codec (x64) v10.0.1"
-#define CONTROL_PANEL_DESCRIPTION	"GoPro CineForm Codec v10.0.1"
+#define CINEFORM_DESCRIPTION_L		L"GoPro CineForm Codec v10.0.2"
+#define CINEFORM_DESCRIPTION_x64_L	L"GoPro CineForm Codec (x64) v10.0.2"
+#define CONTROL_PANEL_DESCRIPTION	"GoPro CineForm Codec v10.0.2"
 #define CINEFORM_COPYRIGHT			"Copyright 2001-2017 GoPro Inc.  All rights reserved.",
 
 #endif
