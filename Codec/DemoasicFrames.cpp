@@ -5201,17 +5201,20 @@ float *LoadCube64_3DLUT(DECODER *decoder, CFHDDATA *cfhddata, int *lutsize)
 		}
 	}
 
-	if(useLUT)
+	if (decoder)
 	{
-		decoder->LUTcacheCRC = cfhddata->user_look_CRC;
-		decoder->LUTcache = LUT;
-		decoder->LUTcacheSize = *lutsize;
-	}
-	else
-	{
-		decoder->LUTcacheCRC = 0;
-		decoder->LUTcache = NULL;
-		decoder->LUTcacheSize = 0;
+		if(useLUT)
+		{
+			decoder->LUTcacheCRC = cfhddata->user_look_CRC;
+			decoder->LUTcache = LUT;
+			decoder->LUTcacheSize = *lutsize;
+		}
+		else
+		{
+			decoder->LUTcacheCRC = 0;
+			decoder->LUTcache = NULL;
+			decoder->LUTcacheSize = 0;
+		}
 	}
 
 	return LUT;

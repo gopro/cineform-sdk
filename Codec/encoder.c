@@ -66,11 +66,11 @@
 #include "threaded.h"
 #endif
 
-#ifdef _WINDOWS 
-
-#elif __APPLE__
+#if __APPLE__
 #include "macdefs.h"
-#else
+#endif
+
+#if !defined(_WINDOWS)
 #define min(x,y)	(((x) < (y)) ? (x) : (y))
 #define max(x,y)	(((x) > (y)) ? (x) : (y))
 #endif

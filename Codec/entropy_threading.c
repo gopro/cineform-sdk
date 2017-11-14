@@ -327,7 +327,7 @@ THREAD_PROC(EntropyWorkerThreadProc, lpParam)
 		HANDLE hCurrentThread = GetCurrentThread();
 		SetThreadAffinityMask(hCurrentThread, decoder->thread_cntrl.affinity);
 #else
-		pthread_t thread = GetCurrentThread();
+		pthread_t thread = pthread_self();
 		uint32_t thread_affinity = decoder->thread_cntrl.affinity;
 		SetThreadAffinityMask(thread, &thread_affinity);
 #endif
@@ -403,7 +403,7 @@ THREAD_PROC(ParallelThreadProc, lpParam)
 		HANDLE hCurrentThread = GetCurrentThread();
 		SetThreadAffinityMask(hCurrentThread,decoder->thread_cntrl.affinity);
 #else
-		pthread_t thread = GetCurrentThread();
+		pthread_t thread = pthread_self();
 		uint32_t thread_affinity = decoder->thread_cntrl.affinity;
 		SetThreadAffinityMask(thread, &thread_affinity);
 #endif

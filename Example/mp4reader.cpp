@@ -278,7 +278,7 @@ void *OpenMP4Source(char *filename, uint32_t traktype, uint32_t traksubtype)  //
 							} while (num > 0);
 						}
 
-						if (mp4->metastsc_count == 1 && mp4->metastsc[0].samples == 1) // Simplify if the stsc is not reporting any grouped chunks.
+						if (mp4->metastsc_count == 1 && mp4->metastsc && mp4->metastsc[0].samples == 1) // Simplify if the stsc is not reporting any grouped chunks.
 						{
 							if (mp4->metastsc) free(mp4->metastsc);
 							mp4->metastsc_count = 0;
@@ -564,7 +564,7 @@ void *OpenMP4Source(char *filename, uint32_t traktype, uint32_t traksubtype)  //
 float GetDuration(void *handle)
 {
 	videoobject *mp4 = (videoobject *)handle;
-	if (mp4 == NULL) 0.0;
+	if (mp4 == NULL) return 0.f;
 
 	return mp4->metadatalength;
 }

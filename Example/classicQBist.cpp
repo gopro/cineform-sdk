@@ -283,11 +283,11 @@ void modifyQBistGenes(void)
 		{
 			if(transformSequence[0][i] != transformSequence[1][i])
 				transformSequence[0][i] = transformSequence[1][i], same = 0;
-			if (source[0][i] = source[1][i])
+			if (source[0][i] != source[1][i])
 				source[0][i] = source[1][i], same = 0;
-			if (control[0][i] = control[1][i])
+			if (control[0][i] != control[1][i])
 				control[0][i] = control[1][i], same = 0;
-			if (dest[0][i] = dest[1][i])
+			if (dest[0][i] != dest[1][i])
 				dest[0][i] = dest[1][i], same = 0;
 		}
 	} while (same);

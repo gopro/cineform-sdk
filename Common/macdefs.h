@@ -87,9 +87,6 @@ typedef int BOOL;
 #define CopyMemory(dst, src, length)		memcpy(dst, src, length)
 #define ZeroMemory(dst, length)				memset(dst, 0, length)
 
-#define min(x,y)	(((x) < (y)) ? (x) : (y))
-//#define max(x,y)	(((x) > (y)) ? (x) : (y))
-
 #if defined(HRESULT)
 #undef HRESULT
 typedef int32_t HRESULT;
