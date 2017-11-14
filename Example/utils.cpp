@@ -664,4 +664,6 @@ float PSNR(void *A, void *B, int width, int height, CFHD_PixelFormat pixelFormat
 		if (mse[0] == 0) return 999.0;
 		return 10.0f * (float)log10(65535.0*65535.0 / mse[0]);
 	}
+
+	return 0.f;
 }

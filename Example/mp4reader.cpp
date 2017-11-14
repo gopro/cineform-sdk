@@ -564,7 +564,7 @@ void *OpenMP4Source(char *filename, uint32_t traktype, uint32_t traksubtype)  //
 float GetDuration(void *handle)
 {
 	videoobject *mp4 = (videoobject *)handle;
-	if (mp4 == NULL) 0.0;
+	if (mp4 == NULL) return 0.f;
 
 	return mp4->metadatalength;
 }
