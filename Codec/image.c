@@ -53,7 +53,9 @@
 
 #if __APPLE__
 #include "macdefs.h"
-#elif !defined(_WINDOWS)
+#endif
+
+#if !defined(_WINDOWS)
 #define min(x,y)	(((x) < (y)) ? (x) : (y))
 #define max(x,y)	(((x) > (y)) ? (x) : (y))
 #endif
