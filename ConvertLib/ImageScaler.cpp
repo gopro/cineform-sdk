@@ -4723,7 +4723,7 @@ void ScaleB64ARow( unsigned short *input_row_ptr,
 	short *ptrL = rowScaleFactors;
 	while((dstx = *ptrL++) != -1)
 	{
-		tmpR = tmpG = tmpB = 0;
+        tmpR = tmpG = tmpB = tmpA = 0;
 		while((srcx = *ptrL++) != -1)
 		{
 			srcmix = *ptrL++;

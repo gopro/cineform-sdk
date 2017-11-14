@@ -575,7 +575,7 @@ CFHD_Error EncodeSpeedTest()
 	int frameWidth = 0;
 	int frameHeight = 0;
 
-	double tottime;
+	double tottime = 0.0;
 	double tottime2;
 	int queuedFrames = 0;
 	int unique_frame = 0;

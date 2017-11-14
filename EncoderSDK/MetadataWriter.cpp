@@ -195,12 +195,13 @@ uint32_t ValidateLookGenCRCEnc(char* path)
 #endif
 							return 0;
 						}
-						iLUT = (unsigned char *)malloc(size*size*size*sizeof(char)*3);
+						iLUT = (unsigned char *)malloc(size*size*size*sizeof(unsigned char)*3);
 						if(iLUT == NULL)
 						{
 #if (OUTPUT && _WINDOWS)
 							OutputDebugString("no memory\n");
 #endif
+							free(LUT);
 							return 0;
 						}
 					
@@ -315,8 +316,8 @@ uint32_t ValidateLookGenCRCEnc(char* path)
 			//GenerateLUTfile(crc, LUT, size, fullpath);
 		}
 
-		if(LUT) 
-			free(LUT), LUT=NULL;
+        free(LUT);
+        free(iLUT);
 	}
 	return crc;
 }

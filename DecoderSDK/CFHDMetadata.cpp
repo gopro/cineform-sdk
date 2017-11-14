@@ -1798,7 +1798,7 @@ void CSampleMetadata::MakeLeftRightDelta(uint32_t Tag, unsigned int typesizebyte
 		case TAG_FRAME_DIFF_ZOOM:
 			for (i = 0; i < item_count; i++)
 			{
-				if(*fldata)
+				if(fldata && *fldata)
 					*fddata++ /= 1.0;
 			}
 			break;
