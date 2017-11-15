@@ -123,7 +123,7 @@ typedef union
 } m128i;
 
 
-FORCEINLINE static int _saturate10u(int x)
+INLINE static int _saturate10u(int x)
 {
 	const int upper_limit = 1023;
 
@@ -134,7 +134,7 @@ FORCEINLINE static int _saturate10u(int x)
 	return x;
 }
 
-FORCEINLINE static int _saturate12u(int x)
+INLINE static int _saturate12u(int x)
 {
 	const int upper_limit = 4095;
 
