@@ -681,6 +681,17 @@ CFHD_GetImageSize(uint32_t imageWidth, uint32_t imageHeight, CFHD_PixelFormat pi
 	return CFHD_ERROR_INVALID_ARGUMENT;
 }
 
+CFHDDECODER_API CFHD_Error
+CFHD_GetColorFlags(CFHD_DecoderRef decoderRef, int* flagsOut)
+{
+	if (flagsOut)
+	{
+		CSampleDecoder *decoder = (CSampleDecoder *)decoderRef;
+		return decoder->GetColorFlags(*flagsOut);
+	}
+	return CFHD_ERROR_INVALID_ARGUMENT;
+}
+
 /*!
 	@function CFHD_DecodeSample
 
