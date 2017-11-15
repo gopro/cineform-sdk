@@ -487,6 +487,8 @@ CFHD_ParseSampleHeader(void *samplePtr,
 		encodedFormat = CSampleDecoder::EncodedFormat(header.encoded_format);
 		sampleHeader->SetEncodedFormat(encodedFormat);
 
+		sampleHeader->SetInputFormat(header.input_format);
+
 		fieldType = CSampleDecoder::FieldType(&header);
 		sampleHeader->SetFieldType(fieldType);
 
