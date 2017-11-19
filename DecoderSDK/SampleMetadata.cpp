@@ -112,8 +112,8 @@ void InitGetLUTPaths(char *pPathStr, size_t pathSize, char *pDBStr, size_t DBSiz
 			}
 		}
 
-		strncpy(pPathStr, defaultLUTpath, 259);
-		strncpy(pDBStr, DbNameStr, 63);
+		strncpy_s(pPathStr, pathSize, defaultLUTpath, 259);
+		strncpy_s(pDBStr, DBSize, DbNameStr, 63);
 
 #elif __APPLE_REMOVE__
 

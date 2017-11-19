@@ -243,8 +243,8 @@ int Lookup(const char *keyword,
 
 	for (i = 0; i < token_table_length; i++)
 	{
-#ifdef _WINDOWS
-		if (0 == stricmp(keyword, token_table[i].string)) 
+#ifdef _MSC_VER
+		if (0 == _stricmp(keyword, token_table[i].string)) 
 #else
 		if (0 == strcasecmp(keyword, token_table[i].string))
 #endif

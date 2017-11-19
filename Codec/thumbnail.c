@@ -84,7 +84,6 @@ bool GenerateThumbnail(void *sample_ptr,
 	if (ParseSampleHeader(&input, &header))
 	{
 		uint32_t *yptr;
-		uint32_t *yptr2;
 		uint16_t *uptr16;
 		uint16_t *vptr16;
 		uint32_t *gptr;
