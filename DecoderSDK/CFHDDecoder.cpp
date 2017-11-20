@@ -327,7 +327,7 @@ CFHD_GetSampleInfo(	CFHD_DecoderRef decoderRef,
 
 	@param decodedResolution
 	The desired resolution for decoding relative to the encoded frame size.
-	See the posible resolutions defined in the enumeration CFHD_DecodedResolution.
+	See the possible resolutions defined in the enumeration CFHD_DecodedResolution.
 	If this argument is non-zero, it must specify a valid decoded resolution such
 	as full or half resolution.  The decoder will divide the encoded dimensions
 	by the divisor implied by this parameter to determine the actual output dimensions.
@@ -512,7 +512,7 @@ finish:
 
 	@brief Return the size of the specified pixel format in bytes. 
 	
-	@description Return the size of a pixle in byte is it uniquely 
+	@description Return the size of a pixel in byte is it uniquely 
 	addressable.  Note that the pixel size is not defined for some
 	image formats such as v210.  This routine returns zero for pixel
 	formats that do not have a size that is an integer number of bytes.
@@ -766,7 +766,7 @@ CFHD_DecodeSample(CFHD_DecoderRef decoderRef,
 /*!
 	@function CFHD_SetLicense
 
-	@brief Now obselete, this was used to license the commerical version, but it is no longer required.
+	@brief Now obsolete, this was used to license the commercial version, but it is no longer required.
 	The interface is maintained for backward compatibility.
 
 	@description The license key is used to control trial periods and decode resolution limits.

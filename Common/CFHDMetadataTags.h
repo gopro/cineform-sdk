@@ -1,5 +1,5 @@
-/*! @file MetadataTags.h
-
+/*! @file CFHDMetadataTags.h
+*
 *  @brief Active Metadata FourCC tags and control flags
 *
 *  @version 1.0.0
@@ -7,7 +7,7 @@
 *  (C) Copyright 2017 GoPro Inc (http://gopro.com/).
 *
 *  Licensed under either:
-*  - Apache License, Version 2.0, http://www.apache.org/licenses/LICENSE-2.0  
+*  - Apache License, Version 2.0, http://www.apache.org/licenses/LICENSE-2.0
 *  - MIT license, http://opensource.org/licenses/MIT
 *  at your option.
 *
@@ -16,11 +16,11 @@
 *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 *  See the License for the specific language governing permissions and
 *  limitations under the License.
-*
 */
 
-#ifndef _METADATATAGS_H
-#define _METADATATAGS_H
+#pragma once
+#ifndef CFHD_METADATA_TAGS_H
+#define CFHD_METADATA_TAGS_H
 
 // only using the bottom 16-bits, set to 0xffff and mask out elements to disable. (used by TAG_PROCESS_PATH)
 #define PROCESSING_ACTIVE			(1L<<0) //set to indicate flags are in use
@@ -32,7 +32,7 @@
 #define PROCESSING_PAD1				(1L<<6)
 #define PROCESSING_PAD2				(1L<<7)
 
-#define PROCESSING_ACTIVE2			(1L<<8) //set to indicate the next set of flags are in use 
+#define PROCESSING_ACTIVE2			(1L<<8) //set to indicate the next set of flags are in use
 #define PROCESSING_ORIENTATION		(1L<<9)	//Dzoom, convergence, and floating windows, etc.
 #define PROCESSING_BURNINS			(1L<<10) //Histograms, Vectorscope, metadata burns
 #define PROCESSING_FRAMING			(1L<<11) //zoom, x,y offset
@@ -47,7 +47,7 @@
 #define PROCESSING_ACTIVE_BURNINS			((1L<<10)|256) //Histograms, Vectorscope, metadata burns
 #define PROCESSING_ACTIVE_FRAMING			((1L<<11)|256) //zoom, x,y offset
 #define PROCESSING_ACTIVE_IMAGEFLIPS		((1L<<12)|256) //3D frame flips
-											
+
 
 #define PROCESSING_ALL_ON			0xffff
 #define PROCESSING_ALL_OFF			(PROCESSING_ACTIVE2|PROCESSING_ACTIVE)
@@ -76,7 +76,7 @@
 
 //Extended metadata format.
 //4 char tag, 1 char format, 24bit size, data of size.  // string, bytes and shorts are pads to 32-bit.
-//eg  white balance    WBAL(16)..f(1.0,1.0,1.0,1.0)  57 42 41 4c 10 00 00 66 00 00 80 3f 00 00 80 3f 00 00 80 3f 00 00 80 3f 
+//eg  white balance    WBAL(16)..f(1.0,1.0,1.0,1.0)  57 42 41 4c 10 00 00 66 00 00 80 3f 00 00 80 3f 00 00 80 3f 00 00 80 3f
 //eg  scene number     SCEN(2)..S(3)                 53 43 45 4e 02 00 00 53 03 00 00 00
 
 #ifndef MAKETAG
@@ -94,7 +94,7 @@
 // 'H' - unsigned 32bit int32_t "0xB8120D2B"
 // 'h' - hidden unsigned int 32bit  -- not displayed
 // 'l' - signed 32-bit long
-// 'L' - unsigned 32-bit int32_t 
+// 'L' - unsigned 32-bit int32_t
 // 'R' - unsigned short ratio "x:y"
 // 's' - signed short
 // 'S' - unsigned short
@@ -179,27 +179,27 @@ typedef struct metadata_control_point_header
 typedef enum MetadataTag
 {
 //function         														  				Tag	  type	size
-TAG_FREESPACE 			= MAKETAG('F','R','E','E'),		//Free metadata    				FREE	c	(n bytes) can be used for any data 
+TAG_FREESPACE 			= MAKETAG('F','R','E','E'),		//Free metadata    				FREE	c	(n bytes) can be used for any data
 TAG_NOP					= MAKETAG('N','O','P','P'),		//erase entry	  				NOPP	?	Used to erase a single entry
-TAG_COLOR_MATRIX		= MAKETAG('C','O','L','M'),		//Color matrix     				COLM	f	12 floats (48 bytes) 
+TAG_COLOR_MATRIX		= MAKETAG('C','O','L','M'),		//Color matrix     				COLM	f	12 floats (48 bytes)
 TAG_UNITY_MATRIX		= MAKETAG('U','T','Y','M'),		//unity matrix          		UTYM	l	non-zero bypasses COLM
 TAG_BASE_MATRIX			= MAKETAG('B','M','T','X'),		//Unity matrix     				BMTX	L	1 long, 0 - unity Matrix, 1 - camera original matrix, 2 - custom matrix.
 TAG_SATURATION			= MAKETAG('S','A','T','U'),		//Saturation       				SATU	f	1 float // unity 1.0 range 0.0 to 4.0
 TAG_BLUR_SHARPEN		= MAKETAG('B','L','S','H'),		//Blur/Sharpen     				BLSH	f	1 float // unity 0.0 range -1.0 (blur) to 1.0 full sharpen
-TAG_HIGHLIGHT_DESAT		= MAKETAG('H','S','A','T'),		//highlight (de)Saturation     	HSAT	f	1 float // unity 1.0 range 0.0 to 1.0 (saturation) 
+TAG_HIGHLIGHT_DESAT		= MAKETAG('H','S','A','T'),		//highlight (de)Saturation     	HSAT	f	1 float // unity 1.0 range 0.0 to 1.0 (saturation)
 TAG_HIGHLIGHT_POINT		= MAKETAG('H','P','N','T'),		//highlight point		     	HPNT	f	1 float // unity 1.0 range 0.0 (all highlights) to 1.0 (off)
 TAG_VIGNETTE_START 		= MAKETAG('V','G','N','S'),		//vignette start point		    VGNS	f	1 float // unity 1.0 range 0.0 to 1.0, 1.0 is the horizontal with as radius
 TAG_VIGNETTE_END 		= MAKETAG('V','G','N','E'),		//vignette end point		    VGNE	f	1 float // unity 1.0 range 0.0 to 2.0, 1.0 is the horizontal with as radius
-TAG_VIGNETTE_GAIN		= MAKETAG('V','G','N','G'),		//vignette gain				    VGNG	f	1 float // unity 0.0 range 0.0 to 8.0, 
+TAG_VIGNETTE_GAIN		= MAKETAG('V','G','N','G'),		//vignette gain				    VGNG	f	1 float // unity 0.0 range 0.0 to 8.0,
 TAG_SPLIT_POS			= MAKETAG('S','P','L','T'),		//highlight point		     	SPLT	f	1 float // split screen position for color correction 0.0 to 1.0 - 0.5 the center.
 TAG_CONTRAST			= MAKETAG('C','T','R','S'),		//Contrast         				CTRS	f	1 float // unity 1.0 range 0.0 to 4.0
 TAG_EXPOSURE			= MAKETAG('E','X','P','S'),		//Exposure         				EXPS	f	1 float // unity 1.0 range 0.0 to 8.0
 TAG_ASC_CDL_MODE    	= MAKETAG('A','C','D','L'),		//ASC CDL Mode     				ACDL	H	1 long (4 bytes) 0 - off, 1 - on
-TAG_RGB_GAMMA	 		= MAKETAG('G','A','M','T'),		//channel gamma    				GAMT	f	3 floats // (12 bytes) 
+TAG_RGB_GAMMA	 		= MAKETAG('G','A','M','T'),		//channel gamma    				GAMT	f	3 floats // (12 bytes)
 TAG_RGB_GAIN			= MAKETAG('R','G','B','G'),		//RGB Gain         				RGBG	f	3 floats //RGB gains, unity 1.0 range 0.0 to 4.0
 TAG_RGB_LIFT			= MAKETAG('R','G','B','O'),		//RGB Black Offset 				RGBO	f	3 floats // unity 1.0 range 0.0 to 4.0
 TAG_RGB_OFFSET			= MAKETAG('R','G','B','O'),		//RGB Black Offset 				RGBO	f	3 floats // unity 1.0 range 0.0 to 4.0
-TAG_GAMMA_TWEAKS 		= MAKETAG('G','A','M','T'),		//channel gamma    				GAMT	f	3 floats // (12 bytes) 
+TAG_GAMMA_TWEAKS 		= MAKETAG('G','A','M','T'),		//channel gamma    				GAMT	f	3 floats // (12 bytes)
 TAG_TIMECODE 			= MAKETAG('T','I','M','C'),		//Timecode         				TIMC	c	11 chars (00:00:00:00)
 TAG_TIMECODE_ALT		= MAKETAG('T','I','M','A'),		//Timecode ALT     				TIMA	c	11 chars
 TAG_TIMECODE_BASE 		= MAKETAG('T','I','M','B'),		//Timecode Base    				TIMB	B	1 byte of common 24,25,30,50,60
@@ -231,14 +231,14 @@ TAG_FINGERPRINT 		= MAKETAG('P','R','N','T'),		//Hdwr Fingerprint 				PRNT	H	1 l
 TAG_PIXEL_RATIO 		= MAKETAG('P','I','X','R'),		//Pixel ratio     				PIXR	R	ratio of two unsigned shorts. (4 bytes) (2-bytes numerator then 2-bytes demoninator) ratio = (float)(value >> 16)/(float)(value & 0xffff)
 TAG_PROCESS_PATH 		= MAKETAG('P','R','C','S'),		//Process Path     				PRCS	H	1 long (4 bytes)
 TAG_BAYER_FORMAT 		= MAKETAG('B','F','M','T'),		//Bayer Format     				BFMT	B	1 byte (1 byte in 4)
-TAG_CLIP_GUID 			= MAKETAG('G','U','I','D'),		//GUID             				GUID	G	16 bytes 
+TAG_CLIP_GUID 			= MAKETAG('G','U','I','D'),		//GUID             				GUID	G	16 bytes
 TAG_SUBTYPE 	 		= MAKETAG('S','U','B','T'),		//cfhd_subtype     				SUBT	L	4 bytes //0-normal (YUY2), 1-Bayer, 2-RGB native, 3-RGBA native
 TAG_NUM_CHANNELS 		= MAKETAG('N','U','M','C'),		//num chroma channels  			NUMC	L	4 bytes //total number of chroma channels per stream
-TAG_DEMOSAIC_TYPE 		= MAKETAG('D','E','M','O'),		//demosaic type    				DEMO	L	1 long  
-TAG_MARK_GOOD_TAKE 		= MAKETAG('M','R','K','G'),		//Mark Good Take   				MRKG	L	1 long  
-TAG_UNIQUE_FRAMENUM		= MAKETAG('U','F','R','M'),		//Unique FrameNum  				UFRM	L	1 long  // Unique to the current project, increments  
+TAG_DEMOSAIC_TYPE 		= MAKETAG('D','E','M','O'),		//demosaic type    				DEMO	L	1 long
+TAG_MARK_GOOD_TAKE 		= MAKETAG('M','R','K','G'),		//Mark Good Take   				MRKG	L	1 long
+TAG_UNIQUE_FRAMENUM		= MAKETAG('U','F','R','M'),		//Unique FrameNum  				UFRM	L	1 long  // Unique to the current project, increments
 TAG_ANALOG_GAIN 		= MAKETAG('G','A','I','N'),		//Cam analog gain  				GAIN	S	1 short // typical values -3,0,3,6,9,12
-TAG_SHUTTER_SPEED 		= MAKETAG('S','H','U','T'),		//Shutter Speed    				SHUT	S	1 short // 24,48,50,60,120 etc (1/value of a second.) 
+TAG_SHUTTER_SPEED 		= MAKETAG('S','H','U','T'),		//Shutter Speed    				SHUT	S	1 short // 24,48,50,60,120 etc (1/value of a second.)
 TAG_COLORSPACE_YUV 		= MAKETAG('C','L','S','Y'),		//Colorspace YUV   				CLSY	H	1 long (4 bytes) //0 = unset, 1 = 601, 2 = 709
 TAG_COLORSPACE_RGB 		= MAKETAG('C','L','S','R'),		//Colorspace RGB   				CLSR	H	1 long (4 bytes) //0 = unset, 1 = cgRGB, 2 = vsRGB
 TAG_COLORSPACE_FTR		= MAKETAG('C','L','S','F'),		//Filter 422to444  				CLSF	H	1 long (4 bytes) //0 = off, 1 = on
@@ -254,7 +254,7 @@ TAG_CHANNELS_ACTIVE		= MAKETAG('C','A','C','T'),		//channels on mask 				CACT	H	
 TAG_CHANNELS_MIX		= MAKETAG('C','M','I','X'),		//channel mix type 				CMIX	H	1 long (4 bytes) //0 = normal single channel, 1 = stacked half height, 2 = sibe_by-side, 3 = fields, 16-21 = anaglypth
 TAG_CHANNELS_MIX_VAL	= MAKETAG('C','M','V','L'),		//channel mix valu 				CMVL	H	1 long (4 bytes) //dependent on type, could be a dissolve percentage or PIP control, etc.
 TAG_LENS_GOPRO			= MAKETAG('L','G','P','R'),		//Apply GoPro Lens Curve     	LGPR	H	1 long (4 bytes) //0 - Rectilinear, 1 - GoPro curve
-TAG_LENS_SPHERE			= MAKETAG('L','S','P','H'),		//Use Image Sphere           	LSPH	H	1 long (4 bytes) //0 - Planar image, 1 - spherical image  
+TAG_LENS_SPHERE			= MAKETAG('L','S','P','H'),		//Use Image Sphere           	LSPH	H	1 long (4 bytes) //0 - Planar image, 1 - spherical image
 TAG_LENS_FILL			= MAKETAG('L','F','I','L'),		//Fill background            	LFIL	H	1 long (4 bytes) //0 - fill with black, 1 - pattern fill
 TAG_LENS_STYLE			= MAKETAG('L','S','T','L'),		//Lens Style	            	LSTL	H	1 long (4 bytes) //0 - no magic, ...
 TAG_LENS_SRC_PARAMS		= MAKETAG('L','S','R','C'),		//Lens parameters           	LSRC	f	6 floats (24 bytes) //0 - no magic, ...
@@ -267,36 +267,36 @@ TAG_CHANNEL_QUALITY 	= MAKETAG('C','Q','U','L'),		//channel quality  				CQUL	H	
 TAG_HORIZONTAL_OFFSET	= MAKETAG('H','O','F','F'),		//H.Convergence    				HOFF	f	1 float (range -1.0 to 1.0)
 TAG_VERTICAL_OFFSET 	= MAKETAG('V','O','F','F'),		//V.Convergence    				VOFF	f	1 float (range -1.0 to 1.0)
 TAG_ROTATION_OFFSET 	= MAKETAG('R','O','F','F'),		//R.Convergence    				ROFF	f	1 float (range -0.1 to 0.1)
-TAG_LICENSEE			= MAKETAG('L','C','N','S'),		//Name of licensee 				LCNS	c	(n bytes) The username of the license holder 
-TAG_CPU_MAX				= MAKETAG('C','P','U','M'),		//Limit to X cores 				CPUM	h	1 long hidden -- limit to 'x' cores on decoder, 0 - unset (use all) 
+TAG_LICENSEE			= MAKETAG('L','C','N','S'),		//Name of licensee 				LCNS	c	(n bytes) The username of the license holder
+TAG_CPU_MAX				= MAKETAG('C','P','U','M'),		//Limit to X cores 				CPUM	h	1 long hidden -- limit to 'x' cores on decoder, 0 - unset (use all)
 TAG_AFFINITY_MASK		= MAKETAG('A','F','F','I'),		//Affinity Mask    				AFFI	h	1 long hidden -- 0 - unset (use all)
 TAG_IGNORE_DATABASE 	= MAKETAG('I','G','N','R'),		//Not read disk DB 				IGNR	h	1 long hidden -- non-zero, don't read any Database data form disk
 TAG_FORCE_DATABASE  	= MAKETAG('F','O','R','C'),		//Always RD dsk DB 				FORC	H	1 long  -- non-zero, always read any Database data form disk
 TAG_UPDATE_LAST_USED  	= MAKETAG('U','P','L','T'),		//Update registry current GUID 	UPLT	H	1 long  -- default active, 0 to disable.
-TAG_CALIBRATE			= MAKETAG('C','A','L','I'),		//internal use     				CALI	H	1 long  
-TAG_FRAME_MASK			= MAKETAG('M','A','S','K'),		//frame mask       				MASK	f	8xChannels  float coords, toprgt, botRgt, botLft 0.0 to 1.0, repeated for extra channels.   
+TAG_CALIBRATE			= MAKETAG('C','A','L','I'),		//internal use     				CALI	H	1 long
+TAG_FRAME_MASK			= MAKETAG('M','A','S','K'),		//frame mask       				MASK	f	8xChannels  float coords, toprgt, botRgt, botLft 0.0 to 1.0, repeated for extra channels.
 TAG_NATURAL_FRAMING 	= MAKETAG('N','F','R','M'),		//natural framing       		NFRM	f	picture aspect ratio, e.g. 16by9 = 1.7777
-TAG_FRAME_DIFF_ZOOM		= MAKETAG('D','Z','O','M'),		//frame diff zoom       		DZOM	f	1xChannel float 0.0 is unity, repeated for extra channels.   
-TAG_FRAME_ZOOM			= MAKETAG('Z','O','O','M'),		//frame zoom       				ZOOM	f	1xChannel float 1.0 is unity, repeated for extra channels.   
-TAG_FRAME_KEYSTONE		= MAKETAG('K','Y','S','T'),		//frame keystone   				KYST	f	1xChannel float 0.0 is unity, repeated for extra channels, -0.1 to 0.1.   
-TAG_FRAME_TILT			= MAKETAG('T','I','L','T'),		//frame Tilt	   				TILT	f	1xChannel float 0.0 is unity, repeated for extra channels, -0.1 to 0.1.   
+TAG_FRAME_DIFF_ZOOM		= MAKETAG('D','Z','O','M'),		//frame diff zoom       		DZOM	f	1xChannel float 0.0 is unity, repeated for extra channels.
+TAG_FRAME_ZOOM			= MAKETAG('Z','O','O','M'),		//frame zoom       				ZOOM	f	1xChannel float 1.0 is unity, repeated for extra channels.
+TAG_FRAME_KEYSTONE		= MAKETAG('K','Y','S','T'),		//frame keystone   				KYST	f	1xChannel float 0.0 is unity, repeated for extra channels, -0.1 to 0.1.
+TAG_FRAME_TILT			= MAKETAG('T','I','L','T'),		//frame Tilt	   				TILT	f	1xChannel float 0.0 is unity, repeated for extra channels, -0.1 to 0.1.
 TAG_AUTO_ZOOM			= MAKETAG('A','T','Z','M'),		//frame zoom       				ATZM	H	If non-zero set FramingFlag |= 1
-TAG_FRAME_OFFSET_X		= MAKETAG('O','F','F','X'),		//frame offset x   				OFFX	f	1xChannel float 0.0 is center, repeated for extra channels.   
-TAG_FRAME_OFFSET_Y		= MAKETAG('O','F','F','Y'),		//frame offset y   				OFFY	f	1xChannel float 0.0 is center, repeated for extra channels.   
-TAG_FRAME_OFFSET_R		= MAKETAG('O','F','F','R'),		//frame offset rotaiton   		OFFR	f	1xChannel float 0.0 is center, repeated for extra channels.   
-TAG_FRAME_OFFSET_F		= MAKETAG('O','F','F','F'),		//frame offset fisheye   		OFFF	f	1xChannel float 0.0 is center, repeated for extra channels.   
-TAG_FRAME_HSCALE		= MAKETAG('O','F','F','H'),		//frame offset Horizontal Scale	OFFH	f	1xChannel float 0.0 is center, repeated for extra channels.   
-TAG_FRAME_HDYNAMIC		= MAKETAG('O','F','F','D'),		//frame offset Dynamic Scale   	OFFD	f	1xChannel float 0.0 is center, repeated for extra channels.   
-TAG_FRAME_DYNCENTER		= MAKETAG('O','F','F','C'),		//frame offset Dynamic Scale   	OFFC	f	1xChannel float 0.0 is center, repeated for extra channels.   
-TAG_FRAME_DYNWIDTH		= MAKETAG('O','F','F','W'),		//frame offset Dynamic Scale   	OFFW	f	1xChannel float 0.0 is center, repeated for extra channels.   
-TAG_MASK_LEFT			= MAKETAG('M','S','K','L'),		//floading window left   		MSKL	f	window mask 0.0 is no mask.   
-TAG_MASK_RIGHT			= MAKETAG('M','S','K','R'),		//floading window right   		MSKR	f	window mask 0.0 is no mask.   
-TAG_PROXY_COPY			= MAKETAG('P','R','X','Y'),		//proxy for another CFHD file	PRXY	H	1 -  proxy.   
+TAG_FRAME_OFFSET_X		= MAKETAG('O','F','F','X'),		//frame offset x   				OFFX	f	1xChannel float 0.0 is center, repeated for extra channels.
+TAG_FRAME_OFFSET_Y		= MAKETAG('O','F','F','Y'),		//frame offset y   				OFFY	f	1xChannel float 0.0 is center, repeated for extra channels.
+TAG_FRAME_OFFSET_R		= MAKETAG('O','F','F','R'),		//frame offset rotaiton   		OFFR	f	1xChannel float 0.0 is center, repeated for extra channels.
+TAG_FRAME_OFFSET_F		= MAKETAG('O','F','F','F'),		//frame offset fisheye   		OFFF	f	1xChannel float 0.0 is center, repeated for extra channels.
+TAG_FRAME_HSCALE		= MAKETAG('O','F','F','H'),		//frame offset Horizontal Scale	OFFH	f	1xChannel float 0.0 is center, repeated for extra channels.
+TAG_FRAME_HDYNAMIC		= MAKETAG('O','F','F','D'),		//frame offset Dynamic Scale   	OFFD	f	1xChannel float 0.0 is center, repeated for extra channels.
+TAG_FRAME_DYNCENTER		= MAKETAG('O','F','F','C'),		//frame offset Dynamic Scale   	OFFC	f	1xChannel float 0.0 is center, repeated for extra channels.
+TAG_FRAME_DYNWIDTH		= MAKETAG('O','F','F','W'),		//frame offset Dynamic Scale   	OFFW	f	1xChannel float 0.0 is center, repeated for extra channels.
+TAG_MASK_LEFT			= MAKETAG('M','S','K','L'),		//floading window left   		MSKL	f	window mask 0.0 is no mask.
+TAG_MASK_RIGHT			= MAKETAG('M','S','K','R'),		//floading window right   		MSKR	f	window mask 0.0 is no mask.
+TAG_PROXY_COPY			= MAKETAG('P','R','X','Y'),		//proxy for another CFHD file	PRXY	H	1 -  proxy.
 TAG_CALLING_APP			= MAKETAG('S','A','P','P'),		//calling App 4cc				SAPP	H	1 long (4 byte 4cc of calling application)
 TAG_SOURCE_PIXEL_FMT	= MAKETAG('S','F','M','T'),		//format of pixel passed to enc SFMT	H	1 long (4 byte 4cc of pixel format)
 
-TAG_EYE_DELTA_1			= MAKETAG('C','O','L','1'),   	//eye difference information  	COL1	-	x bytes of CineForm metadata  
-TAG_EYE_DELTA_2			= MAKETAG('C','O','L','2'),   	//eye difference information  	COL2	-	x bytes of CineForm metadata  
+TAG_EYE_DELTA_1			= MAKETAG('C','O','L','1'),   	//eye difference information  	COL1	-	x bytes of CineForm metadata
+TAG_EYE_DELTA_2			= MAKETAG('C','O','L','2'),   	//eye difference information  	COL2	-	x bytes of CineForm metadata
 
 TAG_SET_EYE				= MAKETAG('S','E','T','E'),  	//start writing eye channel x	SETE	L	1 long to indicate the eye number the following metadata is applied  0-both, 1-left, 2-right
 
@@ -305,23 +305,23 @@ TAG_SMART_RENDER_OK		= MAKETAG('S','R','O','K'),  	//only Smart Render some clip
 
 // tags for FirstLight
 TAG_GAINS				= MAKETAG('G','A','I','N'),		//early first light version
-        
+
 TAG_SYNC_3D				= MAKETAG('S','Y','N','C'),		//3D sync frame					SYNC	L	frame number of 3D sync
-TAG_HISTOGRAM			= MAKETAG('H','I','S','T'),		//Histogram on     				HIST	H	non-zero is active.   
-TAG_OVERLAYS			= MAKETAG('O','V','E','R'),		//text overlay     				OVER	H	non-zero is active. 
-TAG_TOOLS				= MAKETAG('T','O','O','L'),		//tools overlay     			TOOL	H	non-zero is active. 
-TAG_WAVEFORM			= MAKETAG('W','V','F','M'),		//Waveform	     				WVFM	H	non-zero is active. 
-TAG_VECTORSCOPE			= MAKETAG('V','T','S','P'),		//vectorscope    				VTSP	H	non-zero is active. 
-                    	                           		                             	    	   	
-TAG_DPX_FILE			= MAKETAG('D','P','X','F'),		//DPX File Information     		DPXF	-	x bytes // 
-TAG_DPX_INFO			= MAKETAG('D','P','X','I'),		//DPX Image_Information    		DPXI	-	x bytes // 
-TAG_DPX_ORIENT			= MAKETAG('D','P','X','O'),		//DPX Image_Orientation    		DPXO	-	x bytes // 
-TAG_DPX_MOTION			= MAKETAG('D','P','X','M'),		//DPX Motion_Picture_Film  		DPXM	-	x bytes // 
-TAG_DPX_TV				= MAKETAG('D','P','X','T'),		//DPX Television_Header    		DPXT	-	x bytes // 
-TAG_DPX_USER			= MAKETAG('D','P','X','U'),		//DPX User Data            		DPXU	-	x bytes // 
+TAG_HISTOGRAM			= MAKETAG('H','I','S','T'),		//Histogram on     				HIST	H	non-zero is active.
+TAG_OVERLAYS			= MAKETAG('O','V','E','R'),		//text overlay     				OVER	H	non-zero is active.
+TAG_TOOLS				= MAKETAG('T','O','O','L'),		//tools overlay     			TOOL	H	non-zero is active.
+TAG_WAVEFORM			= MAKETAG('W','V','F','M'),		//Waveform	     				WVFM	H	non-zero is active.
+TAG_VECTORSCOPE			= MAKETAG('V','T','S','P'),		//vectorscope    				VTSP	H	non-zero is active.
+
+TAG_DPX_FILE			= MAKETAG('D','P','X','F'),		//DPX File Information     		DPXF	-	x bytes //
+TAG_DPX_INFO			= MAKETAG('D','P','X','I'),		//DPX Image_Information    		DPXI	-	x bytes //
+TAG_DPX_ORIENT			= MAKETAG('D','P','X','O'),		//DPX Image_Orientation    		DPXO	-	x bytes //
+TAG_DPX_MOTION			= MAKETAG('D','P','X','M'),		//DPX Motion_Picture_Film  		DPXM	-	x bytes //
+TAG_DPX_TV				= MAKETAG('D','P','X','T'),		//DPX Television_Header    		DPXT	-	x bytes //
+TAG_DPX_USER			= MAKETAG('D','P','X','U'),		//DPX User Data            		DPXU	-	x bytes //
 TAG_DPX_FRAME_POSITION	= MAKETAG('D','P','F','N'),		//DPX Frame Number				DPFN	L	1 long frame number for DPX file
 TAG_DPX_FILE_FIELD		= MAKETAG('D','P','X','X'),		//DPX file from ALE file		DPXX	c	x bytes from ALE file
- 	
+
 TAG_DISPLAY_METADATA	= MAKETAG('D','S','P','m'),		//Burn-in Display parameters	DSPm	-	x bytes of CineForm metadata
 TAG_DISPLAY_SCRIPT		= MAKETAG('D','S','C','R'),		//Embedded script text			DSCR	c	x bytes of metadata control script
 TAG_DISPLAY_SCRIPT_FILE = MAKETAG('D','S','C','P'),		//Script file path				DSCP	c	x bytes of full path to a metadata control script
@@ -331,14 +331,14 @@ TAG_DISPLAY_OVERLAY_SAFE= MAKETAG('D','O','S','F'),		//Overlay safe region			DOS
 
 //many of the TAG_DISPLAY_xxx types can in used outside of a DSPm for a global default
 TAG_DISPLAY_TAG			= MAKETAG('D','T','A','G'),		//TAG to display				DTAG	T	4 bytes, FOURCC value of the tag to display
-TAG_DISPLAY_FREEFORM	= MAKETAG('D','F','F','M'),		//freeform to display			DFFM	c	x bytes, string name / value metadata 
+TAG_DISPLAY_FREEFORM	= MAKETAG('D','F','F','M'),		//freeform to display			DFFM	c	x bytes, string name / value metadata
 TAG_DISPLAY_FONT		= MAKETAG('D','F','N','T'),		//Font to use					DFMT	c	x bytes, name of font to load
 TAG_DISPLAY_FONTSIZE	= MAKETAG('D','F','S','Z'),		//Font size						DFSZ	f	1 float, size of font 0 to 0.1, where 1 is the display height
 TAG_DISPLAY_JUSTIFY		= MAKETAG('D','J','S','T'),		//Justifaction for fonts & gfx	DJST	H	4 bytes, Justification flags JUSTIFY_CENTER = 0, JUSTIFY_LEFT = 1, JUSTIFY_RIGHT = 2, JUSTIFY_TOP = 4, JUSTIFY_TL = 5, JUSTIFY_TR = 6, JUSTIFY_BOTTOM = 8, JUSTIFY_BL = 9, JUSTIFY_BR = 10
 TAG_DISPLAY_TIMING_IN 	= MAKETAG('D','T','I','N'),		//Timing in frame number    	DTIN	L	4 bytes, In frame
 TAG_DISPLAY_TIMING_DUR 	= MAKETAG('D','T','D','R'),		//Timing duration in frames  	DTDR	L	4 bytes, Duration frames
 TAG_DISPLAY_T_FADEIN 	= MAKETAG('D','T','F','I'),		//Timing fade in frames 		DTFI	L	4 bytes, in fade frames
-TAG_DISPLAY_T_FADEOUT	= MAKETAG('D','T','F','O'),		//Timing fade out frames 		DTFO	L	4 bytes, out fade frames 
+TAG_DISPLAY_T_FADEOUT	= MAKETAG('D','T','F','O'),		//Timing fade out frames 		DTFO	L	4 bytes, out fade frames
 TAG_DISPLAY_FCOLOR		= MAKETAG('D','F','C','L'),		//Foreground color				DFCL	f	4 floats, R,G,B,A from 0.0 to 1.0 -- font color
 TAG_DISPLAY_BCOLOR		= MAKETAG('D','B','C','L'),		//Background color				DBCL	f	4 floats, R,G,B,A from 0.0 to 1.0 -- font background
 TAG_DISPLAY_SCOLOR		= MAKETAG('D','S','C','L'),		//Stroke color					DSCL	f	4 floats, R,G,B,A from 0.0 to 1.0 -- font background
@@ -360,9 +360,9 @@ TAG_CONTROL_POINT		= MAKETAG('C','T','L','p'),		//Add a timecode metadat event	C
 TAG_ATTACH_SPI_PATH		= MAKETAG('A','S','P','I'),		//Path to SPI file				ASPI	c	x bytes of full path of SPI to load.
 TAG_SPI_OFFSET_TC		= MAKETAG('S','P','I','O'),		//SPI TC offset					SPIO	c	11 bytes of TC 00:00:00:00
 TAG_SPI_PARALLAX		= MAKETAG('S','P','I','P'),		//SPI Parallax					SPIP	l	pixel parallax, neative is in front of the screen plane.
-	
+
 // Values added to support Avid ALE metadata
-	
+
 TAG_AUX_INK_END			= MAKETAG('A','N','K','E'),	    //Aux Ink out point for clip    ANKE    c	x chars - depends on format of aux ink
 TAG_AUX_INK_FILM_TYPE	= MAKETAG('A','N','K','F'),		//Aux Ink film type				ANKF	c	x chars - defines counting format of aux ink
 TAG_AUX_INK_EDGE		= MAKETAG('A','N','K','G'),		//Aux ink edge type				ANKG	c	x chars - defines how Aux Ink number displayed
@@ -412,15 +412,15 @@ TAG_TRANSFER			= MAKETAG('T','R','N','S'),		//Transfer						TRNS	c	x bytes: from
 TAG_UNCPATH				= MAKETAG('U','N','C','P'),		//UNC Path						UNCP	c	x bytes: UNC path from ALE file
 TAG_VFX					= MAKETAG('V','F','X','F'),		//VFX name and frame			VFXF	c	x bytes: frame based counter with 32 An prefix and 6 frame counter (32-6)
 TAG_VFX_REEL			= MAKETAG('V','F','X','R'),		//VFX Reel name					VFXR	c	x bytes VFX reel name
-                               	    	   	
-// lower case last character indicates items can have multiple metadata entries     	    	   	
-TAG_DIRECTOR			= MAKETAG('D','R','T','r'),    //Director Name   				DRTr	c	x chars (variable length) 
-TAG_PRODUCER 			= MAKETAG('P','R','O','d'),    //Producer Name   				PROd	c	x chars (variable length) 
-TAG_DIR_PHOTOGR 		= MAKETAG('D','R','P','t'),    //D.P. Name       				DRPt	c	x chars (variable length) 
-TAG_SHOT_TYPE 			= MAKETAG('S','H','T','y'),    //Shot Type       				SHTy	c	x chars (variable length) 
+
+// lower case last character indicates items can have multiple metadata entries
+TAG_DIRECTOR			= MAKETAG('D','R','T','r'),    //Director Name   				DRTr	c	x chars (variable length)
+TAG_PRODUCER 			= MAKETAG('P','R','O','d'),    //Producer Name   				PROd	c	x chars (variable length)
+TAG_DIR_PHOTOGR 		= MAKETAG('D','R','P','t'),    //D.P. Name       				DRPt	c	x chars (variable length)
+TAG_SHOT_TYPE 			= MAKETAG('S','H','T','y'),    //Shot Type       				SHTy	c	x chars (variable length)
 TAG_PRODUCTION 			= MAKETAG('P','R','D','l'),    //Production length  			PRDl	c	x chars (variable length)
-TAG_LOCATION        	= MAKETAG('L','O','C','n'),    //Location        				LOCn	c	x chars (variable length) 
-TAG_KEYWORD         	= MAKETAG('K','W','R','d'),    //Keyword         				KWRd	c	x chars (variable length) 
+TAG_LOCATION        	= MAKETAG('L','O','C','n'),    //Location        				LOCn	c	x chars (variable length)
+TAG_KEYWORD         	= MAKETAG('K','W','R','d'),    //Keyword         				KWRd	c	x chars (variable length)
 TAG_SCRIPT_PAGE			= MAKETAG('S','C','P','g'),    //Scriptpage num  				SCPq	L	4 bytes as unsigned integer
 TAG_MODIFIER_NUMBER 	= MAKETAG('M','D','F','r'),    //Modifier number (deprecated)	MDFr	S	1 short (2 bytes in 4) 0 = NONE, 1 = 'A', 2 = 'B', take modifier
 
@@ -436,20 +436,20 @@ TAG_GOPRO_SENSOR_ID		= MAKETAG('S','N','I','D'),		// Camera sensor ID				SNID	H	
 TAG_GOPRO_SETTINGS		= MAKETAG('G','P','S','T'),		// Camera sensor ID				GPST	H	n x 32-bit settings flags
 
 TAG_FRAMERATE			= MAKETAG('F','R','M','R'),		// Frame rate & scale			FRMR	L	2 longs (8-byes), rate and scale
-TAG_PRESENTATION_WIDTH	= MAKETAG('P','R','S','W'),		//Presentation Width			PRSW	L	presentation width, independent to the encoded width (4 bytes) 
-TAG_PRESENTATION_HEIGHT	= MAKETAG('P','R','S','H'),		//Presetnation Hieght			PRSH	L	presentation height, independent to the encoded height (4 bytes) 
+TAG_PRESENTATION_WIDTH	= MAKETAG('P','R','S','W'),		//Presentation Width			PRSW	L	presentation width, independent to the encoded width (4 bytes)
+TAG_PRESENTATION_HEIGHT	= MAKETAG('P','R','S','H'),		//Presetnation Hieght			PRSH	L	presentation height, independent to the encoded height (4 bytes)
 
 
-// REGN/REGV and TAGN/TAGV are pairs that can be mulitple times.                		    	   	
-TAG_REGISTRY_NAME 		= MAKETAG('R','E','G','N'),    //Registry name    				REGN	c	variable length 
-TAG_REGISTRY_VALUE 		= MAKETAG('R','E','G','V'),    //Registry value   				REGV	L/c	variable length for a string or only DWORD 
-                                                                                		    	
-// Free form third party data in TAG NAME/VALUE pairs                           		    	
-TAG_NAME 				= MAKETAG('T','A','G','N'),    //Registry name    				TAGN	c	variable length 
-TAG_VALUE 				= MAKETAG('T','A','G','V'),    //Registry value  				TAGV	any	variable length for a string or only DWORD 
+// REGN/REGV and TAGN/TAGV are pairs that can be mulitple times.
+TAG_REGISTRY_NAME 		= MAKETAG('R','E','G','N'),    //Registry name    				REGN	c	variable length
+TAG_REGISTRY_VALUE 		= MAKETAG('R','E','G','V'),    //Registry value   				REGV	L/c	variable length for a string or only DWORD
+
+// Free form third party data in TAG NAME/VALUE pairs
+TAG_NAME 				= MAKETAG('T','A','G','N'),    //Registry name    				TAGN	c	variable length
+TAG_VALUE 				= MAKETAG('T','A','G','V'),    //Registry value  				TAGV	any	variable length for a string or only DWORD
 
 // Third party can create their own FOURCC codes as long as they are completely lower case
 
 } MetadataTag;
 
-#endif // _METADATATAGS_H
+#endif // CFHD_METADATA_TAGS_H

@@ -1,5 +1,5 @@
 /*! @file CFHDEncoder.h
-
+*
 *  @brief Interface to the CineForm HD encoder.  The encoder API uses an opaque
 *  data type to represent an instance of an encoder.  The encoder reference
 *  is returned by the call to @ref CFHD_OpenEncoder.
@@ -9,7 +9,7 @@
 *  (C) Copyright 2017 GoPro Inc (http://gopro.com/).
 *
 *  Licensed under either:
-*  - Apache License, Version 2.0, http://www.apache.org/licenses/LICENSE-2.0  
+*  - Apache License, Version 2.0, http://www.apache.org/licenses/LICENSE-2.0
 *  - MIT license, http://opensource.org/licenses/MIT
 *  at your option.
 *
@@ -18,21 +18,18 @@
 *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 *  See the License for the specific language governing permissions and
 *  limitations under the License.
-*
 */
 
-
 #pragma once
-
-//TODO: Eliminate warnings caused by use of four character codes
-//#pragma warning(disable: 1899)
+#ifndef CFHD_ENCODER_H
+#define CFHD_ENCODER_H
 
 #include "CFHDError.h"
 #include "CFHDTypes.h"
 
 #ifdef _WINDOWS
 	#ifndef DYNAMICLIB
-		#define CFHDENCODER_API  
+		#define CFHDENCODER_API
 	#else
 		#ifdef ENCODERDLL_EXPORTS
 		// Export the entry points for the encoder
@@ -42,11 +39,11 @@
 		#define CFHDENCODER_API __declspec(dllimport)
 		#endif
      #endif
-#else 
+#else
   #ifdef ENCODERDLL_EXPORTS
     #define CFHDENCODER_API __attribute__((visibility("default")))
   #else
-    #define CFHDENCODER_API 
+    #define CFHDENCODER_API
   #endif
 #endif
 
@@ -64,7 +61,9 @@ typedef void *CFHD_SampleBufferRef;
 extern "C" {
 #endif
 
+
 #if DYNAMICALLY_LINK
+
 
 // Open an instance of the CineForm HD ENCODER
 CFHD_Error CFHD_OpenEncoderStub(CFHD_EncoderRef *encoderRefOut,
@@ -122,11 +121,11 @@ CFHD_Error CFHD_MetadataOpenStub(CFHD_MetadataRef *metadataRefOut);
 
 CFHD_Error CFHD_MetadataAddStub(CFHD_MetadataRef metadataRef,
 				 uint32_t tag,
-				 CFHD_MetadataType type, 
+				 CFHD_MetadataType type,
 				 size_t size,
 				 uint32_t *data,
 				 bool temporary);
-	
+
 CFHD_Error CFHD_MetadataAttachStub(CFHD_EncoderRef encoderRef, CFHD_MetadataRef metadataRef);
 
 CFHD_Error CFHD_MetadataCloseStub(CFHD_MetadataRef metadataRef);
@@ -217,37 +216,40 @@ CFHD_Error CFHD_ReleaseSampleBufferStub(CFHD_EncoderPoolRef encoderPoolRef,
 // Release the encoder pool
 CFHD_Error CFHD_ReleaseEncoderPoolStub(CFHD_EncoderPoolRef encoderPoolRef);
 
-#define CFHD_OpenEncoder                  CFHD_OpenEncoderStub 
-#define CFHD_GetInputFormats			  CFHD_GetInputFormatsStub 
-#define CFHD_PrepareToEncode			  CFHD_PrepareToEncodeStub 
-#define CFHD_SetEncodeLicense			  CFHD_SetEncodeLicenseStub 
-#define CFHD_EncodeSample				  CFHD_EncodeSampleStub 
-#define CFHD_GetSampleData				  CFHD_GetSampleDataStub 
-#define CFHD_CloseEncoder				  CFHD_CloseEncoderStub 
-#define CFHD_GetEncodeThumbnail			  CFHD_GetEncodeThumbnailStub 
-#define CFHD_MetadataOpen				  CFHD_MetadataOpenStub 
-#define CFHD_MetadataAdd				  CFHD_MetadataAddStub 
-#define CFHD_MetadataAttach				  CFHD_MetadataAttachStub 
-#define CFHD_MetadataClose				  CFHD_MetadataCloseStub 
-#define CFHD_ApplyWatermark				  CFHD_ApplyWatermarkStub 
-#define CFHD_CreateEncoderPool			  CFHD_CreateEncoderPoolStub 
-#define CFHD_GetAsyncInputFormats		  CFHD_GetAsyncInputFormatsStub 
-#define CFHD_PrepareEncoderPool			  CFHD_PrepareEncoderPoolStub 
-#define CFHD_SetEncoderPoolLicense		  CFHD_SetEncoderPoolLicenseStub 
-#define CFHD_AttachEncoderPoolMetadata	  CFHD_AttachEncoderPoolMetadataStub 
-#define CFHD_StartEncoderPool			  CFHD_StartEncoderPoolStub 
-#define CFHD_StopEncoderPool			  CFHD_StopEncoderPoolStub 
-#define CFHD_EncodeAsyncSample			  CFHD_EncodeAsyncSampleStub 
-#define CFHD_WaitForSample				  CFHD_WaitForSampleStub 
-#define CFHD_TestForSample				  CFHD_TestForSampleStub 
-#define CFHD_GetEncodedSample			  CFHD_GetEncodedSampleStub 
-#define CFHD_GetSampleThumbnail			  CFHD_GetSampleThumbnailStub 
-#define CFHD_ReleaseSampleBuffer		  CFHD_ReleaseSampleBufferStub 
-#define CFHD_ReleaseEncoderPool			  CFHD_ReleaseEncoderPoolStub 
-#define CFHD_SetEncodeLicense2			  CFHD_SetEncodeLicense2Stub 
-#define CFHD_SetEncoderPoolLicense2		  CFHD_SetEncoderPoolLicense2Stub 
 
-#else
+#define CFHD_OpenEncoder                  CFHD_OpenEncoderStub
+#define CFHD_GetInputFormats			  CFHD_GetInputFormatsStub
+#define CFHD_PrepareToEncode			  CFHD_PrepareToEncodeStub
+#define CFHD_SetEncodeLicense			  CFHD_SetEncodeLicenseStub
+#define CFHD_EncodeSample				  CFHD_EncodeSampleStub
+#define CFHD_GetSampleData				  CFHD_GetSampleDataStub
+#define CFHD_CloseEncoder				  CFHD_CloseEncoderStub
+#define CFHD_GetEncodeThumbnail			  CFHD_GetEncodeThumbnailStub
+#define CFHD_MetadataOpen				  CFHD_MetadataOpenStub
+#define CFHD_MetadataAdd				  CFHD_MetadataAddStub
+#define CFHD_MetadataAttach				  CFHD_MetadataAttachStub
+#define CFHD_MetadataClose				  CFHD_MetadataCloseStub
+#define CFHD_ApplyWatermark				  CFHD_ApplyWatermarkStub
+#define CFHD_CreateEncoderPool			  CFHD_CreateEncoderPoolStub
+#define CFHD_GetAsyncInputFormats		  CFHD_GetAsyncInputFormatsStub
+#define CFHD_PrepareEncoderPool			  CFHD_PrepareEncoderPoolStub
+#define CFHD_SetEncoderPoolLicense		  CFHD_SetEncoderPoolLicenseStub
+#define CFHD_AttachEncoderPoolMetadata	  CFHD_AttachEncoderPoolMetadataStub
+#define CFHD_StartEncoderPool			  CFHD_StartEncoderPoolStub
+#define CFHD_StopEncoderPool			  CFHD_StopEncoderPoolStub
+#define CFHD_EncodeAsyncSample			  CFHD_EncodeAsyncSampleStub
+#define CFHD_WaitForSample				  CFHD_WaitForSampleStub
+#define CFHD_TestForSample				  CFHD_TestForSampleStub
+#define CFHD_GetEncodedSample			  CFHD_GetEncodedSampleStub
+#define CFHD_GetSampleThumbnail			  CFHD_GetSampleThumbnailStub
+#define CFHD_ReleaseSampleBuffer		  CFHD_ReleaseSampleBufferStub
+#define CFHD_ReleaseEncoderPool			  CFHD_ReleaseEncoderPoolStub
+#define CFHD_SetEncodeLicense2			  CFHD_SetEncodeLicense2Stub
+#define CFHD_SetEncoderPoolLicense2		  CFHD_SetEncoderPoolLicense2Stub
+
+
+#else // DYNAMICALLY_LINK
+
 
 // Open an instance of the CineForm HD ENCODER
 CFHDENCODER_API CFHD_Error
@@ -314,11 +316,11 @@ CFHD_MetadataOpen(CFHD_MetadataRef *metadataRefOut);
 CFHDENCODER_API CFHD_Error
 CFHD_MetadataAdd(CFHD_MetadataRef metadataRef,
 				 uint32_t tag,
-				 CFHD_MetadataType type, 
+				 CFHD_MetadataType type,
 				 size_t size,
 				 uint32_t *data,
 				 bool temporary);
-	
+
 CFHDENCODER_API CFHD_Error
 CFHD_MetadataAttach(CFHD_EncoderRef encoderRef, CFHD_MetadataRef metadataRef);
 
@@ -424,8 +426,12 @@ CFHD_ReleaseSampleBuffer(CFHD_EncoderPoolRef encoderPoolRef,
 CFHDENCODER_API CFHD_Error
 CFHD_ReleaseEncoderPool(CFHD_EncoderPoolRef encoderPoolRef);
 
-#endif
+
+#endif // DYNAMICALLY_LINK
+
 
 #ifdef __cplusplus
 }
 #endif
+
+#endif // CFHD_ENCODER_H

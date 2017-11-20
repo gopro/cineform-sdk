@@ -425,7 +425,7 @@ CFHD_GetSampleData(CFHD_EncoderRef encoderRef,
 
 	@brief Encoding a sample returns an error unless a valid license key is provided.
 
-	@description The license key is used to control trial peroids and decode resolution
+	@description The license key is used to control trial periods and decode resolution
 	limits.
 
 	@param encoderRef
@@ -471,7 +471,7 @@ CFHD_SetEncodeLicense(CFHD_EncoderRef encoderRef,
 
 	@brief Encoding a sample returns an error unless a valid license key is provided.
 
-	@description The license key is used to control trial peroids and decode resolution
+	@description The license key is used to control trial periods and decode resolution
 	limits.
 
 	@param encoderRef
