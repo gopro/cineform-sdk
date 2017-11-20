@@ -29,7 +29,8 @@
 #include "CFHDError.h"
 #include "CFHDTypes.h"
 #include "CFHDMetadata.h"
-#ifdef __cplusplus
+#ifdef _QTZPATCH
+#else
 #include "CFHDSampleHeader.h"
 #endif
 
