@@ -71,7 +71,7 @@ public:
 			long count;
 			BOOL result = ReleaseSemaphore(handle, 1, &count);
 			assert(result);
-			return result;
+			return result!=0;
 		}
 		return false;
 	}

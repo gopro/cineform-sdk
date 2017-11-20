@@ -487,6 +487,8 @@ CFHD_ParseSampleHeader(void *samplePtr,
 		encodedFormat = CSampleDecoder::EncodedFormat(header.encoded_format);
 		sampleHeader->SetEncodedFormat(encodedFormat);
 
+		sampleHeader->SetInputFormat(header.input_format);
+
 		fieldType = CSampleDecoder::FieldType(&header);
 		sampleHeader->SetFieldType(fieldType);
 
@@ -677,6 +679,17 @@ CFHD_GetImageSize(uint32_t imageWidth, uint32_t imageHeight, CFHD_PixelFormat pi
 		// Return the size of the image (in bytes)
 		*imageSizeOut = imageSize;
 		return CFHD_ERROR_OKAY;
+	}
+	return CFHD_ERROR_INVALID_ARGUMENT;
+}
+
+CFHDDECODER_API CFHD_Error
+CFHD_GetColorFlags(CFHD_DecoderRef decoderRef, int* flagsOut)
+{
+	if (flagsOut)
+	{
+		CSampleDecoder *decoder = (CSampleDecoder *)decoderRef;
+		return decoder->GetColorFlags(*flagsOut);
 	}
 	return CFHD_ERROR_INVALID_ARGUMENT;
 }

@@ -152,6 +152,12 @@ public:
 						   CFHD_PixelFormat outputFormat,
 						   int decodedResolution);
 
+	CFHD_Error GetColorFlags(int &data)
+	{
+		data = m_decoder->frame.colorspace;
+		return CFHD_ERROR_OKAY;
+	}
+
 protected:
 #if 0
 	CFHD_Error PrepareToDecodeBayer(int outputWidth,
