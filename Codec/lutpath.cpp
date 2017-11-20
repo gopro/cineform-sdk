@@ -1,4 +1,4 @@
-/*! @file lutpath.c
+/*! @file lutpath.h
 
 *  @brief Active MetadataTools
 *
@@ -23,6 +23,7 @@
 #include "stdafx.h"
 #include "config.h"
 #include "encoder.h"
+#include <string>
 
 #ifdef _WINDOWS
 // Must include the following file for Visual Studio 2005 (not required for Visual Studio 2003)
@@ -146,19 +147,18 @@ FILE *OpenUserPrefsFile(char *actual_pathname, size_t actual_size)
 	if (home_dir)
 	{
 		// Initialize the preferences path with the user home directory
-		char pathname[PATH_MAX];
-		strncpy(pathname, home_dir, PATH_MAX);
-		strncat(pathname, "/.cineform/dbsettings", PATH_MAX);
+		std::string pathname(home_dir);
+		pathname.append("/.cineform/dbsettings");
 
 		// Does the user have a preferences file?
-		FILE *file = fopen(pathname, "r");
+		FILE *file = fopen(pathname.c_str(), "r");
 		if (file)
 		{
 			if (actual_pathname)
 			{
 				// Return the actual preferences pathname for error messages
 				int actual_length = actual_size / sizeof(actual_pathname[0]);
-				strncpy(actual_pathname, pathname, actual_length);
+				strncpy(actual_pathname, pathname.c_str(), actual_length);
 				actual_pathname[actual_length - 1] = '\0';
 			}
 			return file;
@@ -780,7 +780,7 @@ void InitLUTPathsEnc(ENCODER *encoder)
 		strncpy(encoder->UserDBPathStr, DATABASE_PATH_STRING, STRING_LENGTH(encoder->UserDBPathStr));
 
 		//FILE *file = fopen(SETTINGS_PATH_STRING, "r");
-		FILE *file = OpenUserPrefsFile(NULL, 0);
+		FILE *file = OpenUserPrefsFile();
 		if(file)
 		{
 			//TODO: Parse the encoder preferences file
