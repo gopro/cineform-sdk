@@ -7,7 +7,7 @@
 *  (C) Copyright 2017 GoPro Inc (http://gopro.com/).
 *
 *  Licensed under either:
-*  - Apache License, Version 2.0, http://www.apache.org/licenses/LICENSE-2.0  
+*  - Apache License, Version 2.0, http://www.apache.org/licenses/LICENSE-2.0
 *  - MIT license, http://opensource.org/licenses/MIT
 *  at your option.
 *
@@ -24,9 +24,9 @@
 #ifndef AVIEH
 #define AVIEH
 
+#include "CFHDMetadataTags.h"
 #include <math.h>
 #include <stdint.h>
-#include "MetadataTags.h"
 
 #define CFHDDATA_MAGIC_NUMBER	0x12345678
 #define	CFHDDATA_VERSION		7

@@ -1,5 +1,5 @@
 /*! @file CFHDDecoder.h
-
+*
 *  @brief Interface to the CineForm HD decoder.  The decoder API uses an opaque
 *  data type to represent an instance of an decoder.  The decoder reference
 *  is returned by the call to @ref CFHD_OpenDecoder.
@@ -9,7 +9,7 @@
 *  (C) Copyright 2017 GoPro Inc (http://gopro.com/).
 *
 *  Licensed under either:
-*  - Apache License, Version 2.0, http://www.apache.org/licenses/LICENSE-2.0  
+*  - Apache License, Version 2.0, http://www.apache.org/licenses/LICENSE-2.0
 *  - MIT license, http://opensource.org/licenses/MIT
 *  at your option.
 *
@@ -18,13 +18,11 @@
 *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 *  See the License for the specific language governing permissions and
 *  limitations under the License.
-*
 */
 
 #pragma once
-
-#ifndef _CFHD_DECODER_H
-#define _CFHD_DECODER_H
+#ifndef CFHD_DECODER_H
+#define CFHD_DECODER_H
 
 #include "CFHDError.h"
 #include "CFHDTypes.h"
@@ -36,29 +34,26 @@
 
 #ifdef _WINDOWS
 	#ifndef DYNAMICLIB
-		#define CFHDDECODER_API   
+		#define CFHDDECODER_API
 	#else
 		#ifdef DECODERDLL_EXPORTS
 			// Export the entry points for the decoder
-			#define CFHDDECODER_API __declspec(dllexport) 
+			#define CFHDDECODER_API __declspec(dllexport)
 		#else
 			// Declare the entry points to the decoder
-			#define CFHDDECODER_API __declspec(dllimport) 
+			#define CFHDDECODER_API __declspec(dllimport)
 		#endif
 	#endif
 #else
-   #ifdef DECODERDLL_EXPORTS
-	  #define CFHDDECODER_API __attribute__((visibility("default")))
-   #else
-      #define CFHDDECODER_API 
-   #endif
+	#ifdef DECODERDLL_EXPORTS
+		#define CFHDDECODER_API __attribute__((visibility("default")))
+	#else
+		#define CFHDDECODER_API
+	#endif
 #endif
 
 // Opaque datatype for the CineForm HD decoder
 typedef void *CFHD_DecoderRef;
-
-
-
 
 // Interface to the codec library for use with either C or C++
 #ifdef __cplusplus
@@ -68,7 +63,7 @@ extern "C" {
 
 #if DYNAMICALLY_LINK
 
-	
+
 // Open an instance of the CineForm HD decoder
 CFHD_Error
 CFHD_OpenDecoderStub(CFHD_DecoderRef *decoderRefOut,
@@ -129,7 +124,7 @@ CFHD_GetImagePitchStub(uint32_t imageWidth, CFHD_PixelFormat pixelFormat, int32_
 
 // Return the size of an image in bytes.
 CFHD_Error
-CFHD_GetImageSizeStub(uint32_t imageWidth, uint32_t imageHeight, CFHD_PixelFormat pixelFormat, 
+CFHD_GetImageSizeStub(uint32_t imageWidth, uint32_t imageHeight, CFHD_PixelFormat pixelFormat,
 					  CFHD_VideoSelect videoselect,	CFHD_Stereo3DType stereotype, uint32_t *imageSizeOut);
 
 // Decode one frame of CineForm HD encoded video
@@ -139,19 +134,19 @@ CFHD_DecodeSampleStub(CFHD_DecoderRef decoderRef,
 				  size_t sampleSize,
 				  void *outputBuffer,
 				  int outputPitch);
-	
+
 // Set the license for the decoder, controlling time trials and decode resolutions, else watermarked
 CFHD_Error
 CFHD_SetLicenseStub(CFHD_DecoderRef decoderRef,
 				const unsigned char *licenseKey);
-	
+
 // Set the metadata rules for the decoder
 CFHD_Error
 CFHD_SetActiveMetadataStub(CFHD_DecoderRef decoderRef,
 					   CFHD_MetadataRef metadataRef,
-					   unsigned int tag, 
-					   CFHD_MetadataType type, 
-					   void *data, 
+					   unsigned int tag,
+					   CFHD_MetadataType type,
+					   void *data,
 					   CFHD_MetadataSize size);
 
 CFHD_Error
@@ -176,10 +171,10 @@ CFHD_CloseDecoderStub(CFHD_DecoderRef decoderRef);
 
 // Close an instance of the CineForm HD developer
 CFHD_Error
-CFHD_CreateImageDeveloperStub(CFHD_DecoderRef decoderRef, 
-						  uint32_t imageWidth, 
+CFHD_CreateImageDeveloperStub(CFHD_DecoderRef decoderRef,
+						  uint32_t imageWidth,
 						  uint32_t imageHeight,
-						  uint32_t sourceVideoChannels, 
+						  uint32_t sourceVideoChannels,
 						  CFHD_PixelFormat pixelFormatSrc,
 						  CFHD_PixelFormat pixelFormatDst);
 
@@ -201,7 +196,7 @@ CFHD_CreateImageDeveloperStub(CFHD_DecoderRef decoderRef,
 #define CFHD_CreateImageDeveloper	CFHD_CreateImageDeveloperStub
 
 
-#else
+#else // DYNAMICALLY_LINK
 
 
 // Open an instance of the CineForm HD decoder
@@ -260,7 +255,7 @@ CFHD_GetImagePitch(uint32_t imageWidth, CFHD_PixelFormat pixelFormat, int32_t *i
 
 // Return the size of an image (in bytes)
 CFHDDECODER_API CFHD_Error
-CFHD_GetImageSize(uint32_t imageWidth, uint32_t imageHeight, CFHD_PixelFormat pixelFormat, 
+CFHD_GetImageSize(uint32_t imageWidth, uint32_t imageHeight, CFHD_PixelFormat pixelFormat,
 				  CFHD_VideoSelect videoselect,	CFHD_Stereo3DType stereotype, uint32_t *imageSizeOut);
 
 // Decode one frame of CineForm HD encoded video
@@ -270,7 +265,7 @@ CFHD_DecodeSample(CFHD_DecoderRef decoderRef,
 				  size_t sampleSize,
 				  void *outputBuffer,
 				  int32_t outputPitch);
-	
+
 // Set the license for the decoder, controlling time trials and decode resolutions, else watermarked
 CFHDDECODER_API CFHD_Error
 CFHD_SetLicense(CFHD_DecoderRef decoderRef,
@@ -280,9 +275,9 @@ CFHD_SetLicense(CFHD_DecoderRef decoderRef,
 CFHDDECODER_API CFHD_Error
 CFHD_SetActiveMetadata(CFHD_DecoderRef decoderRef,
 					   CFHD_MetadataRef metadataRef,
-					   unsigned int tag, 
-					   CFHD_MetadataType type, 
-					   void *data, 
+					   unsigned int tag,
+					   CFHD_MetadataType type,
+					   void *data,
 					   unsigned int size);
 
 CFHDDECODER_API CFHD_Error
@@ -307,17 +302,19 @@ CFHD_CloseDecoder(CFHD_DecoderRef decoderRef);
 
 // Close an instance of the CineForm HD developer
 CFHDDECODER_API CFHD_Error
-CFHD_CreateImageDeveloper(CFHD_DecoderRef decoderRef, 
-						  uint32_t imageWidth, 
+CFHD_CreateImageDeveloper(CFHD_DecoderRef decoderRef,
+						  uint32_t imageWidth,
 						  uint32_t imageHeight,
 						  uint32_t sourceVideoChannels,
 						  CFHD_PixelFormat pixelFormatSrc,
 						  CFHD_PixelFormat pixelFormatDst);
 
-#endif
+
+#endif // DYNAMICALLY_LINK
+
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif //_CFHD_DECODER_H
+#endif // CFHD_DECODER_H

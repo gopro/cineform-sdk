@@ -1,5 +1,5 @@
 /*! @file CFHDAllocator.h
-
+*
 *  @brief Setting up and controlling the Allocator used within the CineForm SDKs
 *
 *  @version 1.0.0
@@ -7,7 +7,7 @@
 *  (C) Copyright 2017 GoPro Inc (http://gopro.com/).
 *
 *  Licensed under either:
-*  - Apache License, Version 2.0, http://www.apache.org/licenses/LICENSE-2.0  
+*  - Apache License, Version 2.0, http://www.apache.org/licenses/LICENSE-2.0
 *  - MIT license, http://opensource.org/licenses/MIT
 *  at your option.
 *
@@ -16,11 +16,9 @@
 *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 *  See the License for the specific language governing permissions and
 *  limitations under the License.
-*
 */
-#pragma once
 
-// Prevent duplicate files from being loaded
+#pragma once
 #ifndef CFHD_ALLOCATOR_H
 #define CFHD_ALLOCATOR_H
 
@@ -51,4 +49,4 @@ typedef struct cfhd_allocator
 
 #define CFHD_ALLOCATOR ALLOCATOR
 
-#endif
+#endif // CFHD_ALLOCATOR_H

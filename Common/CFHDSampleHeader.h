@@ -1,5 +1,5 @@
 /*! @file CFHDSampleHeader.h
-
+*
 *  @brief Utilities for parsing the compressed sample header for a CineForm compressed frame.
 *
 *  @version 1.0.0
@@ -7,7 +7,7 @@
 *  (C) Copyright 2017 GoPro Inc (http://gopro.com/).
 *
 *  Licensed under either:
-*  - Apache License, Version 2.0, http://www.apache.org/licenses/LICENSE-2.0  
+*  - Apache License, Version 2.0, http://www.apache.org/licenses/LICENSE-2.0
 *  - MIT license, http://opensource.org/licenses/MIT
 *  at your option.
 *
@@ -16,15 +16,13 @@
 *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 *  See the License for the specific language governing permissions and
 *  limitations under the License.
-*
 */
 
 #pragma once
+#ifndef CFHD_SAMPLE_HEADER_H
+#define CFHD_SAMPLE_HEADER_H
 
-#ifndef _CFHD_SAMPLE_HEADER_H
-#define _CFHD_SAMPLE_HEADER_H
-
-/*
+/*!
 	@brief Information obtained by parsing the sample header
 
 	@todo Add more fields from the sample header to this class as
@@ -66,12 +64,14 @@ public:
 		*fieldTypeOut = m_fieldType;
 		return CFHD_ERROR_OKAY;
 	}
+
 	CFHD_Error SetFrameSize(int width, int height)
 	{
 		m_width = width;
 		m_height = height;
 		return CFHD_ERROR_OKAY;
 	}
+
 	CFHD_Error GetFrameSize(int *widthOut, int *heightOut)
 	{
 		*widthOut = m_width;
@@ -80,12 +80,10 @@ public:
 	}
 
 private:
-
 	CFHD_EncodedFormat m_encodedFormat;
 	CFHD_FieldType m_fieldType;
-	int	m_width;
+	int m_width;
 	int m_height;
-
 };
 
-#endif //_CFHD_SAMPLE_HEADER_H
+#endif // CFHD_SAMPLE_HEADER_H
