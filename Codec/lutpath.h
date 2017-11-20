@@ -78,20 +78,12 @@ CODEC_ERROR ParseUserMetadataPrefs(FILE *file,
 
 #endif
 
+FILE *OpenUserPrefsFile(char *actual_pathname,			//!< Return the actual pathname
+                        size_t actual_size				//!< Return the pathname size (in bytes)
+                        );
+
 #ifdef __cplusplus
 }
 #endif
 
 
-#ifdef __cplusplus
-
-extern "C"
-FILE *OpenUserPrefsFile(char *actual_pathname = NULL,	//!< Return the actual pathname
-						size_t actual_size = 0			//!< Return the pathname size (in bytes)
-						);
-#else
-
-FILE *OpenUserPrefsFile(char *actual_pathname,			//!< Return the actual pathname
-						size_t actual_size				//!< Return the pathname size (in bytes)
-						);
-#endif
