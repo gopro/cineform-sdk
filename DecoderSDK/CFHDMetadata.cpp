@@ -27,7 +27,6 @@
 #include "StdAfx.h"
 
 #ifdef _WINDOWS
-#include "../Common/Settings.h"
 #else
 #define MAX_PATH	260
 #if __APPLE__

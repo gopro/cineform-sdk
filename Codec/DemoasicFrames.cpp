@@ -42,11 +42,7 @@
 #endif
 
 #include "../Common/AVIExtendedHeader.h"
-#ifdef _WINDOWS
-#include "../Common/Settings.h"
-#else
 #define MAX_PATH	260
-#endif
 
 #include "codec.h"
 //#include "swap.h"
@@ -502,7 +498,7 @@ void FastVignetteInplaceWP13(DECODER *decoder, int displayWidth, int width, int 
 
 				Af -= 0.5f;
 				Af *= 2.0f;
-				Af /= (1.0f + fabs(Af)); 
+				Af /= (1.0f + fabsf(Af)); 
 				Af += 0.5f;
 
 				Af *= (1.0f-gain);
@@ -6578,9 +6574,9 @@ void UpdateCFHDDATA(DECODER *decoder, unsigned char *ptr, int len, int delta, in
 
 			for(i=0;i<3; i++)
 			{				
-				horizZoom1 = horizZoom2 = fabs(cfhddata->channel[i].HorizontalOffset) + fabs(cfhddata->channel[i].RotationOffset * 0.5f);
-				verticalZoom = fabs(cfhddata->channel[i].VerticalOffset) + fabs(cfhddata->channel[i].RotationOffset * (float)(w*w) / (float)(h*h) * 0.5f); // 16/9
-				verticalZoom += fabs(cfhddata->channel[i].FrameKeyStone/4.0f);
+				horizZoom1 = horizZoom2 = fabsf(cfhddata->channel[i].HorizontalOffset) + fabsf(cfhddata->channel[i].RotationOffset * 0.5f);
+				verticalZoom = fabsf(cfhddata->channel[i].VerticalOffset) + fabsf(cfhddata->channel[i].RotationOffset * (float)(w*w) / (float)(h*h) * 0.5f); // 16/9
+				verticalZoom += fabsf(cfhddata->channel[i].FrameKeyStone/4.0f);
 
 				horizZoom1 += cfhddata->channel[0].FrameTilt*0.5f;
 				horizZoom2 -= cfhddata->channel[0].FrameTilt*0.5f;

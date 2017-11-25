@@ -31,7 +31,8 @@
 #include <windows.h>
 
 // Includes required for Visual Studio 2005 (not required for Visual Studio 2003)
-#include <atlbase.h>
+//#include <atlbase.h>
+#include <tchar.h>
 
 #endif
 

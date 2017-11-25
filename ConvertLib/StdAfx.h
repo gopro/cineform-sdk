@@ -23,7 +23,7 @@
 
 #if _WINDOWS
 #include <windows.h>
-#include <atlbase.h>
+//#include <atlbase.h>
 #include <tchar.h>
 //#include <malloc.h>
 #endif
