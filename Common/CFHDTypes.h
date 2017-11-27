@@ -24,6 +24,7 @@
 
 #include "CFHDAllocator.h"
 #include <stdint.h>
+#include <stdbool.h>
 #include <string.h>
 
 // Convert the four character code to the correct byte order
