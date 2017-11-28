@@ -7,5 +7,5 @@ Name: ${PROJECT_NAME}
 Description: CineForm SDK libraries
 URL: https://github.com/gopro/cineform-sdk
 Version: ${PROJECT_VERSION}
-Libs: -L${LIB_INSTALL_DIR} -lCFHDCodec -luuid -lm
+Libs: -L${LIB_INSTALL_DIR} -lCFHDCodec ${ADDITIONAL_LIBS}
 Cflags: -I${INCLUDE_INSTALL_DIR}

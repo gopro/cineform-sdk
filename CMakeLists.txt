@@ -17,18 +17,21 @@ if (WIN32)
 
     set(COMPILER_FLAGS "")
     set(COMPILER_FLAGS_W_OMP "/openmp")
+    set(ADDITIONAL_LIBS "")
 endif (WIN32)
 
 if (UNIX)
     set(COMPILER_FLAGS -O3)
     set(COMPILER_FLAGS_W_OMP -fopenmp -O3)
-    set(ADDITIONAL_LIBS "-lpthread -luuid -lm -lgomp")
+    set(INTERNAL_LIBS "-lpthread -lgomp")
+    set(ADDITIONAL_LIBS "-lm -luuid")
 endif (UNIX)
 
 if (APPLE)
     set(COMPILER_FLAGS -fvisibility=hidden -O3)
     set(COMPILER_FLAGS_W_OMP -O3)
-    set(ADDITIONAL_LIBS "-lpthread -lm")
+    set(INTERNAL_LIBS "-lpthread")
+    set(ADDITIONAL_LIBS "-lm")
 endif (APPLE)
 
 
@@ -70,14 +73,14 @@ if (BUILD_TOOLS)
     target_compile_options(TestCFHD PRIVATE ${COMPILER_FLAGS_W_OMP})
 
     if (BUILD_TOOLS_STATIC)
-        target_link_libraries(TestCFHD CFHDCodecStatic ${ADDITIONAL_LIBS})
+        target_link_libraries(TestCFHD CFHDCodecStatic ${INTERNAL_LIBS} ${ADDITIONAL_LIBS})
     else (BUILD_TOOLS_STATIC)
-        target_link_libraries(TestCFHD CFHDCodecShared ${ADDITIONAL_LIBS})
+        target_link_libraries(TestCFHD CFHDCodecShared ${INTERNAL_LIBS} ${ADDITIONAL_LIBS})
     endif (BUILD_TOOLS_STATIC)
 
     # WaveletDemo
     add_executable(WaveletDemo ${WAVELETDEMO_SOURCE})
-    target_link_libraries(WaveletDemo ${TOY_LIBS})
+    target_link_libraries(WaveletDemo ${ADDITIONAL_LIBS})
 endif (BUILD_TOOLS)
 
 
