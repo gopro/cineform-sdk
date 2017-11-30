@@ -62,31 +62,22 @@ int err = 0;
 
 #if _WINDOWS
 	#ifdef DYNAMICLIB
-	BOOL APIENTRY DllMain(HANDLE hModule,
-						  DWORD ulReasonForCall,
-						  LPVOID lpReserved)
-	{
-	#if (1 && SYSLOG)
-		if (logfile == NULL) {
-			err = fopen_s(&logfile, "EncoderDLL.log", "w");
-		}
-	#endif
-	#if (0 && SYSLOG)
-		if (logfile != NULL) {
-			fprintf(logfile, "DllMain reason: %d\n", ulReasonForCall);
-		}
-	#endif
-
-		switch (ulReasonForCall)
+		#ifndef CODECCOMBINED
+		BOOL APIENTRY DllMain(HANDLE hModule,
+							  DWORD ulReasonForCall,
+							  LPVOID lpReserved)
 		{
-		case DLL_PROCESS_ATTACH:
-		case DLL_THREAD_ATTACH:
-		case DLL_THREAD_DETACH:
-		case DLL_PROCESS_DETACH:
-			break;
+			switch (ulReasonForCall)
+			{
+			case DLL_PROCESS_ATTACH:
+			case DLL_THREAD_ATTACH:
+			case DLL_THREAD_DETACH:
+			case DLL_PROCESS_DETACH:
+				break;
+			}
+			return TRUE;
 		}
-		return TRUE;
-	}
+		#endif
 	#endif
 #endif
 

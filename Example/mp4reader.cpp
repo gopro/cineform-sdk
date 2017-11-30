@@ -65,7 +65,7 @@ uint32_t *GetPayload(void *handle, uint32_t *lastpayload, uint32_t index)
 		if (MP4buffer)
 		{
 			LONGSEEK(mp4->mediafp, mp4->metaoffsets[index], SEEK_SET);
-			fread(MP4buffer, 1, mp4->metasizes[index], mp4->mediafp);
+			size_t len = fread(MP4buffer, 1, mp4->metasizes[index], mp4->mediafp);
 			return MP4buffer;
 		}
 	}
@@ -132,7 +132,7 @@ void *OpenMP4Source(char *filename, uint32_t traktype, uint32_t traksubtype)  //
 
 				if (qtsize32 == 1) // 64-bit Atom
 				{
-					fread(&qtsize, 1, 8, mp4->mediafp);
+					size_t len = fread(&qtsize, 1, 8, mp4->mediafp);
 					qtsize = BYTESWAP64(qtsize) - 8;
 				}
 				else
