@@ -22,7 +22,6 @@ Compression ratio: between 10:1 and 4:1 are typical, greater ranges are possible
   - Windows 10 with Visual Studio 2015 & 2017
   - Ubuntu 16.04 with gcc v5.4
 
-
 # License Terms
 
 CineForm-SDK is licensed under either:
@@ -35,7 +34,6 @@ at your option.
 ## Contribution
 
 Unless you explicitly state otherwise, any contribution intentionally submitted for inclusion in the work by you, as defined in the Apache-2.0 license, shall be dual licensed as above, without any additional terms or conditions.
-
 
 # Quick Start for Developers
 
@@ -97,7 +95,6 @@ Encode:       422
 
 As this is origin source it should decode all existing CineForm AVI or MOV files. Two sample files have been included showing YUV 4:2:2 and RGB 4:4:4 encoding.
 
-
 ## Using WaveletDemo
 
 After building it.
@@ -142,13 +139,13 @@ Within Example/WaveletDemo/wavelets.c: here are some key configuration controls:
 
 Play with the **BITDEPTH**, to see the impact on quality. Change the number of **LEVELS** to see how wavelets work. Set the **ERRORGAIN** to amplify the difference between the source and the decoded image. Increase the **GENERATIONS** to see it makes very little difference on the quality. 
 
-# Brief History on CineForm
+# Brief History of CineForm
 
-The CineForm video codec was developed in between 2001 and 2002 as a light weight compressed alternative for DV or other consumer formats of the time. However its notoriety wouldn't come unto around 2003 when CineForm HD when was developed, which moved the codec a from consumer 8-bit YUV, to offering [10-bit YUV](http://cineform.com/10-bit-vs-8-bit) and [12-bit RGB/RGBA](http://cineform.com/444-vs-422) for more professional digital intermediate work. The codec was ideal for the transition to HD, as its efficiency improved with the resolution increase, a bonus of it being a native Wavelet codec. Also as wavelet's can be designed to do sub-resolution decoding at a very high rate, editing of HD would perform like SD (fast) whenever needed.
+The CineForm video codec was developed in between 2001 and 2002 as a light weight compressed alternative for DV or other consumer formats of the time. However its notoriety wouldn't come unto around 2003 when CineForm HD was developed, which moved the codec a from consumer 8-bit YUV, to offering [10-bit YUV](http://cineform.com/10-bit-vs-8-bit) and [12-bit RGB/RGBA](http://cineform.com/444-vs-422) for more professional digital intermediate work. The codec was ideal for the transition to HD, as its efficiency improved with the resolution increase, a bonus of it being a native Wavelet codec. Also as wavelet's can be designed to do sub-resolution decoding at a very high rate, editing of HD would perform like SD (fast) whenever needed.
 
 CineForm RAW was added in 2005, the first to offer substantial compression directly from CFA Bayer image sensor data. Once RAW was a compression profile, this is when CineForm stopped being like other codecs, which strive to encode (compress) and decode (decompress) to the same or as close as possible to the source image. Compressing RAW was straight forward, but decompressing back to RAW didn't help the workflow, as most video editing tools (even today) do not handle native RAW well. To support RAW workflows the CineForm decoder would "develop" the image, applying demosaicing filters, color matrices, CDL color corrections and 3D LUTs before presenting the decoded image to the NLE, compositor or video editing tool. CineForm is still the only codec that does this, it was marketed as [Active Metadata](http://cineform.com/active-metadata).
 
-Active Metadata was used to enable stereoscopic 3D encoding and presentation, the third significant major feature addition to the codec core (first HD, second RAW.) The 3D support within the CineForm codec, was one of the reasons leading to the CineForm acquisition by GoPro in 2011.
+Active Metadata was used to enable stereoscopic 3D encoding and presentation, the third significant major feature addition to the codec core (first HD, second RAW). The 3D support within the CineForm codec, was one of the reasons leading to the CineForm acquisition by GoPro in 2011.
 
 Over the last six years at GoPro, the CineForm codec has been licensed to Adobe, FXHome and others and was tweaked and made into a standard through SMPTE as VC-5. VC-5 is a superset of the CineForm compression engine, it is better defined and can handle more pixel formats and resolutions than CineForm, although doesn't include the Active Metadata engine, nor does it have a performance implementation for video yet. GoPro added VC-5 to their GoPro Hero5/6 Black edition cameras for compressing RAW photos -- in camera a 24MByte DNG would be stored as a 4-7MByte GPR file using VC-5 compression.
 
@@ -216,7 +213,6 @@ The lack of complexity is what makes CineForm fast.
 ## To Decode
 
 Reverse all the steps.
-
 
 # CineForm implementation
 
