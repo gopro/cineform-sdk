@@ -345,6 +345,7 @@ public:
 
 		// Increase the amount of space in the encoder job queue
 		available++;
+		space.Wake();
 
 		// Return the encoder job with the next encoded sample
 		return job;
@@ -364,6 +365,7 @@ public:
 
 		// Increase the amount of space in the encoder job queue
 		available++;
+		space.Wake();
 
 		// Return the encoder job with the next encoded sample
 		return job;
