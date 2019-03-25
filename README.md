@@ -80,7 +80,7 @@ Within Example/TestCFHD.cpp, here are some key configuration controls:
 
 The TestCFHD defaults to using the asynchronous encoder for the greatest performance on multi-core systems, which encodes 'n' frames simultaneously. For the highest performance, the number of frames to encode at once should match the number of CPU threads available, set by **POOL_THREADS**. To keep you CPU busy, have a **POOL_QUEUE_LENGTH** greater than the number of CPUs.
 
-Asynchronous performance on a 4Ghz 8 core Broadwell E system:
+Asynchronous performance on a 4GHz 8 core Broadwell E system:
 ```
 $ ./TestCFHD -E
 Pixel format: YUY2
@@ -123,15 +123,15 @@ total 4153346
 
 Within Example/WaveletDemo/wavelets.c: here are some key configuration controls:
 ```
-#define INTERLACED22        0	    // Source is interlaced, use a different vertical filter on the first wavelet level
+#define INTERLACED22        0     // Source is interlaced, use a different vertical filter on the first wavelet level
 
-#define OUTPUT_DIFFERENCE   1	    // Output a PGM (portable Grey Map) image for the differences due to quantization.
-#define OUTPUT_WAVELET_TREE 1	    // Output a PGM for the wavelet structure.
-#define OUTPUT_DECODED      1	    // Output a PGM for the decoded image.
-#define SUBBANDS_STATS      1	    // Show Subband stats
+#define OUTPUT_DIFFERENCE   1     // Output a PGM (portable Grey Map) image for the differences due to quantization.
+#define OUTPUT_WAVELET_TREE 1     // Output a PGM for the wavelet structure.
+#define OUTPUT_DECODED      1     // Output a PGM for the decoded image.
+#define SUBBANDS_STATS      1     // Show Subband stats
 #define ERRORGAIN           (10)  // The compression is good, this multiples the error to so can see the subtle differences
 
-#define GENERATIONS         (1)	  // The type of compression,setting losing little to nothing after the first generation.
+#define GENERATIONS         (1)   // The type of compression,setting losing little to nothing after the first generation.
 
 #define LEVELS              (3)   // designed for 3, but you can experiment with 1 thru 7
 #define BITDEPTH            (12)  // designed for 12, supports 8 thru 14
