@@ -54,15 +54,15 @@ typedef enum CFHD_PixelFormat
 	CFHD_PIXEL_FORMAT_YU64 = ('YU64'),
 	CFHD_PIXEL_FORMAT_V210 = ('v210'),
 	CFHD_PIXEL_FORMAT_RG30 = ('RG30'),	// (AJA format)
-	CFHD_PIXEL_FORMAT_AB10 = ('AB10'),	// A2B10G10R10(same as RG30)
+	CFHD_PIXEL_FORMAT_AB10 = ('AB10'),	// A2B10G10R10 (same as RG30)
 	CFHD_PIXEL_FORMAT_AR10 = ('AR10'),	// A2R10G10B10
 	CFHD_PIXEL_FORMAT_R210 = ('r210'),	// DPX packed format
 	CFHD_PIXEL_FORMAT_DPX0 = ('DPX0'),	// DPX packed format
 	CFHD_PIXEL_FORMAT_NV12 = ('NV12'),	// Planar YUV 4:2:0 format for MPEG-2
 	CFHD_PIXEL_FORMAT_YV12 = ('YV12'),	// Planar YUV 4:2:0 format for MPEG-2
-	CFHD_PIXEL_FORMAT_R408 = ('R408'),	// Component Y'CbCrA 8-bit 4:4:4:4 (alpha is not populated.)
-	CFHD_PIXEL_FORMAT_V408 = ('V408'),	// Component Y'CbCrA 8-bit 4:4:4:4 (alpha is not populate
-	CFHD_PIXEL_FORMAT_BYR4 = ('BYR4'),	// Raw bayer 16-bits per componentd.)
+	CFHD_PIXEL_FORMAT_R408 = ('R408'),	// Component Y'CbCrA 8-bit 4:4:4:4 (alpha is not populated)
+	CFHD_PIXEL_FORMAT_V408 = ('V408'),	// Component Y'CbCrA 8-bit 4:4:4:4 (alpha is not populated)
+	CFHD_PIXEL_FORMAT_BYR4 = ('BYR4'),	// Raw Bayer 16-bits per component
 
 	// Decoder only formats
 	CFHD_PIXEL_FORMAT_BYR2 = ('BYR2'),	// Raw Bayer pixel data
@@ -71,7 +71,7 @@ typedef enum CFHD_PixelFormat
 	CFHD_PIXEL_FORMAT_YUYV = ('yuyv'),	// YUYV 8-bit 4:2:2
 
 	// Encoder only formats
-	CFHD_PIXEL_FORMAT_BYR5 = ('BYR5'),	// Raw bayer 12-bits per component, packed line of 8bit then line a 4bit reminder.
+	CFHD_PIXEL_FORMAT_BYR5 = ('BYR5'),	// Raw Bayer 12-bits per component, packed line of 8-bit then line a 4-bit reminder
 	CFHD_PIXEL_FORMAT_B48R = ('b48r'),	// RGB 16-bits per component
 	CFHD_PIXEL_FORMAT_RG64 = ('RG64'),	// 16-bit RGBA CFHD format
 
@@ -131,9 +131,9 @@ typedef enum CFHD_PixelFormat
 	CFHD_PIXEL_FORMAT_DPX0 = FOUR_CHAR_CODE('D','P','X','0'),	// DPX packed format
 	CFHD_PIXEL_FORMAT_NV12 = FOUR_CHAR_CODE('N','V','1','2'),	// Planar YUV 4:2:0 format for MPEG-2
 	CFHD_PIXEL_FORMAT_YV12 = FOUR_CHAR_CODE('Y','V','1','2'),	// Planar YUV 4:2:0 format for MPEG-2
-	CFHD_PIXEL_FORMAT_R408 = FOUR_CHAR_CODE('R','4','0','8'),	// Component Y'CbCrA 8-bit 4:4:4:4 (alpha is not populated.)
-	CFHD_PIXEL_FORMAT_V408 = FOUR_CHAR_CODE('V','4','0','8'),	// Component Y'CbCrA 8-bit 4:4:4:4 (alpha is not populate
-	CFHD_PIXEL_FORMAT_BYR4 = FOUR_CHAR_CODE('B','Y','R','4'),	// Raw bayer 16-bits per componentd.)
+	CFHD_PIXEL_FORMAT_R408 = FOUR_CHAR_CODE('R','4','0','8'),	// Component Y'CbCrA 8-bit 4:4:4:4 (alpha is not populated)
+	CFHD_PIXEL_FORMAT_V408 = FOUR_CHAR_CODE('V','4','0','8'),	// Component Y'CbCrA 8-bit 4:4:4:4 (alpha is not populated)
+	CFHD_PIXEL_FORMAT_BYR4 = FOUR_CHAR_CODE('B','Y','R','4'),	// Raw bayer 16-bits per component
 
 	// Decoder only formats
 	CFHD_PIXEL_FORMAT_BYR2 = FOUR_CHAR_CODE('B','Y','R','2'),	// Raw Bayer pixel data
@@ -142,17 +142,17 @@ typedef enum CFHD_PixelFormat
 	CFHD_PIXEL_FORMAT_YUYV = FOUR_CHAR_CODE('y','u','y','v'),	// YUYV 8-bit 4:2:2
 
 	// Encoder only formats
-	CFHD_PIXEL_FORMAT_BYR5 = FOUR_CHAR_CODE('B','Y','R','5'),	// Raw bayer 12-bits per component, packed line of 8bit then line a 4bit reminder.
+	CFHD_PIXEL_FORMAT_BYR5 = FOUR_CHAR_CODE('B','Y','R','5'),	// Raw Bayer 12-bits per component, packed line of 8-bit then line a 4-bit reminder
 	CFHD_PIXEL_FORMAT_B48R = FOUR_CHAR_CODE('b','4','8','r'),	// RGB 16-bits per component
 	CFHD_PIXEL_FORMAT_RG64 = FOUR_CHAR_CODE('R','G','6','4'),	// 16-bit RGBA CFHD format
 
 	// Avid pixel formats
-	CFHD_PIXEL_FORMAT_CT_UCHAR =		FOUR_CHAR_CODE('a','v','u','8'),		// Avid 8-bit CbYCrY 4:2:2 (no alpha)
-	CFHD_PIXEL_FORMAT_CT_10BIT_2_8 =	FOUR_CHAR_CODE('a','v','2','8'),	// Two planes of 8-bit and 2-bit pixels
-	CFHD_PIXEL_FORMAT_CT_SHORT_2_14 =	FOUR_CHAR_CODE('a','2','1','4'),	// Avid fixed point 2.14 pixel format
-	CFHD_PIXEL_FORMAT_CT_USHORT_10_6 =  FOUR_CHAR_CODE('a','1','0','6'),	// Avid fixed point 10.6 pixel format
-	CFHD_PIXEL_FORMAT_CT_SHORT =		FOUR_CHAR_CODE('a','v','1','6'),		// Avid 16-bit signed pixels
-	CFHD_PIXEL_FORMAT_UNC_ARGB_444 =	FOUR_CHAR_CODE('a','r','1','0'),	// Avid 10-bit ARGB 4:4:4:4
+	CFHD_PIXEL_FORMAT_CT_UCHAR =       FOUR_CHAR_CODE('a','v','u','8'),	// Avid 8-bit CbYCrY 4:2:2 (no alpha)
+	CFHD_PIXEL_FORMAT_CT_10BIT_2_8 =   FOUR_CHAR_CODE('a','v','2','8'),	// Two planes of 8-bit and 2-bit pixels
+	CFHD_PIXEL_FORMAT_CT_SHORT_2_14 =  FOUR_CHAR_CODE('a','2','1','4'),	// Avid fixed point 2.14 pixel format
+	CFHD_PIXEL_FORMAT_CT_USHORT_10_6 = FOUR_CHAR_CODE('a','1','0','6'),	// Avid fixed point 10.6 pixel format
+	CFHD_PIXEL_FORMAT_CT_SHORT =	   FOUR_CHAR_CODE('a','v','1','6'),	// Avid 16-bit signed pixels
+	CFHD_PIXEL_FORMAT_UNC_ARGB_444 =   FOUR_CHAR_CODE('a','r','1','0'),	// Avid 10-bit ARGB 4:4:4:4
 
 	// Pixel formats in the Macintosh coding style
 	kCFHDPixelFormatUnknown = CFHD_PIXEL_FORMAT_UNKNOWN,
