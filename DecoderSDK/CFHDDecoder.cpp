@@ -188,10 +188,10 @@ CFHD_OpenDecoder(CFHD_DecoderRef *decoderRefOut,
 	An opaque reference to a decoder created by a call to @ref CFHD_OpenDecoder.
 
 	@param samplePtr
-	The memory address of a CineForm compressed sample
+	The memory address of a CineForm compressed sample.
 
 	@param sampleSize
-	The size of a CineForm compressed sample
+	The size of a CineForm compressed sample.
 
 	@param outputFormatArray
 	Pointer to a preallocated array of type CFHD_PixelFormat.
@@ -200,7 +200,7 @@ CFHD_OpenDecoder(CFHD_DecoderRef *decoderRefOut,
 	Number elements in the preallocated array of type CFHD_PixelFormat.
 
 	@param actualOutputFormatCountOut
-	Location to return the number of recommended formats. 
+	Location to return the number of recommended formats.
 
 	@return Returns a CFHD error code.
 */
@@ -245,19 +245,19 @@ CFHD_GetOutputFormats(CFHD_DecoderRef decoderRef,
 	An opaque reference to a decoder created by a call to @ref CFHD_OpenDecoder.
 
 	@param samplePtr
-	The memory address of a CineForm compressed sample
+	The memory address of a CineForm compressed sample.
 
 	@param sampleSize
-	The size of a CineForm compressed sample
+	The size of a CineForm compressed sample.
 
 	@param tag
-	The request the desired data. 
+	The request the desired data.
 
 	@param value
-	pointer to an buffer that holds the return value.
+	Pointer to an buffer that holds the return value.
 
 	@param buffer_size
-	size of the buffer for the return value.
+	Size of the buffer for the return value.
 
 	@return Returns a CFHD error code.
 */
@@ -344,9 +344,9 @@ CFHD_GetSampleInfo(	CFHD_DecoderRef decoderRef,
 	initializing the decoder.
 
 	@param sampleSize
-	Normally this size of the sample in bytes, if you intend to go on to decode the frame.  
+	Normally this size of the sample in bytes, if you intend to go on to decode the frame.
 	However, if you was only initializing a decode, and wish to reduce disk overhead,
-	you can set the size to a little as 512, as that is sufficient to pass all the need 
+	you can set the size to a little as 512, as that is sufficient to pass all the need
 	information from the sample header.
 
 	@param actualWidthOut
@@ -427,16 +427,16 @@ CFHD_PrepareToDecode(CFHD_DecoderRef decoderRef,
 	@brief Parse the header in the encoded video sample. OBSOLETED by CFHD_GetSampleInfo()
 
 	@description The sample header is parsed to obtain information about the
-	video sample without decoding the video sample. 
+	video sample without decoding the video sample.
 	
 	@param samplePtr
-	The memory address of a CineForm compressed sample
+	The memory address of a CineForm compressed sample.
 
 	@param sampleSize
-	The size of a CineForm compressed sample
+	The size of a CineForm compressed sample.
 
 	@param sampleHeader
-	The address of a pre-allocated structure of type CFHD_SampleHeader
+	The address of a pre-allocated structure of type CFHD_SampleHeader.
 
 */
 CFHDDECODER_API CFHD_Error
@@ -510,9 +510,9 @@ finish:
 /*!
 	@function CFHD_GetPixelSize
 
-	@brief Return the size of the specified pixel format in bytes. 
+	@brief Return the size of the specified pixel format in bytes.
 	
-	@description Return the size of a pixel in byte is it uniquely 
+	@description Return the size of a pixel in byte is it uniquely
 	addressable.  Note that the pixel size is not defined for some
 	image formats such as v210.  This routine returns zero for pixel
 	formats that do not have a size that is an integer number of bytes.
@@ -520,10 +520,10 @@ finish:
 	compute the pitch of the image rows.  See @ref CFHD_GetImagePitch.
 
 	@param pixelFormat
-	CFHD_PixelFormat of the decoding pixel type 
+	CFHD_PixelFormat of the decoding pixel type.
 
 	@param pixelSizeOut
-	pointer to return the pixel size
+	Pointer to return the pixel size.
 
 	@return Returns a CFHD error code.
 */
@@ -607,17 +607,17 @@ CFHD_GetPixelSize(CFHD_PixelFormat pixelFormat, uint32_t *pixelSizeOut)
 
 	@brief Return the allocated length of each image row in bytes.
 
-	@description This routine must be used to determine the pitch for 
+	@description This routine must be used to determine the pitch for
 	pixel formats such as v210 where the pixel size is not defined.
 
 	@param imageWidth
-	width of the image. 
+	Width of the image. 
 
 	@param pixelFormat
-	CFHD_PixelFormat of the decoding pixel type 
+	CFHD_PixelFormat of the decoding pixel type.
 
 	@param imagePitchOut
-	pointer to return the rowsize/pitch in bytes	
+	Pointer to return the rowsize/pitch in bytes.
 
 	@return Returns a CFHD error code.
 */
@@ -637,28 +637,28 @@ CFHD_GetImagePitch(uint32_t imageWidth, CFHD_PixelFormat pixelFormat, int32_t *i
 /*!
 	@function CFHD_GetImageSize
 
-	@brief Return the size of an image in bytes. 
+	@brief Return the size of an image in bytes.
 
 	@description This image size returned by this routine can be used to allocate a 
 	buffer for a decoded 2D or 3D image.
 
 	@param imageWidth
-	width of the image. 
+	Width of the image.
 
 	@param imageHeight
-	Height of the image. In the case of a 3D image, this is the height of a single eye. 
+	Height of the image.  In the case of a 3D image, this is the height of a single eye.
 
 	@param pixelFormat
-	CFHD_PixelFormat of the decoding pixel type 
+	CFHD_PixelFormat of the decoding pixel type.
 
 	@param videoselect
-	CFHD_VideoSelect type to specifty if you are decoding left/right or both eyes
+	CFHD_VideoSelect type to specify if you are decoding left/right or both eyes.
 
 	@param stereotype
-	CFHD_Stereo3DType type to specifty 3D format if decoding both eyes.
+	CFHD_Stereo3DType type to specify 3D format if decoding both eyes.
 
 	@param imageSizeOut
-	pointer to return the image size in bytes	
+	Pointer to return the image size in bytes.
 
 	@return Returns a CFHD error code.
 */
@@ -741,9 +741,9 @@ CFHD_DecodeSample(CFHD_DecoderRef decoderRef,
 		{
 			int len = length;
 			if(outputPitch > 0)
-				test_mem[len - 1] = 0;	
+				test_mem[len - 1] = 0;
 			if(outputPitch < 0)
-				test_mem[-(len + outputPitch)] = 0;	
+				test_mem[-(len + outputPitch)] = 0;
 		}
 	}
 	catch (...)
@@ -879,7 +879,7 @@ void make_crc_table(void)
   crc() routine below)). */
 
 uint32_t update_crc(uint32_t crc, unsigned char *buf,
-                        int len)
+                    int len)
 {
  uint32_t c = crc;
  int n;
@@ -963,8 +963,6 @@ void GenerateLUTfile(unsigned int crc, float *LUT, int size, char *displayname)
 		CFLKhdr.input_curve = CURVE_LOG_90;// CURVE_TYPE input to the LUT
 		CFLKhdr.output_curve = CURVE_GAMMA_2pt2;// CURVE_TYPE output from the LUT
 
-
-
 		char drive[260], dir[260], fname[260], ext[64];
 
 		_splitpath(displayname, drive, dir, fname, ext);
@@ -991,10 +989,8 @@ void GenerateLUTfile(unsigned int crc, float *LUT, int size, char *displayname)
 			if((i&7)==0)
 				fwrite(space,1,strlen(space),fp);
 
-
 			sprintf(hexval,"%02X%02X%02X%02X", ptr[0], ptr[1], ptr[2], ptr[3]);
 			fwrite(hexval,1,8,fp);
-
 		}
 
 
@@ -1053,7 +1049,6 @@ unsigned int ValidateLookGenCRC(char* path)
 						pos+=5;
 						LUTfound = true;
 						break;
-
 					}
 					pos++;
 				} while(pos < len-5);
@@ -1119,8 +1114,6 @@ unsigned int ValidateLookGenCRC(char* path)
 							pos++;
 
 						//printf("%s\n",&buf[pos+j]);
-
-
 
 						DATAfound = true;
 						break;
@@ -1188,8 +1181,6 @@ unsigned int ValidateLookGenCRC(char* path)
 				} while(pos < len-16 && !finished);
 			}
 
-
-
 		//	printf("len = %d\n", len);
 		}
 		while(len > 0 && !finished);
@@ -1217,7 +1208,7 @@ unsigned int ValidateLookGenCRC(char* path)
 	return crc;
 }
 
-#endif 
+#endif
 
 
 /*!
@@ -1226,7 +1217,7 @@ unsigned int ValidateLookGenCRC(char* path)
 	@brief Recursively add active metadata for the decoder to use.
 
 	@description Decoder will use the active metadata store in the sample, or in
-	the color database or overrided by the Tags added by this function.  If you
+	the color database or override by the Tags added by this function.  If you
 	want the decoder to use the original camera data with a few change, initialize
 	the metadata engine with @ref CFHD_InitSampleMetadata with the track set to
 	METADATATYPE_ORIGINAL. Then call CFHD_SetActiveMetadata we the tag you want it
@@ -1280,7 +1271,7 @@ CFHD_SetActiveMetadata(	CFHD_DecoderRef decoderRef,
 	//if(metadata->m_overrideSize == 0)
 	{
 		if(metadata->m_metadataTrack & METADATAFLAG_MODIFIED)
-		{			
+		{
 			int data = 1;
 			int typesizebytes = ('H'<<24)|4;
 
@@ -1290,7 +1281,7 @@ CFHD_SetActiveMetadata(	CFHD_DecoderRef decoderRef,
 			metadata->AddMetaData(TAG_IGNORE_DATABASE, typesizebytes, (void *)&data);
 		}
 		else
-		{			
+		{
 			int data = 1;
 			int typesizebytes = ('H'<<24)|4;
 
@@ -1388,7 +1379,6 @@ CFHD_SetActiveMetadata(	CFHD_DecoderRef decoderRef,
 			_makepath(filename, NULL, NULL, fname, ext);
 #endif
 
-
 			if(strlen(filename) < 40)
 			{
 				typesizebytes = ('c'<<24)|39;
@@ -1480,7 +1470,6 @@ CFHD_ClearActiveMetadata(	CFHD_DecoderRef decoderRef,
 }
 
 
-
 /*!
 	@function CFHD_GetThumbnail
 
@@ -1500,7 +1489,7 @@ CFHD_ClearActiveMetadata(	CFHD_DecoderRef decoderRef,
 	Size of the encoded sample.
 
 	@param outputBuffer
-	Buffer that will receive the thumbnail of size 1/8 x 1/8 the original frame.  
+	Buffer that will receive the thumbnail of size 1/8 x 1/8 the original frame.
 
 	@param outputBufferSize
 	Size must be at least ((w+7)/8) * ((h+7)/8) * 4 for 10-bit RGB format.
@@ -1582,7 +1571,7 @@ CFHD_CreateImageDeveloper(CFHD_DecoderRef decoderRef,
 						  uint32_t imageHeight,
 						  uint32_t sourceVideoChannels, 
 						  CFHD_PixelFormat pixelFormatSrc,
-						  CFHD_PixelFormat pixelFormatDst) //1 or 2 for 3D double high stacked 
+						  CFHD_PixelFormat pixelFormatDst) //1 or 2 for 3D double high stacked
 {
 	CFHD_Error errorCode = CFHD_ERROR_OKAY;
 
