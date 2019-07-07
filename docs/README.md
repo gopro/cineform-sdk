@@ -1,6 +1,6 @@
 # CineForm Introduction
 
-GoPro CineForm® is a 12-bit, full-frame wavelet compression video codec. It is designed for speed and quality, at the expense of a very high compression size. Image compression is a balance of size, speed and quality, and you can only choose two. CineForm was the first of its type to focus on speed, while supporting higher bit depths for image quality. More recent examples would be Avid DNxHD® and Apple ProRES®, although both divide the image into blocks using DCT. The full frame wavelet as a subject quality advantage over DCTs, so you can compression more without classic ringing or block artifact issues.
+GoPro CineForm® is a 12-bit, full-frame wavelet compression video codec. It is designed for speed and quality, at the expense of a very high compression size. Image compression is a balance of size, speed and quality, and you can only choose two. CineForm was the first of its type to focus on speed, while supporting higher bit depths for image quality. More recent examples would be Avid DNxHD® and Apple ProRes®, although both divide the image into blocks using DCT. The full frame wavelet as a subject quality advantage over DCTs, so you can compression more without classic ringing or block artifact issues.
 
 Pixel formats supported:
 * 8/10/16-bit YUV 4:2:2 compressed as 10-bit, progressive or interlace 
@@ -134,7 +134,7 @@ Within Example/WaveletDemo/wavelets.c: here are some key configuration controls:
 #define SUBBANDS_STATS      1	    // Show Subband stats
 #define ERRORGAIN           (10)  // The compression is good, this multiples the error to so can see the subtle differences
 
-#define GENERATIONS         (1)	  // The type of compression,setting losing little to nothing after the first generation.
+#define GENERATIONS         (1)	  // The type of compression, setting losing little to nothing after the first generation.
 
 #define LEVELS              (3)   // designed for 3, but you can experiment with 1 thru 7
 #define BITDEPTH            (12)  // designed for 12, supports 8 thru 14
@@ -232,6 +232,6 @@ While I showed that the steps involved are fairly simple, and much can be modele
 
 ```
 GoPro and CineForm are trademarks of GoPro, Inc.
-Apple and ProRES are trademarks of Apple, Inc.
+Apple and ProRes are trademarks of Apple, Inc.
 Avid and DNxHD are trademarks of Avid Technology, Inc.
 ```
