@@ -1142,7 +1142,7 @@ int main(int argc, char **argv)
 
 	if (showusage)
 	{
-		printf("usage: %s [switches] or <filname.MOV|MP4|AVI>\n", argv[0]);
+		printf("usage: %s [switches] or <filename.MOV|MP4|AVI>\n", argv[0]);
 		printf("          -D = decoder tester\n");
 		printf("          -E = encoder tester\n");
 	}
