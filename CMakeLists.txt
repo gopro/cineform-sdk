@@ -36,6 +36,7 @@ file(GLOB ENCODER_SOURCES "EncoderSDK/*.cpp" "Common/*.h")
 file(GLOB DECODER_SOURCES "DecoderSDK/*.cpp" "Common/*.h" "WarpLib/*.c" "WarpLib/*.h" "ConvertLib/*.cpp" "ConvertLib/*.h" )
 file(GLOB EXAMPLE_SOURCE "Example/*.cpp" "Example/*.h" )
 file(GLOB WAVELETDEMO_SOURCE "Example/WaveletDemo/*.c" "Example/WaveletDemo/*.h" )
+file(GLOB PUBLIC_HEADERS "Common/*.h")
 
 # Build CFHDCodec library (static and shared rules)
 if (BUILD_LIBS)
@@ -134,3 +135,4 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/libcineformsdk.pc.cmake ${CMAKE_CURRE
 
 install(TARGETS ${TARGET_NAMES} DESTINATION lib/)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libcineformsdk.pc DESTINATION lib/pkgconfig)
+install(FILES ${PUBLIC_HEADERS} DESTINATION ${INCLUDE_INSTALL_DIR})
