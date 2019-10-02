@@ -12,9 +12,6 @@ set(CMAKE_CONFIGURATION_TYPES "Debug;Release")
 add_definitions(-D_ALLOCATOR=1 -DWARPSTUFF=1)
 
 if (WIN32)
-	include(ucm.cmake)
-	ucm_set_runtime(STATIC)
-	
 	SET(COMPILER_FLAGS "")
 	SET(COMPILER_FLAGS_W_OMP "/openmp" )
 	SET(ADDITIONAL_LIBS "")
