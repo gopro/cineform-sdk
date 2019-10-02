@@ -30,8 +30,6 @@ if (APPLE)
 	SET(ADDITIONAL_LIBS "-lpthread")
 endif (APPLE)
 
-set(CMAKE_CONFIGURATION_TYPES "Debug;Release")
-
 include_directories("Common" "Tables" "Codec" "ConvertLib" "WarpLib" "Example")
 file(GLOB CODEC_SOURCES "Codec/*.c" "Codec/*.h" "Codec/*.cpp" "WarpLib/*.c" "WarpLib/*.h" )
 file(GLOB ENCODER_SOURCES "EncoderSDK/*.cpp" "Common/*.h")
