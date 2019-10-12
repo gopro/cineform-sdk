@@ -309,7 +309,7 @@ void QuantizationSetQuality(QUANTIZER *q,
 					q->FSratelimiter = 0;
 				if(q->FSratelimiter >= 20) // values 17 thru 20 reduce rgbquality
 					q->FSratelimiter = 20;
-#if (DEBUG && _WINDOWS)
+#if (DEBUG && _WIN32)
 				{
 					char t[100];
 					sprintf_s(t, sizeof(t), "compression = %f, FSratelimiter = %d (q%d)",

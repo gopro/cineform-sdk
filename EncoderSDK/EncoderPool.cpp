@@ -23,7 +23,7 @@
 #include "StdAfx.h"
 
 
-#ifndef _WINDOWS
+#ifndef _WIN32
 #include <uuid/uuid.h>
 #endif
 
@@ -468,7 +468,7 @@ CFHD_Error CEncoderPool::UpdateMetadata()
 	char timecode[16];
 
 	// Format the date and time strings
-#ifdef _WINDOWS
+#ifdef _WIN32
 	sprintf_s(date_string, sizeof(date_string), "%04d-%02d-%02d", time->tm_year + 1900, time->tm_mon + 1, time->tm_mday);
 	sprintf_s(time_string, sizeof(time_string), "%02d:%02d:%02d", time->tm_hour, time->tm_min, time->tm_sec);
 #else
@@ -490,7 +490,7 @@ CFHD_Error CEncoderPool::UpdateMetadata()
 			// Generate the timecode metadata from the local time
 			m_timecodeBase = 24;
 			m_timecodeFrame = (((time->tm_hour * 60 + time->tm_min) * 60) + time->tm_sec) * m_timecodeBase;
-#ifdef _WINDOWS
+#ifdef _WIN32
 			sprintf_s(timecode, sizeof(timecode), "%02d:%02d:%02d:00", time->tm_hour, time->tm_min, time->tm_sec);
 #else
 			sprintf(timecode, "%02d:%02d:%02d:00", time->tm_hour, time->tm_min, time->tm_sec);
@@ -561,7 +561,7 @@ CFHD_Error CEncoderPool::UpdateMetadata()
 			minutes = frame_number % 60;				frame_number /= 60;
 			hours = frame_number % 60;					frame_number /= 60;
 
-#ifdef _WINDOWS
+#ifdef _WIN32
 			sprintf_s(timecode, sizeof(timecode), "%02d:%02d:%02d:%02d", hours, minutes, seconds, frames);
 #else
 			sprintf(timecode, "%02d:%02d:%02d:%02d", hours, minutes, seconds, frames);

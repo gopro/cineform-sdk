@@ -21,7 +21,7 @@
 
 #pragma once
 
-#ifdef _WINDOWS
+#ifdef _WIN32
 
 // Override the default calling convention so the virtual methods are C callable
 #define CALLTYPE __stdcall

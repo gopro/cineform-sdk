@@ -766,7 +766,7 @@ CFHD_ReleaseEncoderPool(CFHD_EncoderPoolRef encoderPoolRef)
 	try
 	{
 		CEncoderPool *encoderPool = GetEncoderPool(encoderPoolRef);
-#ifdef _WINDOWS
+#ifdef _WIN32
 		delete encoderPool;  //TODO need find out why this isn't working on Linux. 
 #endif
 		return CFHD_ERROR_OKAY;

@@ -430,7 +430,7 @@ void OutputSubbands(char *filename, int *src, int w, int h, int regw, int regh, 
 	char band_name[3][3] = { "HL","LH","HH" };
 	FILE *fp;
 
-#ifdef _WINDOWS
+#ifdef _WIN32
 	strcpy_s(basename, sizeof(name), filename);
 	basename[strlen(basename) - 4] = 0;
 #else
@@ -440,7 +440,7 @@ void OutputSubbands(char *filename, int *src, int w, int h, int regw, int regh, 
 
 	for(i=0; i<3; i++)
 	{
-#ifdef _WINDOWS
+#ifdef _WIN32
 		sprintf_s(name, sizeof(name), "%s-%dx%d-band%s-L%d.raw", basename, regw, regh, band_name[i], level);
 		fopen_s(&fp, name, "wb");
 #else
@@ -516,7 +516,7 @@ double psnr(int *lptr, int *lptr2, int w, int h, int depth)
 
 void ExportPGM(char *filename, unsigned char *frameBuffer, int frameWidth, int frameHeight)
 {
-#ifdef _WINDOWS
+#ifdef _WIN32
 	FILE *fp = NULL;
 	fopen_s(&fp, filename, "wb");
 #else

@@ -21,7 +21,7 @@
 
 #pragma once
 
-#if _WINDOWS
+#if _WIN32
 #include <windows.h>
 //#include <atlbase.h>
 #include <tchar.h>
@@ -46,7 +46,7 @@
 #include "CoreFoundation/CoreFoundation.h"
 #endif
 
-#ifdef _WINDOWS
+#ifdef _WIN32
 
 #if 0
 // Windows does not have the standard integer types
@@ -69,7 +69,7 @@ typedef unsigned __int64   uint64_t;
 #define __STDC_LIMIT_MACROS
 #include <stdint.h>
 
-#if !defined(_WINDOWS) && !defined(__APPLE__)
+#if !defined(_WIN32) && !defined(__APPLE__)
 // Use byte swapping functions on Linux
 #include <byteswap.h>
 #endif

@@ -68,7 +68,7 @@ extern COUNTER alloc_frame_count;		// Number of frames allocated
 #define SATURATE_12U(x) _saturate12u(x)
 
 #if 0
-	#ifdef _WINDOWS
+	#ifdef _WIN32
 
 		#include <stdlib.h>
 
@@ -123,7 +123,7 @@ typedef union
 } m128i;
 
 
-FORCEINLINE static int _saturate10u(int x)
+INLINE static int _saturate10u(int x)
 {
 	const int upper_limit = 1023;
 
@@ -134,7 +134,7 @@ FORCEINLINE static int _saturate10u(int x)
 	return x;
 }
 
-FORCEINLINE static int _saturate12u(int x)
+INLINE static int _saturate12u(int x)
 {
 	const int upper_limit = 4095;
 
@@ -160,7 +160,7 @@ FRAME *CreateFrame(int width, int height, int display_height, int format)
 #endif
 	if (frame == NULL)
 	{
-#if (DEBUG && _WINDOWS)
+#if (DEBUG && _WIN32)
 		OutputDebugString("sizeof(FRAME)");
 #endif
 		return NULL;

@@ -26,7 +26,7 @@
 #undef _POSIX
 #endif
 
-#ifdef _WINDOWS
+#ifdef _WIN32
 #include <windows.h>
 #else
 // Force the use of POSIX on Macintosh and Linux

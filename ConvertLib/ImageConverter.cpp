@@ -54,7 +54,7 @@
 #define PF_MAX_CHAN16			32768
 
 
-#if _WINDOWS
+#if _WIN32
 
 //#include <stdlib.h>
 

@@ -31,7 +31,7 @@
 #include "CFHDSampleHeader.h"
 #endif
 
-#ifdef _WINDOWS
+#ifdef _WIN32
 	#ifndef DYNAMICLIB
 		#define CFHDDECODER_API
 	#else
@@ -66,7 +66,7 @@ extern "C" {
 // Open an instance of the CineForm HD decoder
 CFHD_Error
 CFHD_OpenDecoderStub(CFHD_DecoderRef *decoderRefOut,
-				#if define(_WINDOWS)
+				#if define(_WIN32)
 				 CFHD_ALLOCATOR *allocator = NULL
 				#else
 				 CFHD_ALLOCATOR *allocator

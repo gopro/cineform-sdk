@@ -33,7 +33,7 @@
 
 #include <emmintrin.h>
 
-#if (DEBUG && _WINDOWS)
+#if (DEBUG && _WIN32)
 #include <tchar.h>		// For printing debug string in the console window
 #endif
 

@@ -264,7 +264,7 @@ CFHD_Error LoadDLL()
 	}
 #endif
 
-#if _WINDOWS
+#if _WIN32
 	DWORD retVal;
 	char DLLPath[260] = "C:\\Program Files (x86)\\CineForm\\Tools";
 

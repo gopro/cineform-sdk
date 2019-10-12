@@ -29,7 +29,7 @@
 #define _GRAPHICS	0
 #endif
 
-#ifdef _WINDOWS
+#ifdef _WIN32
  #ifndef DEBUG_ALLOCS
  #define DEBUG_ALLOCS	1
  #endif
@@ -86,7 +86,7 @@
 #include <stdbool.h>
 
 // Use the standard definition for the maximum length of a pathname
-#ifdef _WINDOWS
+#ifdef _WIN32
 #ifndef PATH_MAX
 #define PATH_MAX _MAX_PATH
 #endif
@@ -267,7 +267,7 @@ static void *malloc22(size_t size, size_t align)
 #define _DELAYED_THREAD_START	1
 
 #ifndef _INTERLACED_WORKER_THREADS
-#ifdef _WINDOWS
+#ifdef _WIN32
 #define _INTERLACED_WORKER_THREADS (_THREADED_DECODER)		// Use worker threads for the last transform?
 #else
 #define _INTERLACED_WORKER_THREADS 0

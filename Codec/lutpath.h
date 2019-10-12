@@ -21,7 +21,7 @@
 
 #pragma once
 
-#ifdef _WINDOWS
+#ifdef _WIN32
 
 // Define strings for the database locations on Windows
 #define OVERRIDE_PATH_STRING	"C:/Users/Public/CineForm"
@@ -63,7 +63,7 @@ void WriteLastGUIDAndFrame(DECODER *decoder, int checkdiskinfotime);
 void OverrideCFHDDATA(struct decoder *decoder, unsigned char *lpCurrentBuffer, int nWordsUsed);
 void OverrideCFHDDATAUsingParent(struct decoder *decoder, struct decoder *parentDecoder, unsigned char *lpCurrentBuffer, int nWordsUsed);
 
-#if !defined(_WINDOWS) && !defined(__APPLE_REMOVE__)
+#if !defined(_WIN32) && !defined(__APPLE_REMOVE__)
 
 // Use the lexical scanner to parse the user preferences file on Linux
 #include "scanner.h"

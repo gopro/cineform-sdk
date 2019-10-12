@@ -23,7 +23,7 @@
 #include "config.h"
 #include "timing.h"
 
-#ifdef _WINDOWS
+#ifdef _WIN32
 #include <windows.h>
 #elif __APPLE__
 #include "macdefs.h"
@@ -70,7 +70,7 @@
 #include "macdefs.h"
 #endif
 
-#if !defined(_WINDOWS)
+#if !defined(_WIN32)
 #define min(x,y)	(((x) < (y)) ? (x) : (y))
 #define max(x,y)	(((x) > (y)) ? (x) : (y))
 #endif
@@ -89,7 +89,7 @@
 #define DUMP   (0 && _DUMP)
 #endif
 
-#ifdef _WINDOWS
+#ifdef _WIN32
 #define SYSLOG	0
 #else
 #define SYSLOG	(0 && DEBUG)
@@ -133,7 +133,7 @@ extern COUNTER progressive_encode_count;
 #endif
 
 
-#ifdef _WINDOWS
+#ifdef _WIN32
 // Forward reference
 
 #elif defined(__APPLE__)
@@ -1087,7 +1087,7 @@ void SetEncoderFormatRecursive(ENCODER *encoder, int width, int height, int disp
 
 	if (encoder->frame == NULL)
 	{
-#if (DEBUG && _WINDOWS)
+#if (DEBUG && _WIN32)
 		OutputDebugString("sizeof(FRAME)");
 #endif
 		return;
@@ -1332,7 +1332,7 @@ void PrintEncodingParameters(ENCODING_PARAMETERS *parameters)
 	int err = 0;
 	FILE *file;
 
-#ifdef _WINDOWS
+#ifdef _WIN32
 	err = fopen_s(&file, "parameters.log", "w+");
 #else
 	file = fopen("parameters.log", "w+");
@@ -1780,7 +1780,7 @@ void EncodeRelease(ENCODER *encoder, TRANSFORM *transform[], int num_transforms,
 
 	if (logfile != NULL && frame_count > 0)
 	{
-#ifdef _WINDOWS
+#ifdef _WIN32
 		PrintStatistics(logfile, frame_count, NULL, TIMING_CSV_FILENAME);
 #else
 		PrintStatistics(logfile, frame_count, NULL, NULL);
@@ -2145,7 +2145,7 @@ bool EncodeSample(ENCODER *encoder, uint8_t *data, int width, int height, int pi
 		else
 		{	
 			encoder->error = CODEC_ERROR_INVALID_FORMAT;
-	#ifdef _WINDOWS
+	#ifdef _WIN32
 			if(encoder->reported_license_issue == 0)
 			{
 				encoder->reported_license_issue = 1;
@@ -2167,7 +2167,7 @@ bool EncodeSample(ENCODER *encoder, uint8_t *data, int width, int height, int pi
 		else
 		{
 			encoder->error = CODEC_ERROR_INVALID_FORMAT;
-	#ifdef _WINDOWS
+	#ifdef _WIN32
 			if(encoder->reported_license_issue == 0)
 			{
 				encoder->reported_license_issue = 1;
@@ -2197,7 +2197,7 @@ bool EncodeSample(ENCODER *encoder, uint8_t *data, int width, int height, int pi
 		else
 		{
 			encoder->error = CODEC_ERROR_INVALID_SIZE;
-	#ifdef _WINDOWS
+	#ifdef _WIN32
 			if(encoder->reported_license_issue == 0)
 			{
 				encoder->reported_license_issue = 1;
@@ -2218,7 +2218,7 @@ bool EncodeSample(ENCODER *encoder, uint8_t *data, int width, int height, int pi
 		else
 		{
 			encoder->error = CODEC_ERROR_INVALID_FORMAT;
-	#ifdef _WINDOWS
+	#ifdef _WIN32
 			if(encoder->reported_license_issue == 0)
 			{
 				encoder->reported_license_issue = 1;
@@ -2854,7 +2854,7 @@ bool EncodeSample(ENCODER *encoder, uint8_t *data, int width, int height, int pi
 	default:
 		// Cannot handle this color format
 		encoder->error = CODEC_ERROR_INVALID_FORMAT;
-#ifdef _WINDOWS
+#ifdef _WIN32
 		if(encoder->reported_error == 0)
 		{
 			encoder->reported_error = 1;
@@ -7496,7 +7496,7 @@ void EncodeQuantizedGroup(ENCODER *encoder, TRANSFORM *transform[], int num_tran
 
 	START(tk_encoding);
 
-#if (DEBUG && _WINDOWS)
+#if (DEBUG && _WIN32)
 	//OutputDebugString("EncodeQuantizedGroup");
 #endif
 
@@ -7843,7 +7843,7 @@ void EncodeQuantizedGroup(ENCODER *encoder, TRANSFORM *transform[], int num_tran
 
 	if(!(encoder->uncompressed & 2)) // only hdr is written
 	{
-#if (DEBUG && _WINDOWS)
+#if (DEBUG && _WIN32)
 		//OutputDebugString("pop 1");
 #endif
 		if (encode_iframe)
@@ -7862,7 +7862,7 @@ void EncodeQuantizedGroup(ENCODER *encoder, TRANSFORM *transform[], int num_tran
 	}
 	else if(encoder->uncompressed == 3)
 	{
-#if (DEBUG && _WINDOWS)
+#if (DEBUG && _WIN32)
 		OutputDebugString("pop 2");
 #endif
 		//	Set Sample size field here.
@@ -7874,7 +7874,7 @@ void EncodeQuantizedGroup(ENCODER *encoder, TRANSFORM *transform[], int num_tran
 	}
 	else
 	{
-#if (DEBUG && _WINDOWS)
+#if (DEBUG && _WIN32)
 		OutputDebugString("pop 3");
 #endif
 		//	Set Sample size field here.
@@ -8822,7 +8822,7 @@ void OverrideEncoderSettings(ENCODER *encoder)
 
 			if(type == 0) // preset_default an colr file for all clips.
 			{
-#ifdef _WINDOWS
+#ifdef _WIN32
 				sprintf_s(filenameGUID, sizeof(filenameGUID), "%s/%s/defaults.colr", encoder->LUTsPathStr, encoder->UserDBPathStr);
 #else
 				sprintf(filenameGUID, "%s/%s/defaults.colr", encoder->LUTsPathStr, encoder->UserDBPathStr);
@@ -8833,7 +8833,7 @@ void OverrideEncoderSettings(ENCODER *encoder)
 			}
 			else if(type == 1) // preset_override an colr file for all clips.
 			{
-#ifdef _WINDOWS
+#ifdef _WIN32
 				sprintf_s(filenameGUID, sizeof(filenameGUID), "%s/override.colr", encoder->OverridePathStr);
 #else
 				sprintf(filenameGUID, "%s/override.colr", encoder->OverridePathStr);
@@ -8849,7 +8849,7 @@ void OverrideEncoderSettings(ENCODER *encoder)
 				int err = 0;
 				FILE *fp;
 
-#ifdef _WINDOWS
+#ifdef _WIN32
 				err = fopen_s(&fp, filenameGUID, "rb");
 #else
 				fp = fopen(filenameGUID, "rb");
@@ -8864,7 +8864,7 @@ void OverrideEncoderSettings(ENCODER *encoder)
 					if(len <= MAX_ENCODE_DATADASE_LENGTH)
 					{
 						fseek (fp, 0, SEEK_SET);
-#ifdef _WINDOWS
+#ifdef _MSC_VER
 						len = (int)fread_s(buffer, MAX_ENCODE_DATADASE_LENGTH, 1, len, fp);
 #else
 						len = (int)fread(buffer,1,len,fp);
@@ -10127,7 +10127,7 @@ DWORD WINAPI FinishFieldTransformThread(LPVOID param)
 	// Record the number of wavelets
 	transform->num_wavelets = level + 1;
 
-#if (0 && DEBUG && _WINDOWS)
+#if (0 && DEBUG && _WIN32)
 	_CrtCheckMemory();
 #endif
 }

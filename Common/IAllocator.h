@@ -20,7 +20,7 @@
 */
 #pragma once
 
-#ifdef	_WINDOWS
+#ifdef	_WIN32
 // Force use of the normal C language calling conventions
 #define	CALLTYPE_(type)  type __cdecl
 #else

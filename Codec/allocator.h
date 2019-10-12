@@ -31,12 +31,16 @@
 #include "../Common/CFHDAllocator.h"
 
 
-#ifdef _WINDOWS
+#ifdef _WIN32
 
 #ifdef INLINE
 #undef INLINE
 #endif
+#ifdef _MSC_VER
 #define INLINE __forceinline
+#else
+#define INLINE inline
+#endif
 
 #elif defined(__APPLE__)
 

@@ -23,7 +23,7 @@
 #define _TIMING_H
 
 // Enable timing by default if in debug mode
-#ifdef _WINDOWS
+#ifdef _WIN32
 #ifndef _TIMING
 #if defined(_DEBUG)
 #define _TIMING _DEBUG
@@ -33,7 +33,7 @@
 
 #if _TIMING
 
-#ifdef _WINDOWS
+#ifdef _WIN32
 
 #include <windows.h>
 #include <stdio.h>
@@ -90,7 +90,7 @@ void StartTimer(TIMER *timer);
 void StopTimer(TIMER *timer);
 void DoThreadTiming(int startend);
 
-#ifdef _WINDOWS
+#ifdef _WIN32
 void PrintStatistics(FILE *logfile, int frame_count, HWND hwnd, char *results);
 #else
 void PrintStatistics(FILE *logfile, int frame_count, void *unused, char *results);

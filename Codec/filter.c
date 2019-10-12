@@ -700,7 +700,7 @@ double BandEnergy(PIXEL *data, int width, int height, int pitch, int band, int s
 		rowptr += pitch;
 	}
 
-#if (0 && _WINDOWS)
+#if (0 && _WIN32)
 	{
 		char t[100];
 		sprintf(t,"band = %d, subband = %d, valuemax = %d, rms = %f", 

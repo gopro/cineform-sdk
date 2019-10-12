@@ -144,7 +144,7 @@ typedef enum codec_error
 } CODEC_ERROR;
 
 // Convert a bistream error code into a codec error code
-static INLINE CODEC_ERROR CodecErrorBitstream(BITSTREAM *stream)
+INLINE static CODEC_ERROR CodecErrorBitstream(BITSTREAM *stream)
 {
 	int32_t error_code = (int32_t)CODEC_ERROR_BITSTREAM;
 

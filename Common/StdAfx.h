@@ -20,7 +20,7 @@
 */
 #pragma once
 
-#ifdef _WINDOWS
+#ifdef _WIN32
 
 // Exclude rarely-used stuff from Windows headers
 //#define WIN32_LEAN_AND_MEAN
@@ -36,7 +36,7 @@
 #include <memory.h>
 #include <assert.h>
 
-#ifdef WIN32
+#ifdef _WIN32
 #define __STDC_LIMIT_MACROS
 #include <stdint.h>
 #endif

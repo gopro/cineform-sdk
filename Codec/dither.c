@@ -19,7 +19,7 @@
 *
 */
 
-#ifdef _WINDOWS
+#ifdef _WIN32
 #include <windows.h>
 #elif __APPLE__
 #include "macdefs.h"

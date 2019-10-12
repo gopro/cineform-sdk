@@ -25,7 +25,7 @@
 */
 #pragma once
 
-#ifdef _WINDOWS
+#ifdef _WIN32
 
 // Export the interface to the encoder
 #ifndef ENCODERDLL_EXPORTS
