@@ -829,7 +829,7 @@ int geomesh_transform_repoint_src_to_dst(void *opaque, float sensorcrop, float n
                     zz = cosf(phi);
 
                     // Calc Equirect
-#if defined(WIN32)
+#if defined(MSC_VER)
                     hypotenuse = _hypotf(yy, zz);
 #else
                     hypotenuse = hypotf(yy, zz);
