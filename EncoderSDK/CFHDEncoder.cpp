@@ -60,7 +60,7 @@ FILE *logfile = NULL;
 int err = 0;
 #endif
 
-#if _WINDOWS
+#if _WIN32
 	#ifdef DYNAMICLIB
 		#ifndef CODECCOMBINED
 		BOOL APIENTRY DllMain(HANDLE hModule,
@@ -81,7 +81,7 @@ int err = 0;
 	#endif
 #endif
 
-#ifndef _WINDOWS
+#ifndef _WIN32
 #if QLONOPEN
 #include "QuickLicense.h"
 #endif
@@ -110,7 +110,7 @@ CFHD_OpenEncoder(CFHD_EncoderRef *encoderRefOut,
 #endif
 #if (1 && SYSLOG)
 	if (logfile == NULL) {
-#ifdef _WINDOWS
+#ifdef _WIN32
 		int err = fopen_s(&logfile, "EncoderDLL.log", "w");
 #else
 		logfile = fopen("EncoderDLL.log", "w");
@@ -133,7 +133,7 @@ CFHD_OpenEncoder(CFHD_EncoderRef *encoderRefOut,
 	if (encoderRef == NULL) {
 		return CFHD_ERROR_OUTOFMEMORY;
 	}
-#ifdef _WINDOWS
+#ifdef _WIN32
 #else
 #if QLONOPEN
 	//	Need to call QuickLicense to check the encoder license

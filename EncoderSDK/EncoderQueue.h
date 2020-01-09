@@ -175,7 +175,7 @@ private:
 */
 class CResourceCounter
 {
-#ifdef _WINDOWS
+#ifdef _WIN32
 
 public:
 

@@ -25,7 +25,7 @@
 #include "config.h"		// Read program configuration parameters
 #include <limits.h>		// Range of integer data types
 
-#ifdef _WINDOWS
+#ifdef _WIN32
 #include <windows.h>
 #elif __APPLE__
 #include "macdefs.h"
@@ -96,7 +96,7 @@ typedef unsigned short PIXEL16U;
 #define PIXEL16U_MIN 0
 #define PIXEL16U_MAX USHRT_MAX
 
-static INLINE int Clamp16s(int x)
+INLINE static int Clamp16s(int x)
 {
 	if (x < SHRT_MIN) x = SHRT_MIN;
 	else if (x > SHRT_MAX) x = SHRT_MAX;
@@ -512,7 +512,7 @@ void FreeImage(IMAGE *image);
 IMAGE *CreateImageFromRGB(uint8_t *rgb, int pitch, int width, int height);
 void ConvertRGBToImage(uint8_t *rgb, int pitch, IMAGE *image);
 
-#ifdef _WINDOWS
+#ifdef _WIN32
 // Convert between images and device independent bitmaps
 IMAGE *CreateImageFromDIB(LPBITMAPINFOHEADER lpbi);
 void ConvertDibToImage(LPBITMAPINFOHEADER lpbi, IMAGE *image);
@@ -586,7 +586,7 @@ int32_t CompareImages(IMAGE *image1, IMAGE *image2, PIXEL *error, int pitch);
 int32_t CompareImageBands16s(IMAGE *image1, int band1, IMAGE *image2, int band2, PIXEL *residual, int pitch);
 bool CompareImageBufferConstantYUV(uint8_t *buffer, int length, int y_value, int u_value, int v_value);
 
-#ifdef _WINDOWS
+#ifdef _WIN32
 int ColorTableLength(LPBITMAPINFOHEADER lpbi);
 #endif
 

@@ -29,7 +29,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-#ifdef _WINDOWS
+#ifdef _WIN32
  #ifdef _DEBUG
   #include <tchar.h>				// For printing debug string in the console window
  #endif
@@ -67,7 +67,7 @@ typedef enum
 } EVENT_STATE;
 
 
-#ifdef _WINDOWS
+#ifdef _WIN32
 
 #include <windows.h>
 
@@ -327,7 +327,7 @@ typedef struct
 } THREAD;
 
 // Dummy routines for thread affinity calls
-#ifdef _WINDOWS
+#ifdef _WIN32
 HANDLE GetCurrentThread(void);
 DWORD SetThreadAffinityMask(HANDLE hThread, DWORD * dwThreadAffinityMask);
 #else

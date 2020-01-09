@@ -34,7 +34,7 @@
 #define XMMOPT (1 && _XMMOPT)
 #endif
 
-#ifdef _WINDOWS
+#ifdef _WIN32
 #include <windows.h>
 #endif
 
@@ -68,7 +68,7 @@
 
 #define ERROR_TOLERANT			1
 
-#if (DEBUG && _WINDOWS)
+#if (DEBUG && _WIN32)
 #include <tchar.h>				// For printing debug string in the console window
 #endif
 
@@ -323,7 +323,7 @@ THREAD_PROC(EntropyWorkerThreadProc, lpParam)
 
 	if (decoder->thread_cntrl.affinity)
 	{
-#ifdef _WINDOWS
+#ifdef _WIN32
 		HANDLE hCurrentThread = GetCurrentThread();
 		SetThreadAffinityMask(hCurrentThread, decoder->thread_cntrl.affinity);
 #else
@@ -399,7 +399,7 @@ THREAD_PROC(ParallelThreadProc, lpParam)
 
 	if(decoder->thread_cntrl.affinity)
 	{
-#ifdef _WINDOWS
+#ifdef _WIN32
 		HANDLE hCurrentThread = GetCurrentThread();
 		SetThreadAffinityMask(hCurrentThread,decoder->thread_cntrl.affinity);
 #else

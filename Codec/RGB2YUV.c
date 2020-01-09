@@ -57,7 +57,7 @@ const int tweakYUV2RGB_CG601[8] =	{-28,14,6,1,7,3,23,23};
 const int tweakYUV2RGB_VS601[8] =	{-26,12,9,-8,1,-6,15,14};
 #endif
 
-#ifdef _WINDOWS
+#ifdef _WIN32
 #include <windows.h>
 #endif
 
@@ -73,7 +73,7 @@ void LoadTweak()
 	sscanf(txt,"%d,%d,%d,%d,%d,%d,%d,%d,%d",&tweak[0],&tweak[1],&tweak[2],&tweak[3],&tweak[4],&tweak[5],&tweak[6],&tweak[7],&tweak[8]);
 
 	txt[len] = 0;
-#ifdef _WINDOWS
+#ifdef _WIN32
 	OutputDebugString(txt);
 #endif
 }
@@ -573,7 +573,7 @@ void ChunkyARGB8toPlanarRGB16(unsigned char *in_rgb8, unsigned short *out_rgb16,
 			gggggggg = _mm_slli_epi16(gggggggg, 8);
 			bbbbbbbb = _mm_slli_epi16(bbbbbbbb, 8);
 
-//#ifdef _WINDOWS // is QT32 mode different on the PC?
+//#ifdef _WIN32 // is QT32 mode different on the PC?
 			_mm_storeu_si128((__m128i *)&out_rgb16[x], bbbbbbbb);
 			_mm_storeu_si128((__m128i *)&out_rgb16[x+width], gggggggg);
 			_mm_storeu_si128((__m128i *)&out_rgb16[x+width*2], rrrrrrrr);
@@ -619,7 +619,7 @@ void ChunkyARGB8toPlanarRGB16(unsigned char *in_rgb8, unsigned short *out_rgb16,
 			gggggggg = _mm_slli_epi16(gggggggg, 8);
 			bbbbbbbb = _mm_slli_epi16(bbbbbbbb, 8);
 
-//#ifdef _WINDOWS // is QT32 mode different on the PC?
+//#ifdef _WIN32 // is QT32 mode different on the PC?
 			_mm_store_si128((__m128i *)&out_rgb16[x], bbbbbbbb);
 			_mm_store_si128((__m128i *)&out_rgb16[x+width], gggggggg);
 			_mm_store_si128((__m128i *)&out_rgb16[x+width*2], rrrrrrrr);

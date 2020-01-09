@@ -23,7 +23,7 @@
 #include "StdAfx.h"
 //#include "Interface.h"
 
-#ifndef _WINDOWS
+#ifndef _WIN32
 #include <uuid/uuid.h>
 #endif
 
@@ -110,7 +110,7 @@ uint32_t ValidateLookGenCRCEnc(char* path)
 	int crc = 0;
 	FILE *fp;
 	int err = 0;
-#ifdef _WINDOWS
+#ifdef _WIN32
 	err = fopen_s(&fp, path, "r");
 #else
 	fp = fopen(path, "r");
@@ -118,7 +118,7 @@ uint32_t ValidateLookGenCRCEnc(char* path)
 
 	if(err || fp == NULL)
 	{
-#if (OUTPUT && _WINDOWS)
+#if (OUTPUT && _WIN32)
 		OutputDebugString("ValidateLookGenCRCEnc : no file");
 #endif
 		return 0;
@@ -179,18 +179,18 @@ uint32_t ValidateLookGenCRCEnc(char* path)
 
 						if(size > 65)
 						{		
-#if (OUTPUT && _WINDOWS)
+#if (OUTPUT && _WIN32)
 							OutputDebugString("LUT too big");
 #endif
 							return 0;
 						}
-#if (OUTPUT && _WINDOWS)
+#if (OUTPUT && _WIN32)
 						printf("size = %d\n",size);
 #endif
 						LUT = (float *)malloc(size*size*size*sizeof(float)*3);
 						if(LUT == NULL)
 						{
-#if (OUTPUT && _WINDOWS)
+#if (OUTPUT && _WIN32)
 							OutputDebugString("no memory\n");
 #endif
 							return 0;
@@ -198,7 +198,7 @@ uint32_t ValidateLookGenCRCEnc(char* path)
 						iLUT = (unsigned char *)malloc(size*size*size*sizeof(unsigned char)*3);
 						if(iLUT == NULL)
 						{
-#if (OUTPUT && _WINDOWS)
+#if (OUTPUT && _WIN32)
 							OutputDebugString("no memory\n");
 #endif
 							free(LUT);
@@ -246,7 +246,7 @@ uint32_t ValidateLookGenCRCEnc(char* path)
 							if(buf[pos] == '"' || buf[pos] == '<')
 							{
 								finished = true;
-#if (OUTPUT && _WINDOWS)
+#if (OUTPUT && _WIN32)
 								OutputDebugString("finished\n");
 #endif							
 								break;
@@ -267,7 +267,7 @@ uint32_t ValidateLookGenCRCEnc(char* path)
 						hexstring[7] = buf[pos+1];
 
 						//printf("%s",hexstring);
-#ifdef _WINDOWS
+#ifdef _WIN32
 						sscanf_s(hexstring, "%08x", (int *)&val);
 #else
 						sscanf(hexstring, "%08x", (int *)&val);
@@ -324,7 +324,7 @@ uint32_t ValidateLookGenCRCEnc(char* path)
 
 CFHD_Error CSampleEncodeMetadata::AddGUID()
 {
-#ifdef _WINDOWS
+#ifdef _WIN32
 	//UUID guid;
 	//UuidCreate(&guid);
 	GUID guid;
@@ -357,7 +357,7 @@ CFHD_Error CSampleEncodeMetadata::AddLookFile(METADATA_TYPE ctype,
 	}
 	
 	{
-#if _WINDOWS
+#if _WIN32
 		char filename[260] = {0};
 		size_t filenamelen = 0;
 

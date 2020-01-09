@@ -37,7 +37,7 @@ public:
 	{
 		InitializeConditionVariable(&condition);
 	}
-#elif _WINDOWS
+#elif _WIN32
 	ConditionVariable() :
 		handle(NULL)
 	{
@@ -62,7 +62,7 @@ public:
 	{
 #ifdef _CONDITION_VARIABLE
 		return SleepConditionVariableCS(&condition, &mutex.lock, timeout);
-#elif _WINDOWS
+#elif _WIN32
 		mutex.Unlock();
 		DWORD result = WaitForSingleObject(handle, timeout);
 		mutex.Lock();
@@ -76,7 +76,7 @@ public:
 	{
 #ifdef _CONDITION_VARIABLE
 		WakeConditionVariable(&condition);
-#elif _WINDOWS
+#elif _WIN32
 		SetEvent(handle);
 #else
 		pthread_cond_signal(&cond);
@@ -87,7 +87,7 @@ private:
 
 #ifdef _CONDITION_VARIABLE
 	CONDITION_VARIABLE condition;
-#elif _WINDOWS
+#elif _WIN32
 	HANDLE handle;
 #else
 	pthread_cond_t cond;

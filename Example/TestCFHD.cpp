@@ -32,6 +32,9 @@
 #include "CFHDEncoder.h"
 #include "CFHDMetadata.h"
 
+#ifdef _WIN32
+#include <windows.h> // Performance counters
+#endif
 
 #include "mp4reader.h"
 
@@ -174,6 +177,11 @@ double gettime(void)
 	timeval ts;
 	gettimeofday(&ts, NULL);
 	return (double)ts.tv_sec + (double)ts.tv_usec / 1000000.0;
+#elif _WIN32
+	LARGE_INTEGER precision, ts;
+	::QueryPerformanceCounter(&ts);
+	::QueryPerformanceFrequency(&precision);
+	return static_cast<double>(ts.QuadPart)/static_cast<double>(precision.QuadPart);
 #else
 	struct timespec ts;
 	timespec_get(&ts, TIME_UTC);
@@ -441,7 +449,7 @@ CFHD_Error DecodeMOVIE(char *filename, char *ext)
 	float length;
 	void *handle;
 	
-#ifdef _WINDOWS
+#ifdef _WIN32
 	if (0 == stricmp("AVI", ext))  AVI = 1;
 #else
 	if (0 == strcasecmp("AVI", ext))  AVI = 1;
@@ -488,7 +496,7 @@ CFHD_Error DecodeMOVIE(char *filename, char *ext)
 					error = CFHD_ERROR_OUTOFMEMORY;
 					goto cleanup;
 				}
-#ifdef _WINDOWS 
+#ifdef _WIN32 
 				if (decode_res == 1) sprintf_s(restxt, sizeof(restxt), "FULL");
 				else if (decode_res == 2) sprintf_s(restxt, sizeof(restxt), "HALF");
 				else if (decode_res == 3) sprintf_s(restxt, sizeof(restxt), "QRTR");
@@ -683,7 +691,7 @@ CFHD_Error EncodeSpeedTest()
 #if  PPM_EXPORT_ALL  // Output image prior to encoding -- the Before image.
 				{
 					char inputname[80] = "";
-	#ifdef _WINDOWS 
+	#ifdef _WIN32 
 					sprintf_s(inputname, sizeof(inputname), "%s-%04d.ppm", BASENAME_IN, frameNumber);
 	#else
 					sprintf(inputname, "%s-%04d.ppm", BASENAME_IN, frameNumber);
@@ -864,7 +872,7 @@ CFHD_Error EncodeDecodeQualityTest()
 		char inputname[80] = "";
 		char outputname[80] = "";
 
-#ifdef _WINDOWS
+#ifdef _WIN32
 		if (decode_res == 1) sprintf_s(restxt, sizeof(restxt), "FULL");
 		else if (decode_res == 2) sprintf_s(restxt, sizeof(restxt), "HALF");
 		else if (decode_res == 3) sprintf_s(restxt, sizeof(restxt), "QRTR");
@@ -926,7 +934,7 @@ CFHD_Error EncodeDecodeQualityTest()
 		int frameNumber;
 		for (frameNumber = 1; frameNumber <= MAX_QUAL_FRAMES; )
 		{
-#ifdef _WINDOWS 
+#ifdef _WIN32 
 			//sprintf_s(inputname, sizeof(inputname), "%s-%04d.ppm", BASENAME_IN, frameNumber);
 			sprintf_s(inputname, sizeof(inputname), "%s-%c%c%c%c%c-%s-%s-%04d.ppm", BASENAME_IN, (pixelFormat >> 24) & 0xff, (pixelFormat >> 16) & 0xff, (pixelFormat >> 8) & 0xff, (pixelFormat >> 0) & 0xff, (inverted ? 'i' : '-'), restxt, enctxt, frameNumber);
 			sprintf_s(outputname, sizeof(outputname), "%s-%c%c%c%c%c-%s-%s-%04d.ppm", BASENAME_OUT, (pixelFormat >> 24) & 0xff, (pixelFormat >> 16) & 0xff, (pixelFormat >> 8) & 0xff, (pixelFormat >> 0) & 0xff, (inverted ? 'i' : '-'), restxt, enctxt, frameNumber);
@@ -1050,7 +1058,7 @@ CFHD_Error EncodeDecodeQualityTest()
 				if (psnr < PPM_EXPORT_BELOW)
 				{
 					char metadata[64];
-#ifdef _WINDOWS 
+#ifdef _WIN32 
 					sprintf_s(metadata, sizeof(metadata), "PSNR = %f", psnr);
 #else
 					sprintf(metadata, "PSNR = %f", psnr);

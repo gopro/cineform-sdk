@@ -100,7 +100,7 @@ void *OpenMP4Source(char *filename, uint32_t traktype, uint32_t traksubtype)  //
 
 	memset(mp4, 0, sizeof(videoobject));
 
-#ifdef _WINDOWS
+#ifdef _WIN32
 	fopen_s(&mp4->mediafp, filename, "rb");
 #else
 	mp4->mediafp = fopen(filename, "rb");

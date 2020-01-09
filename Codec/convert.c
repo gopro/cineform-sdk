@@ -78,7 +78,7 @@ int Timecode2frames(char *tc, int rate)
 
 	if (tc)
 	{
-#ifdef _WINDOWS
+#ifdef _WIN32
 		ret = sscanf_s(tc, "%02d:%02d:%02d:%02d", &hr, &mn, &sc, &fr);
 #else
 		ret = sscanf(tc, "%02d:%02d:%02d:%02d", &hr, &mn, &sc, &fr);

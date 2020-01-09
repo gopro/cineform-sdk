@@ -28,7 +28,7 @@
 	All lock classes should provide lock and unlock methods and be derived
 	from a common base class.
 */
-#ifdef _WINDOWS
+#ifdef _WIN32
 
 class CSimpleLock
 {

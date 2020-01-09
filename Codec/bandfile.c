@@ -136,7 +136,7 @@ struct bandfile_band_header
 CODEC_ERROR OpenBandFile(BANDFILE *bandfile, const char *pathname)
 {
 	memset(bandfile, 0, sizeof(BANDFILE));
-#ifdef _WINDOWS
+#ifdef _WIN32
 	fopen_s(&bandfile->file, pathname, "rb");
 #else
 	bandfile->file = fopen(pathname, "rb");
@@ -326,7 +326,7 @@ CODEC_ERROR ReadBandData(BANDFILE *bandfile, void *data, size_t size)
 CODEC_ERROR CreateBandFile(BANDFILE *bandfile, const char *pathname)
 {
 	memset(bandfile, 0, sizeof(BANDFILE));
-#ifdef _WINDOWS
+#ifdef _WIN32
 	fopen_s(&bandfile->file, pathname, "rb");
 #else
 	bandfile->file = fopen(pathname, "wb");

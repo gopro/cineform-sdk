@@ -22,7 +22,7 @@
 #ifndef _DECODER_H
 #define _DECODER_H
 
-#ifdef _WINDOWS
+#ifdef _WIN32
 #include <windows.h>
 #elif __APPLE__
 #include "macdefs.h"
@@ -293,7 +293,7 @@ void SetDecoderFlags(DECODER *decoder, uint32_t flags);
 bool ResizeDecoderBuffer(DECODER *decoder, int width, int height, int format);
 
 IMAGE *DecodeNextFrame(DECODER *decoder, BITSTREAM *input);
-#ifdef _WINDOWS
+#ifdef _WIN32
 bool DecodeFile(DECODER *decoder, HANDLE file);
 #endif
 bool DecodeSequence(DECODER *decoder, BITSTREAM *input);

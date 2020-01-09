@@ -96,7 +96,7 @@ MessageQueue<MessageType>::WaitForMessage(MessageType &message)
 	message = m_messageQueue.front();
 	m_messageQueue.pop();
 
-#if (0 && DEBUG && _WINDOWS)
+#if (0 && DEBUG && _WIN32)
 	// Check the order in which messages are removed from the queue
 	char string[256];
 	sprintf_s(string, sizeof(string), "Message number: %d\n", message->MessageNumber());

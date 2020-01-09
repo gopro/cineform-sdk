@@ -21,7 +21,7 @@
 
 #include <stdlib.h>
 
-#ifdef _WINDOWS
+#ifdef _WIN32
 #include <io.h>			// for _access()
 #include <direct.h>		// for _mkdir()
 #endif

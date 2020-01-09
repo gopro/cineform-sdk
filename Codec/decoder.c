@@ -48,7 +48,7 @@
 #define PI 3.14159265359f
 #endif
 
-#ifdef _WINDOWS
+#ifdef _WIN32
 #include <windows.h>
 #elif __APPLE__
 #include "macdefs.h"
@@ -127,7 +127,7 @@ extern void FastSharpeningBlurVW13A(short *Aptr,
 
 #define ERROR_TOLERANT			1
 
-#if defined(_WINDOWS) && DEBUG
+#if defined(_WIN32) && DEBUG
 #include <tchar.h>				// For printing debug string in the console window
 #endif
 
@@ -1516,7 +1516,7 @@ bool DecodeInit(DECODER *decoder, int width, int height, int format, int resolut
 	memcpy(&codesets[0], &CURRENT_CODESET, sizeof(CODESET));
 #endif
 	
-#ifdef _WINDOWS
+#ifdef _WIN32
 	// Set the handler for system exceptions
 	SetDefaultExceptionHandler();
 #endif
@@ -16377,7 +16377,7 @@ void ReconstructSampleFrameToBuffer(DECODER *decoder, int frame, uint8_t *output
 	}
 #endif
 
-#if (0 && DEBUG && _WINDOWS)
+#if (0 && DEBUG && _WIN32)
 	_CrtCheckMemory();
 #endif
 
@@ -17074,7 +17074,7 @@ void DecodeRelease(DECODER *decoder, TRANSFORM *transform[], int num_transforms)
 
 	if (logfile != NULL && frame_count > 0)\
 	{
-#ifdef _WINDOWS
+#ifdef _WIN32
 		PrintStatistics(logfile, frame_count, NULL, TIMING_CSV_FILENAME);
 #else
 		PrintStatistics(logfile, frame_count, NULL, NULL);
@@ -17154,7 +17154,7 @@ void SetDecoderFormat(DECODER *decoder, int width, int height, int format, int r
 void SetDecoderCapabilities(DECODER *decoder)
 {
 	int processor_count;
-#ifdef _WINDOWS
+#ifdef _WIN32
 	int limit_cpus = 32;
 #else
 	int limit_cpus = 32;		// AJA spins off too many
@@ -20295,7 +20295,7 @@ bool DecodeFastRunsFSM8s(DECODER *decoder, BITSTREAM *stream, IMAGE *wavelet,
 		return false;
 	}
 
-#if (0 && DEBUG && _WINDOWS)
+#if (0 && DEBUG && _WIN32)
 	_CrtCheckMemory();
 #endif
 
@@ -20706,7 +20706,7 @@ bool SkipFastRunsFSM(DECODER *decoder, BITSTREAM *stream, IMAGE *wavelet,
 
 #endif
 
-#if (0 && DEBUG && _WINDOWS)
+#if (0 && DEBUG && _WIN32)
 	_CrtCheckMemory();
 #endif
 
@@ -21244,7 +21244,7 @@ bool DecodeBandRunsFSM8s(DECODER *decoder, BITSTREAM *stream, IMAGE *wavelet,
 	}
 #endif
 
-#if (0 && DEBUG && _WINDOWS)
+#if (0 && DEBUG && _WIN32)
 	_CrtCheckMemory();
 #endif
 
@@ -24071,7 +24071,7 @@ DWORD WINAPI InterlacedWorkerThreadProc(LPVOID lpParam)
 	}
 
 	// Set the handler for system exceptions
-#ifdef _WINDOWS
+#ifdef _WIN32
 	SetDefaultExceptionHandler();
 #endif
 	

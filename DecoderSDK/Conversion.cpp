@@ -45,7 +45,7 @@
 
 #if __APPLE_CC__
 //#include <QuickTime/QuickTime.h>
-#elif __GNUC__
+#elif __GNUC__ && !_WIN32
 // Use byte swapping functions on Linux
 #include <byteswap.h>
 #else
@@ -70,7 +70,7 @@
 
 #include "decoder.h"				// Decoder data structure and entry points
 
-#ifdef _WINDOWS
+#ifdef _WIN32
 
 #include <stdlib.h>
 
@@ -138,7 +138,7 @@ CFHD_Error ConvertToOutputBuffer(void *inputBuffer, int inputPitch, int inputFor
 									  (unsigned char *)outputBuffer, outputPitch,
 									  width, height, byte_swap_flag);
 
-#if 0	//_WINDOWS	//For Adobe Aftger Effects CS3
+#if 0	//_WIN32	//For Adobe Aftger Effects CS3
 			if (byte_swap_flag)
 			{
 				char *outputRowPtr = (char *)outputBuffer;
@@ -213,7 +213,7 @@ CFHD_Error ConvertToOutputBuffer(void *inputBuffer, int inputPitch, int inputFor
 			//DANREMOVED  ConvertRGB32ToQuickTime((unsigned char *)inputBuffer, inputPitch,
 //									(unsigned char *)outputBuffer, outputPitch,
 //									width, height, 0
-//#ifndef _WINDOWS
+//#ifndef _WIN32
 //									, 0, NULL
 //#endif
 //									);

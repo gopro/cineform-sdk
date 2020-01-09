@@ -26,7 +26,7 @@
 
 #include "ConvertLib.h"
 
-#if _WINDOWS
+#if _WIN32
 
 #if !defined(_OPENMP)
 // Turn off warnings about the Open MP pragmas

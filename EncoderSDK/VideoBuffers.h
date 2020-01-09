@@ -407,7 +407,7 @@ public:
 			m_format = format;
 			m_offset = offset;
 
-#if (0 && _WINDOWS && !defined(_PRODUCTION))
+#if (0 && _WIN32 && !defined(_PRODUCTION))
 			char message[256];
 			sprintf_s(message,
 				"CFrameBuffer::Alloc allocated buffer: 0x%08X, size: %d, width: %d, height: %d, format: %c%c%c%c\n",
@@ -419,7 +419,7 @@ public:
 		}
 		else
 		{
-#if (0 && _WINDOWS && !defined(_PRODUCTION))
+#if (0 && _WIN32 && !defined(_PRODUCTION))
 			char message[256];
 			sprintf_s(message, "CFrameBuffer::Alloc failed size: %d, width: %d, height: %d, format: %c%c%c%c\n",
 				size, width, height, FOURCC(format));

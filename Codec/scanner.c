@@ -25,7 +25,7 @@
 #include <string.h>
 #include <assert.h>
 
-#if !defined(_WINDOWS) && !defined(__APPLE__)
+#if !defined(_WIN32) && !defined(__APPLE__)
 // Different routines for case-insensitive string comparisons on Linux
 #include <strings.h>
 #endif

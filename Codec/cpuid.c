@@ -21,7 +21,7 @@
 
 // Adapted from Microsoft Visual Studio .NET sample code
 
-#ifdef _WINDOWS
+#ifdef _WIN32
 #include <windows.h>
 #elif __APPLE__
 #include "macdefs.h"
@@ -40,7 +40,7 @@
 // This bit is set when cpuid is called with register set to 80000001h (only applicable to AMD)
 #define _3DNOW_FEATURE_BIT      0x80000000
 
-#ifdef _WINDOWS
+#ifdef _WIN32
 
 int GetProcessorCount()
 {

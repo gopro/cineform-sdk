@@ -26,7 +26,7 @@
 #include "CFHDTypes.h"
 #include "CFHDMetadataTags.h"
 
-#ifdef _WINDOWS
+#ifdef _WIN32
 	#ifndef DYNAMICLIB
 		#define CFHDMETADATA_API
 	#else

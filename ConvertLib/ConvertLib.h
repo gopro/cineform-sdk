@@ -35,7 +35,7 @@
 
 #endif
 
-#if _WINDOWS
+#if _WIN32
 #include "ConvertYUV8.h"
 #endif
 
@@ -109,7 +109,7 @@ void ConvertRGB32ToQuickTimeRow(unsigned char *input,
 void ConvertRGB32ToQuickTime(unsigned char *input, long input_pitch,
 							 unsigned char *output, long output_pitch,
 							 int width, int height, int order
-#ifndef _WINDOWS
+#ifndef _WIN32
 							 , int gammaChoice,
 							 void (*GammaFixRGBA)( unsigned char *outputBuffer, int width, int to2point2 )
 #endif

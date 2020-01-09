@@ -94,7 +94,7 @@ int main(int argc, char **argv)
 		int len, w=0, h=0, source_w=0, source_h, i, count;
 		FILE *fpin;
 
-#ifdef _WINDOWS
+#ifdef _WIN32
 		strcpy_s(name, sizeof(name), argv[1]);
 		if (0 == fopen_s(&fpin, name, "rb"))
 #else
@@ -124,7 +124,7 @@ int main(int argc, char **argv)
 				i++;
 			}
 
-#ifdef _WINDOWS
+#ifdef _WIN32
 			sscanf_s(&header[i], "%d %d", &w, &h);
 #else
 			sscanf(&header[i], "%d %d", &w, &h);
@@ -162,7 +162,7 @@ int main(int argc, char **argv)
 						int *buffD = NULL;
 						//int subband = 0;
 						int header_length;
-#ifdef _WINDOWS
+#ifdef _WIN32
 						if (0 == fopen_s(&fpin, name, "rb"))
 #else
                         fpin = fopen(name, "rb");
@@ -275,7 +275,7 @@ int main(int argc, char **argv)
 #if OUTPUT_WAVELET_TREE
 								// Amplify the subbands so they can be viewed easier
 								ScaleThumbnail(buffD, dest, w, h, lowpass_w, lowpass_h, ((BITDEPTH==8) ? 6 : 7));
-#ifdef _WINDOWS
+#ifdef _WIN32
 								strcpy_s(name, sizeof(name), argv[1]);
 								name[strlen(name) - 4] = 0;
 								strcat_s(name, sizeof(name), "-wavelet.pgm");
@@ -293,7 +293,7 @@ int main(int argc, char **argv)
 #if OUTPUT_DECODED
 								{
 									ScaleBuffers(buffA, dest, w, h , (BITDEPTH - 8));
-#ifdef _WINDOWS
+#ifdef _WIN32
 									strcpy_s(name, sizeof(name), argv[1]); 	name[strlen(name) - 4] = 0;
 									strcat_s(name, sizeof(name), "-decoded.pgm");
 #else	
@@ -309,7 +309,7 @@ int main(int argc, char **argv)
 #if OUTPUT_DIFFERENCE
 								{
 									DiffBuffers(buffA, buffS, dest, w, h, BITDEPTH, ERRORGAIN);
-#ifdef _WINDOWS
+#ifdef _WIN32
 									strcpy_s(name, sizeof(name), argv[1]); 	name[strlen(name) - 4] = 0;
 									if (ERRORGAIN > 1)
 									{

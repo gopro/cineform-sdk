@@ -34,7 +34,7 @@
 #include <assert.h>
 //#include <emmintrin.h>		// SSE2 intrinsics
 
-#ifdef _WINDOWS
+#ifdef _WIN32
 #include <windows.h>
 #include <direct.h>
  #ifdef __cplusplus

@@ -23,7 +23,7 @@
 
 #include "thread.h"
 
-#ifndef _WINDOWS
+#ifndef _WIN32
 
 //TODO: How to set the thread affinity on Macintosh and Linux?
 void SetThreadAffinityMask(pthread_t thread, uint32_t *thread_affinity_mask)
