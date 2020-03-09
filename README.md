@@ -9,7 +9,7 @@ Pixel formats supported:
 * 12/16-bit CFA Bayer RAW, log encoded and compressed at 12-bit progressive
 * Dual channel stereoscopic/3D in any of the above.
 
-Compression ratio: between 10:1 and 4:1 are typical, greater ranges are possible. CineForm is a constant quality design, bit-rates will vary as needed for the scene. Whereas most other intermediate video codecs are a constant bit-rate design, quality varies depending on the scene.
+Compression ratio: between 10:1 and 4:1 are typical, greater ranges are possible. CineForm is a constant quality design, bit-rates will vary as needed for the scene. Whereas most other intermediate video codecs are a constant bit-rate design, quality varies depending on the scene. 
 
 # Included Within This Repository
 
