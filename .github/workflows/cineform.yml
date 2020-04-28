@@ -1,0 +1,55 @@
+name: cineform
+on:
+  push:
+  pull_request:
+
+env:
+  DEBIAN_FRONTEND: noninteractive
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-18.04
+            CC: ccache gcc
+            CXX: ccache g++
+          - os: ubuntu-18.04
+            CC: ccache clang
+            CXX: ccache clang++
+          - os: macos-10.15
+            CC: ccache clang
+            CXX: ccache clang++
+    runs-on: ${{ matrix.os }}
+    env:
+      CC: ${{ matrix.CC }}
+      CXX: ${{ matrix.CXX }}
+    steps:
+      - name: Install dependencies (ubuntu)
+        if: matrix.os == 'ubuntu-18.04'
+        run: |
+          sudo apt-get update
+          sudo -E apt-get -yq install ccache uuid-dev
+          case "$CC" in
+          *gcc) sudo -E apt-get -yq install gcc g++ ;;
+          *clang) sudo -E apt-get -yq install clang ;;
+          esac
+          $CC --version
+          cmake --version
+          ccache --version
+      - name: Install dependencies (mac)
+        if: matrix.os == 'macos-10.15'
+        run: |
+          brew update
+          brew install ccache
+          $CC --version
+          ccache --version
+      - uses: actions/checkout@v2
+      - name: Run CMake
+        run: |
+          [ -d "$HOME/.ccache" ] && sudo chown -R "$USER": "$HOME/.ccache"
+          cmake -S . -B build
+      - name: Run make
+        run: |
+          sudo make -j "$(getconf _NPROCESSORS_ONLN 2>/dev/null || sysctl -n hw.ncpu)" -C build
