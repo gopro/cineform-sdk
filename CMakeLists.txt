@@ -19,18 +19,18 @@ endif (WIN32)
 
 if (UNIX)
 	SET(COMPILER_FLAGS -fPIC)
-	SET(ADDITIONAL_LIBS "-luuid -lpthread")
+	SET(ADDITIONAL_LIBS -luuid -lpthread)
 	SET(TOY_LIBS "-lm")
 endif (UNIX)
 
 if (APPLE)
 	SET(COMPILER_FLAGS -fvisibility=hidden)
-	SET(ADDITIONAL_LIBS "-lpthread")
+	SET(ADDITIONAL_LIBS -lpthread)
 endif (APPLE)
 
 if (OPENMP_FOUND)
 	add_definitions(-DHAVE_OPENMP=1)
-	SET(ADDITIONAL_LIBS "${ADDITIONAL_LIBS} ${OpenMP_CXX_FLAGS}")
+	SET(ADDITIONAL_LIBS ${ADDITIONAL_LIBS} ${OpenMP_CXX_FLAGS})
 endif (OPENMP_FOUND)
 
 include_directories("Common" "Tables" "Codec" "ConvertLib" "WarpLib" "Example")
@@ -119,6 +119,7 @@ set(EXEC_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX} CACHE PATH "Installation prefix 
 set(BIN_INSTALL_DIR ${EXEC_INSTALL_PREFIX}/bin CACHE PATH "Installation prefix for user executables" FORCE)
 set(LIB_INSTALL_DIR ${EXEC_INSTALL_PREFIX}/lib${LIB_SUFFIX} CACHE PATH "Installation prefix for object code libraries" FORCE)
 set(INCLUDE_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/include/cineformsdk CACHE PATH "Installation prefix for header files" FORCE)
+string(REPLACE ";" " " ADDITIONAL_LIBS "${ADDITIONAL_LIBS}")
 
 # System wide installation
 if (BUILD_STATIC)
