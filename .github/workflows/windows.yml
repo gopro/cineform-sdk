@@ -1,0 +1,67 @@
+name: windows
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: windows-2019
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - CC: gcc
+            CXX: g++
+          - CC: cl
+            CXX: cl
+    env:
+      CC: ${{ matrix.CC }}
+      CXX: ${{ matrix.CXX }}
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Cache Msys2
+        if: matrix.CC == 'gcc'
+        id: cache-msys2
+        uses: actions/cache@v1.1.2
+        with:
+          path: msys64
+          key: ${{ runner.os }}-msys64-${{ hashFiles('**/*.db') }}
+
+      - name: Setup msys2 (mingw-w64)
+        if: matrix.CC == 'gcc' && steps.cache-msys2.outputs.cache-hit != 'true'
+        run: |
+          Invoke-WebRequest -Outfile msys2.tar.xz -Uri "https://github.com/msys2/msys2-installer/releases/download/nightly-x86_64/msys2-base-x86_64-latest.tar.xz"
+          xz -d msys2.tar.xz
+          tar -xf msys2.tar
+          rm msys2.tar
+      - name: Add msys2 to path (mingw-w64)
+        if: matrix.CC == 'gcc'
+        run: |
+          Write-Output "::add-path::${env:GITHUB_WORKSPACE}/msys64/mingw64/bin"
+          Write-Output "::add-path::${env:GITHUB_WORKSPACE}/msys64/usr/bin"
+      - name: Run bash for first time (mingw-w64)
+        if: matrix.CC == 'gcc' && steps.cache-msys2.outputs.cache-hit != 'true'
+        shell: cmd
+        run: bash -lc 'exit'
+      - name: Install packages (mingw-w64)
+        if: matrix.CC == 'gcc'
+        run: |
+          pacman -Syy
+          pacman -Suu --ask=20 --needed --noconfirm
+          pacman -S --ask=20 --needed --noconfirm `
+            mingw-w64-x86_64-gcc `
+            mingw-w64-x86_64-cmake `
+            mingw-w64-x86_64-openmp
+          pacman -Scc --ask=20
+
+      - name: Run CMake
+        run: |
+          if ($env:CC -eq "cl") {
+            cmake -S . -B build -G"Visual Studio 16 2019" -A x64
+          } else {
+            cmake -S . -B build -G"Unix Makefiles"
+          }
+      - name: Build
+        run: |
+          cmake --build build -j 4

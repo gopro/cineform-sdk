@@ -48,18 +48,18 @@ if (BUILD_LIBS)
 			add_library(CFHDEncoderStatic STATIC ${CODEC_SOURCES} ${ENCODER_SOURCES})
 			add_library(CFHDDecoderStatic STATIC ${CODEC_SOURCES} ${DECODER_SOURCES})
 			target_compile_options(CFHDEncoderStatic PUBLIC ${COMPILER_FLAGS})
-			target_compile_options(CFHDDecoderStatic PUBLIC ${COMPILER_FLAGS})		
+			target_compile_options(CFHDDecoderStatic PUBLIC ${COMPILER_FLAGS})
 			target_link_libraries (CFHDEncoderStatic)
 			target_link_libraries (CFHDDecoderStatic)
 		else (BUILD_SEPARATED)
 			add_library(CFHDCodecStatic STATIC ${CODEC_SOURCES} ${ENCODER_SOURCES} ${DECODER_SOURCES})
 			target_compile_options(CFHDCodecStatic PUBLIC ${COMPILER_FLAGS})
-		
+
 			set_target_properties(CFHDCodecStatic PROPERTIES POSITION_INDEPENDENT_CODE ON)
 			if (UNIX)
 				set_target_properties(CFHDCodecStatic PROPERTIES OUTPUT_NAME CFHDCodec)
 			endif (UNIX)
-		
+
 			target_link_libraries(CFHDCodecStatic)
 		endif (BUILD_SEPARATED)
 	else (BUILD_STATIC)
