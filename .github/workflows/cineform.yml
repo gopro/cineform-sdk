@@ -46,6 +46,11 @@ jobs:
           $CC --version
           ccache --version
       - uses: actions/checkout@v2
+      - name: Cache ccache files
+        uses: actions/cache@v1.1.2
+        with:
+          path: ~/.ccache
+          key: ${{ runner.os }}-${{ matrix.CC }}-${{ hashFiles('**/*.c') }}-${{ hashFiles('**/*.cpp') }}
       - name: Run CMake
         run: |
           [ -d "$HOME/.ccache" ] && sudo chown -R "$USER": "$HOME/.ccache"
