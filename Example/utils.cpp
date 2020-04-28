@@ -21,8 +21,8 @@
 
 #include "stdafx.h"
 
-#ifndef __APPLE__
-#include <omp.h> 
+#ifdef HAVE_OPENMP
+#include <omp.h>
 #endif
 
 

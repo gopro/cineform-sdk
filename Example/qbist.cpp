@@ -20,9 +20,9 @@
 */
 
 #include "stdafx.h"
-#ifndef __APPLE__
-#include <omp.h> 
-#define ANTIALIAS	1 
+#ifdef HAVE_OPENMP
+#include <omp.h>
+#define ANTIALIAS	1
 #endif
 
 static void
