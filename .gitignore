@@ -39,3 +39,7 @@
 *Win32*
 *x64*
 *xcode*
+
+.vs/
+.suo
+*.user

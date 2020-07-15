@@ -1,0 +1,411 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{76919156-C205-316A-8AED-32DDEA8DD736}</ProjectGuid>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <Keyword>Win32Proj</Keyword>
+    <Platform>x64</Platform>
+    <ProjectName>CFHDCodecStatic</ProjectName>
+    <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)builds\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(Platform)\$(Configuration)\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectName)</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.lib</TargetExt>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)builds\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Platform)\$(Configuration)\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectName)</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.lib</TargetExt>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <RunCodeAnalysis>true</RunCodeAnalysis>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <RunCodeAnalysis>true</RunCodeAnalysis>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(ProjectDir)Common;$(ProjectDir)Tables;$(ProjectDir)Codec;$(ProjectDir)ConvertLib;$(ProjectDir)WarpLib;$(ProjectDir)Example;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <Optimization>Disabled</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_ALLOCATOR=1;WARPSTUFF=1;HAVE_OPENMP=1;CMAKE_INTDIR="Debug";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_ALLOCATOR=1;WARPSTUFF=1;HAVE_OPENMP=1;CMAKE_INTDIR=\"Debug\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\git\techsmith-cineform-sdk\Common;C:\git\techsmith-cineform-sdk\Tables;C:\git\techsmith-cineform-sdk\Codec;C:\git\techsmith-cineform-sdk\ConvertLib;C:\git\techsmith-cineform-sdk\WarpLib;C:\git\techsmith-cineform-sdk\Example;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\git\techsmith-cineform-sdk\Common;C:\git\techsmith-cineform-sdk\Tables;C:\git\techsmith-cineform-sdk\Codec;C:\git\techsmith-cineform-sdk\ConvertLib;C:\git\techsmith-cineform-sdk\WarpLib;C:\git\techsmith-cineform-sdk\Example;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+      <TreatLibWarningAsErrors>false</TreatLibWarningAsErrors>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(ProjectDir)Common;$(ProjectDir)Tables;$(ProjectDir)Codec;$(ProjectDir)ConvertLib;$(ProjectDir)WarpLib;$(ProjectDir)Example;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_ALLOCATOR=1;WARPSTUFF=1;HAVE_OPENMP=1;CMAKE_INTDIR="Release";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_ALLOCATOR=1;WARPSTUFF=1;HAVE_OPENMP=1;CMAKE_INTDIR=\"Release\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\git\techsmith-cineform-sdk\Common;C:\git\techsmith-cineform-sdk\Tables;C:\git\techsmith-cineform-sdk\Codec;C:\git\techsmith-cineform-sdk\ConvertLib;C:\git\techsmith-cineform-sdk\WarpLib;C:\git\techsmith-cineform-sdk\Example;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\git\techsmith-cineform-sdk\Common;C:\git\techsmith-cineform-sdk\Tables;C:\git\techsmith-cineform-sdk\Codec;C:\git\techsmith-cineform-sdk\ConvertLib;C:\git\techsmith-cineform-sdk\WarpLib;C:\git\techsmith-cineform-sdk\Example;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+      <TreatLibWarningAsErrors>false</TreatLibWarningAsErrors>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\DemoasicFrames.cpp" />
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\DemoasicFrames.h" />
+    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\InvertHorizontalStrip16s.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
+    </ClCompile>
+    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\RGB2YUV.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
+    </ClCompile>
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\RGB2YUV.h" />
+    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\allocator.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
+    </ClCompile>
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\allocator.h" />
+    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\bandfile.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
+    </ClCompile>
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\bandfile.h" />
+    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\bayer.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
+    </ClCompile>
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\bayer.h" />
+    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\bitstream.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
+    </ClCompile>
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\bitstream.h" />
+    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\buffer.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
+    </ClCompile>
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\buffer.h" />
+    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\codebooks.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
+    </ClCompile>
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\codebooks.h" />
+    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\codec.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
+    </ClCompile>
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\codec.h" />
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\color.h" />
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\config.h" />
+    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\convert.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
+    </ClCompile>
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\convert.h" />
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\counter.h" />
+    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\cpuid.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
+    </ClCompile>
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\cpuid.h" />
+    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\debug.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
+    </ClCompile>
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\debug.h" />
+    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\decoder.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
+    </ClCompile>
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\decoder.h" />
+    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\dither.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
+    </ClCompile>
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\dither.h" />
+    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\draw.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
+    </ClCompile>
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\draw.h" />
+    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\dump.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
+    </ClCompile>
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\dump.h" />
+    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\encoder.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
+    </ClCompile>
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\encoder.h" />
+    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\entropy_threading.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
+    </ClCompile>
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\error.h" />
+    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\exception.cpp" />
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\exception.h" />
+    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\filter.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
+    </ClCompile>
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\filter.h" />
+    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\frame.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
+    </ClCompile>
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\frame.h" />
+    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\image.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
+    </ClCompile>
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\image.h" />
+    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\keyframes.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
+    </ClCompile>
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\keyframes.h" />
+    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\lutpath.cpp" />
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\lutpath.h" />
+    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\metadata.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
+    </ClCompile>
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\metadata.h" />
+    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\quantize.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
+    </ClCompile>
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\quantize.h" />
+    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\recursive.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
+    </ClCompile>
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\recursive.h" />
+    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\scanner.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
+    </ClCompile>
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\scanner.h" />
+    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\spatial.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
+    </ClCompile>
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\spatial.h" />
+    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\stats.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
+    </ClCompile>
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\stats.h" />
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\stdafx.h" />
+    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\swap.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
+    </ClCompile>
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\swap.h" />
+    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\temporal.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
+    </ClCompile>
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\temporal.h" />
+    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\thread.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
+    </ClCompile>
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\thread.h" />
+    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\thumbnail.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
+    </ClCompile>
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\thumbnail.h" />
+    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\timing.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
+    </ClCompile>
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\timing.h" />
+    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\vlc.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
+    </ClCompile>
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\vlc.h" />
+    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\wavelet.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
+    </ClCompile>
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\wavelet.h" />
+    <ClCompile Include="C:\git\techsmith-cineform-sdk\WarpLib\GeoMesh.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
+    </ClCompile>
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\WarpLib\GeoMesh.h" />
+    <ClCompile Include="C:\git\techsmith-cineform-sdk\WarpLib\GeoMeshApply.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
+    </ClCompile>
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\WarpLib\GeoMeshApply.h" />
+    <ClCompile Include="C:\git\techsmith-cineform-sdk\WarpLib\GeoMeshCache.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
+    </ClCompile>
+    <ClCompile Include="C:\git\techsmith-cineform-sdk\WarpLib\GeoMeshGoPro.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
+    </ClCompile>
+    <ClCompile Include="C:\git\techsmith-cineform-sdk\WarpLib\GeoMeshInterp.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
+    </ClCompile>
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\WarpLib\GeoMeshInterp.h" />
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\WarpLib\GeoMeshIpl.h" />
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\WarpLib\GeoMeshPrivate.h" />
+    <ClCompile Include="C:\git\techsmith-cineform-sdk\WarpLib\GeoMeshTransform.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
+    </ClCompile>
+    <ClCompile Include="C:\git\techsmith-cineform-sdk\WarpLib\GeoMeshYuy2.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
+    </ClCompile>
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\WarpLib\GeoMeshYuy2.h" />
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\WarpLib\WarpLib.h" />
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\WarpLib\sse_types.h" />
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\Common\AVIExtendedHeader.h" />
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\Common\CFHDAllocator.h" />
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\Common\CFHDDecoder.h" />
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\Common\CFHDEncoder.h" />
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\Common\CFHDError.h" />
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\Common\CFHDMetadata.h" />
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\Common\CFHDMetadataTags.h" />
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\Common\CFHDSampleHeader.h" />
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\Common\CFHDTypes.h" />
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\Common\Condition.h" />
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\Common\IAllocator.h" />
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\Common\Lock.h" />
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\Common\MessageQueue.h" />
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\Common\SampleMetadata.h" />
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\Common\StdAfx.h" />
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\Common\ThreadMessage.h" />
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\Common\ThreadPool.h" />
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\Common\macdefs.h" />
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\Common\ver.h" />
+    <ClCompile Include="C:\git\techsmith-cineform-sdk\EncoderSDK\AsyncEncoder.cpp" />
+    <ClCompile Include="C:\git\techsmith-cineform-sdk\EncoderSDK\CFHDEncoder.cpp" />
+    <ClCompile Include="C:\git\techsmith-cineform-sdk\EncoderSDK\CFHDEncoderMetadata.cpp" />
+    <ClCompile Include="C:\git\techsmith-cineform-sdk\EncoderSDK\CFHDEncoderPool.cpp" />
+    <ClCompile Include="C:\git\techsmith-cineform-sdk\EncoderSDK\EncoderPool.cpp" />
+    <ClCompile Include="C:\git\techsmith-cineform-sdk\EncoderSDK\EncoderQueue.cpp" />
+    <ClCompile Include="C:\git\techsmith-cineform-sdk\EncoderSDK\MetadataWriter.cpp" />
+    <ClCompile Include="C:\git\techsmith-cineform-sdk\EncoderSDK\SampleEncoder.cpp" />
+    <ClCompile Include="C:\git\techsmith-cineform-sdk\EncoderSDK\VideoBuffers.cpp" />
+    <ClCompile Include="C:\git\techsmith-cineform-sdk\ConvertLib\Bilinear.cpp" />
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\ConvertLib\Bilinear.h" />
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\ConvertLib\ColorFlags.h" />
+    <ClCompile Include="C:\git\techsmith-cineform-sdk\ConvertLib\ColorMatrix.cpp" />
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\ConvertLib\ColorMatrix.h" />
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\ConvertLib\ConvertLib.h" />
+    <ClCompile Include="C:\git\techsmith-cineform-sdk\ConvertLib\ConvertYUV8.cpp" />
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\ConvertLib\ConvertYUV8.h" />
+    <ClCompile Include="C:\git\techsmith-cineform-sdk\ConvertLib\DPXConverter.cpp" />
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\ConvertLib\DPXConverter.h" />
+    <ClCompile Include="C:\git\techsmith-cineform-sdk\ConvertLib\ImageConverter.cpp" />
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\ConvertLib\ImageConverter.h" />
+    <ClCompile Include="C:\git\techsmith-cineform-sdk\ConvertLib\ImageScaler.cpp" />
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\ConvertLib\ImageScaler.h" />
+    <ClCompile Include="C:\git\techsmith-cineform-sdk\ConvertLib\MemAlloc.cpp" />
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\ConvertLib\MemAlloc.h" />
+    <ClInclude Include="C:\git\techsmith-cineform-sdk\ConvertLib\StdAfx.h" />
+    <ClCompile Include="C:\git\techsmith-cineform-sdk\DecoderSDK\CFHDDecoder.cpp" />
+    <ClCompile Include="C:\git\techsmith-cineform-sdk\DecoderSDK\CFHDMetadata.cpp" />
+    <ClCompile Include="C:\git\techsmith-cineform-sdk\DecoderSDK\Conversion.cpp" />
+    <ClCompile Include="C:\git\techsmith-cineform-sdk\DecoderSDK\ISampleDecoder.cpp" />
+    <ClCompile Include="C:\git\techsmith-cineform-sdk\DecoderSDK\SampleDecoder.cpp" />
+    <ClCompile Include="C:\git\techsmith-cineform-sdk\DecoderSDK\SampleMetadata.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
