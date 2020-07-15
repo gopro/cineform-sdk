@@ -1,446 +1,443 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\DemoasicFrames.cpp">
+    <ClCompile Include="$(ProjectDir)Codec\DemoasicFrames.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\InvertHorizontalStrip16s.c">
+    <ClCompile Include="$(ProjectDir)Codec\InvertHorizontalStrip16s.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\RGB2YUV.c">
+    <ClCompile Include="$(ProjectDir)Codec\RGB2YUV.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\allocator.c">
+    <ClCompile Include="$(ProjectDir)Codec\allocator.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\bandfile.c">
+    <ClCompile Include="$(ProjectDir)Codec\bandfile.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\bayer.c">
+    <ClCompile Include="$(ProjectDir)Codec\bayer.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\bitstream.c">
+    <ClCompile Include="$(ProjectDir)Codec\bitstream.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\buffer.c">
+    <ClCompile Include="$(ProjectDir)Codec\buffer.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\codebooks.c">
+    <ClCompile Include="$(ProjectDir)Codec\codebooks.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\codec.c">
+    <ClCompile Include="$(ProjectDir)Codec\codec.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\convert.c">
+    <ClCompile Include="$(ProjectDir)Codec\convert.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\cpuid.c">
+    <ClCompile Include="$(ProjectDir)Codec\cpuid.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\debug.c">
+    <ClCompile Include="$(ProjectDir)Codec\debug.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\decoder.c">
+    <ClCompile Include="$(ProjectDir)Codec\decoder.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\dither.c">
+    <ClCompile Include="$(ProjectDir)Codec\dither.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\draw.c">
+    <ClCompile Include="$(ProjectDir)Codec\draw.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\dump.c">
+    <ClCompile Include="$(ProjectDir)Codec\dump.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\encoder.c">
+    <ClCompile Include="$(ProjectDir)Codec\encoder.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\entropy_threading.c">
+    <ClCompile Include="$(ProjectDir)Codec\entropy_threading.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\exception.cpp">
+    <ClCompile Include="$(ProjectDir)Codec\exception.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\filter.c">
+    <ClCompile Include="$(ProjectDir)Codec\filter.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\frame.c">
+    <ClCompile Include="$(ProjectDir)Codec\frame.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\image.c">
+    <ClCompile Include="$(ProjectDir)Codec\image.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\keyframes.c">
+    <ClCompile Include="$(ProjectDir)Codec\keyframes.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\lutpath.cpp">
+    <ClCompile Include="$(ProjectDir)Codec\lutpath.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\metadata.c">
+    <ClCompile Include="$(ProjectDir)Codec\metadata.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\quantize.c">
+    <ClCompile Include="$(ProjectDir)Codec\quantize.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\recursive.c">
+    <ClCompile Include="$(ProjectDir)Codec\recursive.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\scanner.c">
+    <ClCompile Include="$(ProjectDir)Codec\scanner.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\spatial.c">
+    <ClCompile Include="$(ProjectDir)Codec\spatial.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\stats.c">
+    <ClCompile Include="$(ProjectDir)Codec\stats.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\swap.c">
+    <ClCompile Include="$(ProjectDir)Codec\swap.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\temporal.c">
+    <ClCompile Include="$(ProjectDir)Codec\temporal.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\thread.c">
+    <ClCompile Include="$(ProjectDir)Codec\thread.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\thumbnail.c">
+    <ClCompile Include="$(ProjectDir)Codec\thumbnail.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\timing.c">
+    <ClCompile Include="$(ProjectDir)Codec\timing.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\vlc.c">
+    <ClCompile Include="$(ProjectDir)Codec\vlc.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\git\techsmith-cineform-sdk\Codec\wavelet.c">
+    <ClCompile Include="$(ProjectDir)Codec\wavelet.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\git\techsmith-cineform-sdk\WarpLib\GeoMesh.c">
+    <ClCompile Include="$(ProjectDir)WarpLib\GeoMesh.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\git\techsmith-cineform-sdk\WarpLib\GeoMeshApply.c">
+    <ClCompile Include="$(ProjectDir)WarpLib\GeoMeshApply.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\git\techsmith-cineform-sdk\WarpLib\GeoMeshCache.c">
+    <ClCompile Include="$(ProjectDir)WarpLib\GeoMeshCache.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\git\techsmith-cineform-sdk\WarpLib\GeoMeshGoPro.c">
+    <ClCompile Include="$(ProjectDir)WarpLib\GeoMeshGoPro.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\git\techsmith-cineform-sdk\WarpLib\GeoMeshInterp.c">
+    <ClCompile Include="$(ProjectDir)WarpLib\GeoMeshInterp.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\git\techsmith-cineform-sdk\WarpLib\GeoMeshTransform.c">
+    <ClCompile Include="$(ProjectDir)WarpLib\GeoMeshTransform.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\git\techsmith-cineform-sdk\WarpLib\GeoMeshYuy2.c">
+    <ClCompile Include="$(ProjectDir)WarpLib\GeoMeshYuy2.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\git\techsmith-cineform-sdk\EncoderSDK\AsyncEncoder.cpp">
+    <ClCompile Include="$(ProjectDir)EncoderSDK\AsyncEncoder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\git\techsmith-cineform-sdk\EncoderSDK\CFHDEncoder.cpp">
+    <ClCompile Include="$(ProjectDir)EncoderSDK\CFHDEncoder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\git\techsmith-cineform-sdk\EncoderSDK\CFHDEncoderMetadata.cpp">
+    <ClCompile Include="$(ProjectDir)EncoderSDK\CFHDEncoderMetadata.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\git\techsmith-cineform-sdk\EncoderSDK\CFHDEncoderPool.cpp">
+    <ClCompile Include="$(ProjectDir)EncoderSDK\CFHDEncoderPool.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\git\techsmith-cineform-sdk\EncoderSDK\EncoderPool.cpp">
+    <ClCompile Include="$(ProjectDir)EncoderSDK\EncoderPool.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\git\techsmith-cineform-sdk\EncoderSDK\EncoderQueue.cpp">
+    <ClCompile Include="$(ProjectDir)EncoderSDK\EncoderQueue.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\git\techsmith-cineform-sdk\EncoderSDK\MetadataWriter.cpp">
+    <ClCompile Include="$(ProjectDir)EncoderSDK\MetadataWriter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\git\techsmith-cineform-sdk\EncoderSDK\SampleEncoder.cpp">
+    <ClCompile Include="$(ProjectDir)EncoderSDK\SampleEncoder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\git\techsmith-cineform-sdk\EncoderSDK\VideoBuffers.cpp">
+    <ClCompile Include="$(ProjectDir)EncoderSDK\VideoBuffers.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\git\techsmith-cineform-sdk\ConvertLib\Bilinear.cpp">
+    <ClCompile Include="$(ProjectDir)ConvertLib\Bilinear.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\git\techsmith-cineform-sdk\ConvertLib\ColorMatrix.cpp">
+    <ClCompile Include="$(ProjectDir)ConvertLib\ColorMatrix.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\git\techsmith-cineform-sdk\ConvertLib\ConvertYUV8.cpp">
+    <ClCompile Include="$(ProjectDir)ConvertLib\ConvertYUV8.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\git\techsmith-cineform-sdk\ConvertLib\DPXConverter.cpp">
+    <ClCompile Include="$(ProjectDir)ConvertLib\DPXConverter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\git\techsmith-cineform-sdk\ConvertLib\ImageConverter.cpp">
+    <ClCompile Include="$(ProjectDir)ConvertLib\ImageConverter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\git\techsmith-cineform-sdk\ConvertLib\ImageScaler.cpp">
+    <ClCompile Include="$(ProjectDir)ConvertLib\ImageScaler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\git\techsmith-cineform-sdk\ConvertLib\MemAlloc.cpp">
+    <ClCompile Include="$(ProjectDir)ConvertLib\MemAlloc.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\git\techsmith-cineform-sdk\DecoderSDK\CFHDDecoder.cpp">
+    <ClCompile Include="$(ProjectDir)DecoderSDK\CFHDDecoder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\git\techsmith-cineform-sdk\DecoderSDK\CFHDMetadata.cpp">
+    <ClCompile Include="$(ProjectDir)DecoderSDK\CFHDMetadata.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\git\techsmith-cineform-sdk\DecoderSDK\Conversion.cpp">
+    <ClCompile Include="$(ProjectDir)DecoderSDK\Conversion.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\git\techsmith-cineform-sdk\DecoderSDK\ISampleDecoder.cpp">
+    <ClCompile Include="$(ProjectDir)DecoderSDK\ISampleDecoder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\git\techsmith-cineform-sdk\DecoderSDK\SampleDecoder.cpp">
+    <ClCompile Include="$(ProjectDir)DecoderSDK\SampleDecoder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\git\techsmith-cineform-sdk\DecoderSDK\SampleMetadata.cpp">
+    <ClCompile Include="$(ProjectDir)DecoderSDK\SampleMetadata.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\DemoasicFrames.h">
+    <ClInclude Include="$(ProjectDir)Codec\DemoasicFrames.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\RGB2YUV.h">
+    <ClInclude Include="$(ProjectDir)Codec\RGB2YUV.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\allocator.h">
+    <ClInclude Include="$(ProjectDir)Codec\allocator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\bandfile.h">
+    <ClInclude Include="$(ProjectDir)Codec\bandfile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\bayer.h">
+    <ClInclude Include="$(ProjectDir)Codec\bayer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\bitstream.h">
+    <ClInclude Include="$(ProjectDir)Codec\bitstream.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\buffer.h">
+    <ClInclude Include="$(ProjectDir)Codec\buffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\codebooks.h">
+    <ClInclude Include="$(ProjectDir)Codec\codebooks.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\codec.h">
+    <ClInclude Include="$(ProjectDir)Codec\codec.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\color.h">
+    <ClInclude Include="$(ProjectDir)Codec\color.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\config.h">
+    <ClInclude Include="$(ProjectDir)Codec\config.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\convert.h">
+    <ClInclude Include="$(ProjectDir)Codec\convert.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\counter.h">
+    <ClInclude Include="$(ProjectDir)Codec\counter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\cpuid.h">
+    <ClInclude Include="$(ProjectDir)Codec\cpuid.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\debug.h">
+    <ClInclude Include="$(ProjectDir)Codec\debug.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\decoder.h">
+    <ClInclude Include="$(ProjectDir)Codec\decoder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\dither.h">
+    <ClInclude Include="$(ProjectDir)Codec\dither.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\draw.h">
+    <ClInclude Include="$(ProjectDir)Codec\draw.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\dump.h">
+    <ClInclude Include="$(ProjectDir)Codec\dump.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\encoder.h">
+    <ClInclude Include="$(ProjectDir)Codec\encoder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\error.h">
+    <ClInclude Include="$(ProjectDir)Codec\error.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\exception.h">
+    <ClInclude Include="$(ProjectDir)Codec\exception.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\filter.h">
+    <ClInclude Include="$(ProjectDir)Codec\filter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\frame.h">
+    <ClInclude Include="$(ProjectDir)Codec\frame.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\image.h">
+    <ClInclude Include="$(ProjectDir)Codec\image.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\keyframes.h">
+    <ClInclude Include="$(ProjectDir)Codec\keyframes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\lutpath.h">
+    <ClInclude Include="$(ProjectDir)Codec\lutpath.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\metadata.h">
+    <ClInclude Include="$(ProjectDir)Codec\metadata.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\quantize.h">
+    <ClInclude Include="$(ProjectDir)Codec\quantize.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\recursive.h">
+    <ClInclude Include="$(ProjectDir)Codec\recursive.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\scanner.h">
+    <ClInclude Include="$(ProjectDir)Codec\scanner.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\spatial.h">
+    <ClInclude Include="$(ProjectDir)Codec\spatial.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\stats.h">
+    <ClInclude Include="$(ProjectDir)Codec\stats.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\stdafx.h">
+    <ClInclude Include="$(ProjectDir)Codec\stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\swap.h">
+    <ClInclude Include="$(ProjectDir)Codec\swap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\temporal.h">
+    <ClInclude Include="$(ProjectDir)Codec\temporal.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\thread.h">
+    <ClInclude Include="$(ProjectDir)Codec\thread.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\thumbnail.h">
+    <ClInclude Include="$(ProjectDir)Codec\thumbnail.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\timing.h">
+    <ClInclude Include="$(ProjectDir)Codec\timing.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\vlc.h">
+    <ClInclude Include="$(ProjectDir)Codec\vlc.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\Codec\wavelet.h">
+    <ClInclude Include="$(ProjectDir)Codec\wavelet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\WarpLib\GeoMesh.h">
+    <ClInclude Include="$(ProjectDir)WarpLib\GeoMesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\WarpLib\GeoMeshApply.h">
+    <ClInclude Include="$(ProjectDir)WarpLib\GeoMeshApply.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\WarpLib\GeoMeshInterp.h">
+    <ClInclude Include="$(ProjectDir)WarpLib\GeoMeshInterp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\WarpLib\GeoMeshIpl.h">
+    <ClInclude Include="$(ProjectDir)WarpLib\GeoMeshIpl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\WarpLib\GeoMeshPrivate.h">
+    <ClInclude Include="$(ProjectDir)WarpLib\GeoMeshPrivate.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\WarpLib\GeoMeshYuy2.h">
+    <ClInclude Include="$(ProjectDir)WarpLib\GeoMeshYuy2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\WarpLib\WarpLib.h">
+    <ClInclude Include="$(ProjectDir)WarpLib\WarpLib.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\WarpLib\sse_types.h">
+    <ClInclude Include="$(ProjectDir)WarpLib\sse_types.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\Common\AVIExtendedHeader.h">
+    <ClInclude Include="$(ProjectDir)Common\AVIExtendedHeader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\Common\CFHDAllocator.h">
+    <ClInclude Include="$(ProjectDir)Common\CFHDAllocator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\Common\CFHDDecoder.h">
+    <ClInclude Include="$(ProjectDir)Common\CFHDDecoder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\Common\CFHDEncoder.h">
+    <ClInclude Include="$(ProjectDir)Common\CFHDEncoder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\Common\CFHDError.h">
+    <ClInclude Include="$(ProjectDir)Common\CFHDError.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\Common\CFHDMetadata.h">
+    <ClInclude Include="$(ProjectDir)Common\CFHDMetadata.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\Common\CFHDMetadataTags.h">
+    <ClInclude Include="$(ProjectDir)Common\CFHDMetadataTags.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\Common\CFHDSampleHeader.h">
+    <ClInclude Include="$(ProjectDir)Common\CFHDSampleHeader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\Common\CFHDTypes.h">
+    <ClInclude Include="$(ProjectDir)Common\CFHDTypes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\Common\Condition.h">
+    <ClInclude Include="$(ProjectDir)Common\Condition.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\Common\IAllocator.h">
+    <ClInclude Include="$(ProjectDir)Common\IAllocator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\Common\Lock.h">
+    <ClInclude Include="$(ProjectDir)Common\Lock.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\Common\MessageQueue.h">
+    <ClInclude Include="$(ProjectDir)Common\MessageQueue.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\Common\SampleMetadata.h">
+    <ClInclude Include="$(ProjectDir)Common\SampleMetadata.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\Common\StdAfx.h">
+    <ClInclude Include="$(ProjectDir)Common\StdAfx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\Common\ThreadMessage.h">
+    <ClInclude Include="$(ProjectDir)Common\ThreadMessage.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\Common\ThreadPool.h">
+    <ClInclude Include="$(ProjectDir)Common\ThreadPool.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\Common\macdefs.h">
+    <ClInclude Include="$(ProjectDir)Common\macdefs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\Common\ver.h">
+    <ClInclude Include="$(ProjectDir)Common\ver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\ConvertLib\Bilinear.h">
+    <ClInclude Include="$(ProjectDir)ConvertLib\Bilinear.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\ConvertLib\ColorFlags.h">
+    <ClInclude Include="$(ProjectDir)ConvertLib\ColorFlags.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\ConvertLib\ColorMatrix.h">
+    <ClInclude Include="$(ProjectDir)ConvertLib\ColorMatrix.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\ConvertLib\ConvertLib.h">
+    <ClInclude Include="$(ProjectDir)ConvertLib\ConvertLib.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\ConvertLib\ConvertYUV8.h">
+    <ClInclude Include="$(ProjectDir)ConvertLib\ConvertYUV8.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\ConvertLib\DPXConverter.h">
+    <ClInclude Include="$(ProjectDir)ConvertLib\DPXConverter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\ConvertLib\ImageConverter.h">
+    <ClInclude Include="$(ProjectDir)ConvertLib\ImageConverter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\ConvertLib\ImageScaler.h">
+    <ClInclude Include="$(ProjectDir)ConvertLib\ImageScaler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\ConvertLib\MemAlloc.h">
+    <ClInclude Include="$(ProjectDir)ConvertLib\MemAlloc.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\git\techsmith-cineform-sdk\ConvertLib\StdAfx.h">
+    <ClInclude Include="$(ProjectDir)ConvertLib\StdAfx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <CustomBuild Include="C:\git\techsmith-cineform-sdk\CMakeLists.txt" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">
