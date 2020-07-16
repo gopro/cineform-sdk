@@ -202,6 +202,9 @@
     <ClCompile Include="$(ProjectDir)DecoderSDK\SampleMetadata.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="public_src\CineformCodec.cpp">
+      <Filter>Public Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(ProjectDir)Codec\DemoasicFrames.h">
@@ -438,6 +441,9 @@
     <ClInclude Include="$(ProjectDir)ConvertLib\StdAfx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\cineform-sdk\CineformCodec.h">
+      <Filter>Public Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">
@@ -445,6 +451,12 @@
     </Filter>
     <Filter Include="Source Files">
       <UniqueIdentifier>{F3659EED-4144-3C5E-B6DB-84B7670B4DBB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Public Headers">
+      <UniqueIdentifier>{6b2f261a-774b-4c58-8904-d359efbef76e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Public Source">
+      <UniqueIdentifier>{998b16d5-37dc-42fa-a2a5-faebf10c994c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

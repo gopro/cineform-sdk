@@ -61,7 +61,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(ProjectDir)Common;$(ProjectDir)Tables;$(ProjectDir)Codec;$(ProjectDir)ConvertLib;$(ProjectDir)WarpLib;$(ProjectDir)Example;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Common;$(ProjectDir)Tables;$(ProjectDir)Codec;$(ProjectDir)ConvertLib;$(ProjectDir)WarpLib;$(ProjectDir)Example;$(ProjectDir)include\cineform-sdk;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <CompileAs>CompileAsCpp</CompileAs>
@@ -98,7 +98,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(ProjectDir)Common;$(ProjectDir)Tables;$(ProjectDir)Codec;$(ProjectDir)ConvertLib;$(ProjectDir)WarpLib;$(ProjectDir)Example;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Common;$(ProjectDir)Tables;$(ProjectDir)Codec;$(ProjectDir)ConvertLib;$(ProjectDir)WarpLib;$(ProjectDir)Example;$(ProjectDir)include\cineform-sdk;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <CompileAs>CompileAsCpp</CompileAs>
       <ExceptionHandling>Sync</ExceptionHandling>
@@ -134,6 +134,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="$(ProjectDir)Codec\DemoasicFrames.cpp" />
+    <ClCompile Include="public_src\CineformCodec.cpp" />
     <ClInclude Include="$(ProjectDir)Codec\DemoasicFrames.h" />
     <ClCompile Include="$(ProjectDir)Codec\InvertHorizontalStrip16s.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
@@ -404,6 +405,7 @@
     <ClCompile Include="$(ProjectDir)DecoderSDK\ISampleDecoder.cpp" />
     <ClCompile Include="$(ProjectDir)DecoderSDK\SampleDecoder.cpp" />
     <ClCompile Include="$(ProjectDir)DecoderSDK\SampleMetadata.cpp" />
+    <ClInclude Include="include\cineform-sdk\CineformCodec.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
