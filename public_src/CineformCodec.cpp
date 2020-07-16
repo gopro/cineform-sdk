@@ -23,7 +23,8 @@ CineformCodec::CineformCodec( int width, int height, int stride, CodecType codec
    : _Width( width )
    , _Height( height )
    , _Stride( stride )
-   , _ExpectedBufferSize( ( stride / downsamplingMode ) * ( height / downsamplingMode ) )
+   , _ExpectedEncodeBufferSize( stride * height )
+   , _ExpectedDecodeBufferSize( ( stride / downsamplingMode ) * ( height / downsamplingMode ) )
    , _CodecType( codecType )
    , _DownsamplingMode( downsamplingMode )
 {
@@ -54,7 +55,7 @@ int CineformCodec::encodeFrame( const uint8_t* frameData, int frameDataSize, uin
    if ( !canEncode() )
       throw std::runtime_error( "Attempting to encode with a Cineform codec not created for encoding" );
 
-   if ( frameDataSize < _ExpectedBufferSize )
+   if ( frameDataSize < _ExpectedEncodeBufferSize )
       throw std::runtime_error( "Passed too-small frame data to Cineform encoding" );
 
    if ( !_EncoderInitialized )
@@ -88,7 +89,7 @@ void CineformCodec::decodeFrame( const uint8_t* encodedData, int encodedDataSize
    if ( !canDecode() )
       throw std::runtime_error( "Attempting to decode with a Cineform codec not created for decoding" );
 
-   if ( frameDataSize < _ExpectedBufferSize )
+   if ( frameDataSize < _ExpectedDecodeBufferSize )
       throw std::runtime_error( "Passed too-small frame data to Cineform decoding" );
 
    if ( !_DecoderInitialized )
