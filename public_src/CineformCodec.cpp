@@ -100,7 +100,7 @@ void CineformCodec::decodeFrame( const uint8_t* encodedData, int encodedDataSize
       CFHD_DecodedResolution decodedResolution = decodedResolutionFromDecoderDownsamplingMode( _DownsamplingMode );
       if ( ::CFHD_PrepareToDecode( _Decoder, 0, 0, outputPixelFormat,
                                    decodedResolution, kCFHDDecodingFlagsNone,
-                                   frameData,
+                                   const_cast<uint8_t*>( encodedData ),
                                    512,   // Docs say we can just pass in 512
                                    &actualWidth, &actualHeight, &actualPixelFormatOut ) != CFHD_ERROR_OKAY )
          throw std::runtime_error( "Error initializing Cineform for decoding" );
