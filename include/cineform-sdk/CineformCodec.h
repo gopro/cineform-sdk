@@ -32,7 +32,8 @@ protected:
    const int                     _Width;
    const int                     _Height;
    const int                     _Stride;
-   const int                     _ExpectedBufferSize;
+   const int                     _ExpectedEncodeBufferSize;
+   const int                     _ExpectedDecodeBufferSize;
    const CodecType               _CodecType;
    const DecoderDownsamplingMode _DownsamplingMode;
    void*                         _Encoder = nullptr;
