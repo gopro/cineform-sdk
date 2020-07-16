@@ -26,7 +26,6 @@ public:
                      int frameDataSize );
 
 protected:
-   //void initialize();
    bool canEncode() const;
    bool canDecode() const;
 
