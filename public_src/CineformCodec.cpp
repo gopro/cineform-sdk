@@ -120,5 +120,5 @@ bool CineformCodec::canEncode() const
 
 bool CineformCodec::canDecode() const
 {
-   _CodecType == EncodeDecode || _CodecType == DecodeOnly;
+   return _CodecType == EncodeDecode || _CodecType == DecodeOnly;
 }
