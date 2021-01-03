@@ -3,8 +3,8 @@
 *  @brief A simplistic wavelet compression modeling tool, similar to CineForm, for education purposes 
 *   and some codec design and tuning. 
 *
-*  This models the 2-6 Wavelet, quanitization and reconstruction, massuring the image distortion, 
-*  without any of the entropy encoding.  You can alter the waverlet order, quantization level and types. 
+*  This models the 2-6 Wavelet, quantization and reconstruction, measuring the image distortion, 
+*  without any of the entropy encoding.  You can alter the wavelet order, quantization level and types. 
 *
 *  @version 1.0.0
 *
@@ -32,13 +32,13 @@
 #define INTERLACED22		0		// Source is interlaced, use a different vertical filter on the first wavelet level
 
 #define QUANTIZE_PRESCALE	1		// Precision will grow between wavelet layer, scale the Low pass between levels
-#define QUANTIZE_HIGHPASS	1		//Compression is aided throught quantization
+#define QUANTIZE_HIGHPASS	1		// Compression is aided through quantization
 
 #define OUTPUT_DIFFERENCE	1		// Output a PGM (portable Grey Map) image for the differences due to quantization.
 #define OUTPUT_WAVELET_TREE	1		// Output a PGM for the wavelet structure.
 #define OUTPUT_DECODED		1		// Output a PGM for the decoded image.
 #define SUBBANDS_STATS		1		// Show Subband stats
-#define OUTPUTSUBBANDS		0		// Dump out the RAW qauntized Subband data.
+#define OUTPUTSUBBANDS		0		// Dump out the RAW quantized Subband data.
 #define ERRORGAIN			(10)	// The compression is good, this multiples the error to so can see the subtle differences
 
 #define GENERATIONS			(1)		// The type of compression,setting losing little to nothing after the first generation.
@@ -46,7 +46,7 @@
 #define LEVELS				(3)		// designed for 3, but you can experiment with 1 thru 7
 #define BITDEPTH			(12)	// designed for 12, supports 8 thru 14
 
-#if QUANTIZE_HIGHPASS  //Example qualitization tables.
+#if QUANTIZE_HIGHPASS  //Example quantization tables.
 	#if BITDEPTH==8 || BITDEPTH==9
 	int quant_subband[/*LEVELS * 3*/] = { 8,8,12,   16,16,12, 48,48,24, 48,48,24, 48,48,24, 48,48,24, 48,48,24 };
 	int prescale[/*LEVELS*/] = { 0, 0, 2, 2, 2, 2, 2 };
