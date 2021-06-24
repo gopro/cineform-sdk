@@ -23513,7 +23513,10 @@ CODEC_ERROR UpdateCodecState(DECODER *decoder, BITSTREAM *input, CODEC_STATE *co
 		break;
 
 	case CODEC_TAG_BAND_NUMBER:			// Identifying number of a wavelet band
-		codec->band.number = value;
+		if (value < IMAGE_NUM_BANDS)
+			codec->band.number = value;
+		else
+			error = CODEC_ERROR_BAND_NUMBER;
 		break;
 
 	case CODEC_TAG_BAND_WIDTH:			// Band data width
