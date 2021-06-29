@@ -274,7 +274,8 @@ CFHD_Error DecodeFrame(void **frameDecBuffer,
 		if (error) return error;
 
 
-		printf("\nDecode Res.:  %dx%d\n", actualWidth, actualHeight*scaleHeight);
+		//printf("\nDecode Res.:  %dx%d\n", actualWidth, actualHeight*scaleHeight);
+
 				
 		if (CFHD_ERROR_OKAY == CFHD_GetSampleInfo(decoderRef,
 			sampleBuffer,
@@ -480,6 +481,7 @@ CFHD_Error DecodeMOVIE(char *filename, char *ext)
 		error = CFHD_OpenMetadata(&metadataDecRef);
 		if (error) goto cleanup;
 
+
 		{
 			frame = decmode = resmode = 0;
 			do
@@ -543,7 +545,6 @@ CFHD_Error DecodeMOVIE(char *filename, char *ext)
 
 			} while (TestDecodeOnlyPixelFormat[decmode] != CFHD_PIXEL_FORMAT_UNKNOWN && TestResolution[resmode] != CFHD_DECODED_RESOLUTION_UNKNOWN);
 		}
-
 	}
 
 
@@ -558,6 +559,167 @@ cleanup:
 	if (decoderRef) CFHD_CloseDecoder(decoderRef);
 	if (metadataDecRef) CFHD_CloseMetadata(metadataDecRef);
 	
+	CloseSource(handle);
+
+	return error;
+}
+
+
+
+
+
+// Decode a series of CineForm frames from an MOV or MP4 sequence
+CFHD_Error FuzzMOVIE(char* filename, char* ext)
+{
+	CFHD_Error error = CFHD_ERROR_OKAY;
+	CFHD_DecoderRef decoderRef = NULL;
+	CFHD_MetadataRef metadataDecRef = NULL;
+	int resmode = 0, decmode = 0, dec_us = 0;
+	double dec_tot_us = 0;
+	uint32_t* payload = NULL; //buffer to store samples from the MP4.
+	void* frameDecBuffer = NULL;
+	uint32_t AVI = 0;
+	float length;
+	void* handle;
+
+#ifdef _WIN32
+	if (0 == stricmp("AVI", ext))  AVI = 1;
+#else
+	if (0 == strcasecmp("AVI", ext))  AVI = 1;
+#endif
+
+	if (AVI)
+		handle = OpenAVISource(filename, AVI_TRAK_TYPE, AVI_TRAK_SUBTYPE);
+	else
+		handle = OpenMP4Source(filename, MOV_TRAK_TYPE, MOV_TRAK_SUBTYPE);
+
+	length = GetDuration(handle);
+
+	if (length > 0.0)
+	{
+		int frame = 0;
+		uint32_t numframes = GetNumberPayloads(handle);
+
+		printf("found %.2fs of video (%d frames) within %s\n", length, numframes, filename);
+
+		if (numframes > MAX_DEC_FRAMES)
+			numframes = MAX_DEC_FRAMES;
+
+		{
+			int fuzzloopcount = 100000;
+			int resetfuzzloopcount = fuzzloopcount;
+
+			//int essencefuzzchanges = 300;
+			//int start_run = 365;
+			int essencefuzzchanges = 1;
+			int start_run = 3250;
+
+			fuzzloopcount -= start_run;
+
+			do
+			{
+				frame = decmode = resmode = 0;
+
+				error = CFHD_OpenDecoder(&decoderRef, NULL);
+				if (error) goto cleanup;
+
+				error = CFHD_OpenMetadata(&metadataDecRef);
+				if (error) goto cleanup;
+
+				do
+				{
+					char outputname[250] = "";
+					char restxt[5] = "";
+					CFHD_DecodedResolution decode_res = TestResolution[resmode];
+					uint32_t payloadsize;
+					CFHD_PixelFormat pixelFormat = TestDecodeOnlyPixelFormat[decmode];
+
+					payloadsize = GetPayloadSize(handle, frame);
+					payload = GetPayload(handle, payload, frame);
+
+					if (payload == NULL)
+					{
+						error = CFHD_ERROR_OUTOFMEMORY;
+						goto cleanup;
+					}
+#ifdef _WINDOWS 
+					if (decode_res == 1) sprintf_s(restxt, sizeof(restxt), "FULL");
+					else if (decode_res == 2) sprintf_s(restxt, sizeof(restxt), "HALF");
+					else if (decode_res == 3) sprintf_s(restxt, sizeof(restxt), "QRTR");
+					else sprintf_s(restxt, sizeof(restxt), "THUM");
+
+					sprintf_s(outputname, sizeof(outputname), "%s-%s-%c%c%c%c-%04d.ppm", filename, restxt, (pixelFormat >> 24) & 0xff, (pixelFormat >> 16) & 0xff, (pixelFormat >> 8) & 0xff, (pixelFormat >> 0) & 0xff, frame);
+#else
+
+					if (decode_res == 1) sprintf(restxt, "FULL");
+					else if (decode_res == 2) sprintf(restxt, "HALF");
+					else if (decode_res == 3) sprintf(restxt, "QRTR");
+					else sprintf(restxt, "THUM");
+
+					sprintf(outputname, "%s-%s-%c%c%c%c-%04d.ppm", filename, restxt, (pixelFormat >> 24) & 0xff, (pixelFormat >> 16) & 0xff, (pixelFormat >> 8) & 0xff, (pixelFormat >> 0) & 0xff, frame);
+#endif
+
+					srand((resetfuzzloopcount - fuzzloopcount) + essencefuzzchanges);
+					if (essencefuzzchanges && fuzzloopcount)
+					{
+						int seed = essencefuzzchanges * resetfuzzloopcount + (resetfuzzloopcount - fuzzloopcount) + essencefuzzchanges;
+						srand(seed);
+						for (int times = 0; times < essencefuzzchanges; times++)
+						{
+							uint8_t* byteptr = (uint8_t*)payload;
+							int offset = (rand() + (rand() << 16)) % payloadsize;
+							byteptr[offset] = rand() & 0xff;
+						}
+					}
+
+					error = DecodeFrame(&frameDecBuffer, decoderRef, metadataDecRef, payload, (int)payloadsize, CFHD_ENCODED_FORMAT_UNKNOWN, pixelFormat, decode_res, outputname, &dec_us);
+					if (error)
+					{
+						if (fuzzloopcount == 0)
+							goto cleanup;
+						else
+							printf("error run %d\n", (resetfuzzloopcount - fuzzloopcount));
+					}
+
+					printf(".");
+					{
+						dec_tot_us = 0;
+
+						frame = 0;
+						decmode++;
+						if (TestDecodeOnlyPixelFormat[decmode] == CFHD_PIXEL_FORMAT_UNKNOWN && TestResolution[resmode + 1] != CFHD_DECODED_RESOLUTION_UNKNOWN)
+						{
+							resmode++;
+							decmode = 0;
+						}
+					}
+				} while (0 && TestDecodeOnlyPixelFormat[decmode] != CFHD_PIXEL_FORMAT_UNKNOWN && TestResolution[resmode] != CFHD_DECODED_RESOLUTION_UNKNOWN);
+
+				if (frameDecBuffer) _mm_free(frameDecBuffer);
+				if (decoderRef) CFHD_CloseDecoder(decoderRef);
+				if (metadataDecRef) CFHD_CloseMetadata(metadataDecRef);
+
+				frameDecBuffer = NULL;
+				decoderRef = NULL;
+				metadataDecRef = NULL;
+
+				fuzzloopcount--;
+			} while (fuzzloopcount > 0);
+		}
+	}
+
+
+cleanup:
+	if (payload) FreePayload(payload); payload = NULL;
+#ifdef __APPLE__
+	if (frameDecBuffer) free(frameDecBuffer); frameDecBuffer = NULL;
+#else
+	if (frameDecBuffer) _mm_free(frameDecBuffer); frameDecBuffer = NULL;
+#endif
+
+	if (decoderRef) CFHD_CloseDecoder(decoderRef);
+	if (metadataDecRef) CFHD_CloseMetadata(metadataDecRef);
+
 	CloseSource(handle);
 
 	return error;
@@ -1132,13 +1294,27 @@ int main(int argc, char **argv)
 			error = EncodeDecodeQualityTest();
 		else if (argv[1][1] == 'e' || argv[1][1] == 'E')
 			error = EncodeSpeedTest();
+		else if (argv[1][1] == 'f' || argv[1][1] == 'F')
+		{
+			char ext[4] = "";
+			int len = (int)strlen(argv[1]);
+			if (len > 6)
+			{
+				ext[0] = argv[1][len - 3];
+				ext[1] = argv[1][len - 2];
+				ext[2] = argv[1][len - 1];
+				ext[3] = 0;
+			}
+
+			error = FuzzMOVIE(&argv[1][2], ext);
+		}
 		else
 			showusage = 1;
 	}
 	else 
 	{
 		char ext[4] = "";
-		int len = strlen(argv[1]);
+		int len = (int)strlen(argv[1]);
 		if (len > 4)
 		{
 			ext[0] = argv[1][len - 3];
@@ -1153,8 +1329,9 @@ int main(int argc, char **argv)
 	if (showusage)
 	{
 		printf("usage: %s [switches] or <filename.MOV|MP4|AVI>\n", argv[0]);
-		printf("          -D = decoder tester\n");
-		printf("          -E = encoder tester\n");
+		printf("          -D ... decoder tester\n");
+		printf("          -E ... encoder tester\n");
+		printf("          -Ffilename.MOV|MP4|AVI ... crude decode fuzzer\n");
 	}
 
 	if (error) printf("error code: %d\n", error);
