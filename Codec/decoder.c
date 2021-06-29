@@ -2064,7 +2064,8 @@ static bool AllTransformBandsValid(TRANSFORM *transform_array[], int num_channel
 	for (channel = 0; channel < num_channels; channel++)
 	{
 		IMAGE *wavelet = transform_array[channel]->wavelet[frame_index];
-		if (!AllBandsValid(wavelet))
+		//if (!AllBandsValid(wavelet))
+		if(wavelet == NULL)
 		{
 			return false;
 		}
@@ -11914,7 +11915,12 @@ bool DecodeSampleSubband(DECODER *decoder, BITSTREAM *input, int subband)
 		band = codec->band.number;
 
 		// The empty band should be the highpass band in a temporal wavelet
-		assert(type == WAVELET_TYPE_TEMPORAL && band == 1);
+		//assert(type == WAVELET_TYPE_TEMPORAL && band == 1);
+		if (!(type == WAVELET_TYPE_TEMPORAL && band == 1))
+		{
+			decoder->error = CODEC_ERROR_BAD_FRAME;
+			return false;
+		}
 
 #if _THREADED_DECODER
 		// Allocate (or reallocate) the wavelet with thread safety
@@ -13241,17 +13247,25 @@ void ComputeOutputDimensions(DECODER *decoder, int frame,
 	{
 		case DECODED_RESOLUTION_FULL:
 		case DECODED_RESOLUTION_HALF_HORIZONTAL:
-#if DEBUG
-			assert(AllTransformBandsValid(transform_array, num_channels, frame));
-#endif
+			//assert(AllTransformBandsValid(transform_array, num_channels, frame));
+			if (!AllTransformBandsValid(transform_array, num_channels, frame))
+			{
+				decoder->error = CODEC_ERROR_BAD_FRAME;
+				return;
+			}
+
 			decoded_scale = 2;
 			wavelet = transform_array[0]->wavelet[0];
 			break;
 
 		case DECODED_RESOLUTION_HALF:
-#if DEBUG
-			assert(AllLowpassBandsValid(transform_array, num_channels, frame));
-#endif
+			//assert(AllTransformBandsValid(transform_array, num_channels, frame));
+			if (!AllTransformBandsValid(transform_array, num_channels, frame))
+			{
+				decoder->error = CODEC_ERROR_BAD_FRAME;
+				return;
+			}
+
 			decoded_scale = 1;
 			wavelet = transform_array[0]->wavelet[0];
 			break;
@@ -13259,9 +13273,13 @@ void ComputeOutputDimensions(DECODER *decoder, int frame,
 		case DECODED_RESOLUTION_QUARTER:
 			if(decoder->codec.encoded_format == ENCODED_FORMAT_BAYER)
 			{
-#if DEBUG
-				assert(AllLowpassBandsValid(transform_array, num_channels, frame));
-#endif
+				//assert(AllTransformBandsValid(transform_array, num_channels, frame));
+				if (!AllTransformBandsValid(transform_array, num_channels, frame))
+				{
+					decoder->error = CODEC_ERROR_BAD_FRAME;
+					return;
+				}
+
 				decoded_scale = 1;
 				wavelet = transform_array[0]->wavelet[0];
 			}
@@ -13460,9 +13478,13 @@ void ReconstructSampleFrameToBuffer(DECODER *decoder, int frame, uint8_t *output
 		{
 			case DECODED_RESOLUTION_FULL:
 			case DECODED_RESOLUTION_HALF_HORIZONTAL_DEBAYER:
-#if DEBUG
-				assert(AllTransformBandsValid(transform_array, num_channels, frame));
-#endif
+				//assert(AllTransformBandsValid(transform_array, num_channels, frame));
+				if (!AllTransformBandsValid(transform_array, num_channels, frame))
+				{
+					decoder->error = CODEC_ERROR_BAD_FRAME;
+					return;
+				}
+
 				wavelet = transform_array[0]->wavelet[0];
 				// Get the decoded frame dimensions
 				assert(wavelet != NULL);
@@ -13473,9 +13495,13 @@ void ReconstructSampleFrameToBuffer(DECODER *decoder, int frame, uint8_t *output
 				break;
 
 			case DECODED_RESOLUTION_HALF:
-#if DEBUG
-				assert(AllLowpassBandsValid(transform_array, num_channels, frame));
-#endif
+				//assert(AllTransformBandsValid(transform_array, num_channels, frame));
+				if (!AllTransformBandsValid(transform_array, num_channels, frame))
+				{
+					decoder->error = CODEC_ERROR_BAD_FRAME;
+					return;
+				}
+
 				wavelet = transform_array[0]->wavelet[0];
 				// Get the decoded frame dimensions
 				assert(wavelet != NULL);
@@ -13486,9 +13512,13 @@ void ReconstructSampleFrameToBuffer(DECODER *decoder, int frame, uint8_t *output
 				break;
 
 			case DECODED_RESOLUTION_HALF_HORIZONTAL:
-#if DEBUG
-				assert(AllLowpassBandsValid(transform_array, num_channels, frame));
-#endif
+				//assert(AllTransformBandsValid(transform_array, num_channels, frame));
+				if (!AllTransformBandsValid(transform_array, num_channels, frame))
+				{
+					decoder->error = CODEC_ERROR_BAD_FRAME;
+					return;
+				}
+
 				wavelet = transform_array[0]->wavelet[0];
 				// Get the decoded frame dimensions
 				assert(wavelet != NULL);
@@ -13501,9 +13531,13 @@ void ReconstructSampleFrameToBuffer(DECODER *decoder, int frame, uint8_t *output
 			case DECODED_RESOLUTION_QUARTER:
 				if(decoder->codec.encoded_format == ENCODED_FORMAT_BAYER)
 				{
-#if DEBUG
-					assert(AllLowpassBandsValid(transform_array, num_channels, frame));
-#endif
+					//assert(AllTransformBandsValid(transform_array, num_channels, frame));
+					if (!AllTransformBandsValid(transform_array, num_channels, frame))
+					{
+						decoder->error = CODEC_ERROR_BAD_FRAME;
+						return;
+					}
+
 					wavelet = transform_array[0]->wavelet[0];
 				}
 				else
