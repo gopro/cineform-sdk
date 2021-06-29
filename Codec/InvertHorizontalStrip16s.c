@@ -17563,7 +17563,8 @@ InvertHorizontalStrip16sYUVtoRGB(HorizontalFilterParams)
 
 		newstrip.width = roi.width*2;
 		newstrip.height = roi.height;
-		ConvertRow16uToDitheredBuffer(decoder, plane_array, plane_pitch, newstrip,
+		if(channels >= 3)
+			ConvertRow16uToDitheredBuffer(decoder, plane_array, plane_pitch, newstrip,
 								   output_image, output_pitch, newstrip.width*2,
 								   format, decoder->frame.colorspace);
 	}

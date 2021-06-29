@@ -307,10 +307,14 @@ void InitWaveletStack(IMAGE *wavelet, int width, int height, int pitch, int leve
 	int i;
 
 	// Check that the wavelet type is valid
-	assert(0 < type && type <= WAVELET_TYPE_HIGHEST);
+	//assert(0 < type && type <= WAVELET_TYPE_HIGHEST);
+	if (type <= 0 || type > WAVELET_TYPE_HIGHEST)
+		return;
 
 	// Check that the number of bands is valid
-	assert(0 < num_bands && num_bands <= IMAGE_NUM_BANDS);
+	//assert(0 < num_bands && num_bands <= IMAGE_NUM_BANDS);
+	if(num_bands <= 0 || num_bands > IMAGE_NUM_BANDS)
+		return;
 
 	// Calculate the size of each band (in bytes)
 	band_size = height * pitch;
@@ -475,20 +479,23 @@ void AllocWaveletStack(IMAGE *wavelet, int width, int height, int level, int typ
 #else
 	AllocImage(wavelet, image_width, image_height);
 #endif
-	assert(wavelet->band[0] != NULL);
+	//assert(wavelet->band[0] != NULL);
+	if (wavelet->band[0] != NULL)
+	{
 
 #if (1 && SYSLOG)
-	fprintf(stderr, "AllocWaveletStack wavelet: 0x%p, image address: 0x%p\n", wavelet, wavelet->band[0]);
+		fprintf(stderr, "AllocWaveletStack wavelet: 0x%p, image address: 0x%p\n", wavelet, wavelet->band[0]);
 #endif
 
-	// Initialize the wavelet image descriptor
-	InitWaveletStack(wavelet, width, height, pitch, level, type);
-	assert(wavelet->band[num_bands - 1] != NULL);
+		// Initialize the wavelet image descriptor
+		InitWaveletStack(wavelet, width, height, pitch, level, type);
+		//assert(wavelet->band[num_bands - 1] != NULL);
 
-	// Check that the wavelet bands are within the allocated memory
+		// Check that the wavelet bands are within the allocated memory
 #if _DEBUG
-	assert(IsWaveletAllocationValid(wavelet));
+		//assert(IsWaveletAllocationValid(wavelet));
 #endif
+	}
 }
 
 // Create a four band wavelet image with each band width by height
@@ -1661,7 +1668,7 @@ void GetTransformPrescale(TRANSFORM *transform, int transform_type, int input_pr
 			break;
 
 		default:
-			assert(0);
+			//assert(0);
 			memset(transform->prescale, 0, sizeof(transform->prescale));
 			break;
 		}
@@ -5283,15 +5290,18 @@ void TransformInverseSpatialToBuffer(DECODER *decoder, TRANSFORM *transform[], i
 
 	// Pack the color channels into the output frame
 	STOP(tk_inverse);
-	if(precision == 8 || _NODITHER || DECODEDFORMAT(info)==DECODED_FORMAT_YUYV || DECODEDFORMAT(info)==COLOR_FORMAT_UYVY)
+	if (num_channels >= 3)
 	{
-		ConvertYUVStripPlanarToBuffer(plane_array, plane_pitch, strip, output_row_ptr,
-								  output_pitch, output_width, format, info->colorspace);
-	}
-	else
-	{
-		ConvertRow16uToDitheredBuffer(decoder, plane_array, plane_pitch, strip, output_row_ptr,
-								  output_pitch, output_width, format, info->colorspace);
+		if (precision == 8 || _NODITHER || DECODEDFORMAT(info) == DECODED_FORMAT_YUYV || DECODEDFORMAT(info) == COLOR_FORMAT_UYVY)
+		{
+			ConvertYUVStripPlanarToBuffer(plane_array, plane_pitch, strip, output_row_ptr,
+				output_pitch, output_width, format, info->colorspace);
+		}
+		else
+		{
+			ConvertRow16uToDitheredBuffer(decoder, plane_array, plane_pitch, strip, output_row_ptr,
+				output_pitch, output_width, format, info->colorspace);
+		}
 	}
 	START(tk_inverse);
 
@@ -5322,15 +5332,18 @@ void TransformInverseSpatialToBuffer(DECODER *decoder, TRANSFORM *transform[], i
 
 		// Pack the color channels into the output frame
 		STOP(tk_inverse);
-		if(precision == 8 || _NODITHER || DECODEDFORMAT(info)==DECODED_FORMAT_YUYV || DECODEDFORMAT(info)==COLOR_FORMAT_UYVY)
+		if (num_channels >= 3)
 		{
-			ConvertYUVStripPlanarToBuffer(plane_array, plane_pitch, strip, output_row_ptr,
-									  output_pitch, output_width, format, info->colorspace);
-		}
-		else
-		{
-			ConvertRow16uToDitheredBuffer(decoder, plane_array, plane_pitch, strip, output_row_ptr,
-									  output_pitch, output_width, format, info->colorspace);
+			if (precision == 8 || _NODITHER || DECODEDFORMAT(info) == DECODED_FORMAT_YUYV || DECODEDFORMAT(info) == COLOR_FORMAT_UYVY)
+			{
+				ConvertYUVStripPlanarToBuffer(plane_array, plane_pitch, strip, output_row_ptr,
+					output_pitch, output_width, format, info->colorspace);
+			}
+			else
+			{
+				ConvertRow16uToDitheredBuffer(decoder, plane_array, plane_pitch, strip, output_row_ptr,
+					output_pitch, output_width, format, info->colorspace);
+			}
 		}
 		START(tk_inverse);
 
@@ -5361,15 +5374,18 @@ void TransformInverseSpatialToBuffer(DECODER *decoder, TRANSFORM *transform[], i
 
 		// Pack the color channels into the output frame
 		STOP(tk_inverse);
-		if(precision == 8 || _NODITHER || DECODEDFORMAT(info)==DECODED_FORMAT_YUYV || DECODEDFORMAT(info)==COLOR_FORMAT_UYVY)
+		if (num_channels >= 3)
 		{
-			ConvertYUVStripPlanarToBuffer(plane_array, plane_pitch, strip, output_row_ptr,
-									  output_pitch, output_width, format, info->colorspace);
-		}
-		else
-		{
-			ConvertRow16uToDitheredBuffer(decoder, plane_array, plane_pitch, strip, output_row_ptr,
-									  output_pitch, output_width, format, info->colorspace);
+			if (precision == 8 || _NODITHER || DECODEDFORMAT(info) == DECODED_FORMAT_YUYV || DECODEDFORMAT(info) == COLOR_FORMAT_UYVY)
+			{
+				ConvertYUVStripPlanarToBuffer(plane_array, plane_pitch, strip, output_row_ptr,
+					output_pitch, output_width, format, info->colorspace);
+			}
+			else
+			{
+				ConvertRow16uToDitheredBuffer(decoder, plane_array, plane_pitch, strip, output_row_ptr,
+					output_pitch, output_width, format, info->colorspace);
+			}
 		}
 		START(tk_inverse);
 	}
@@ -5687,19 +5703,30 @@ void TransformInverseSpatialQuantLowpass(IMAGE *input, IMAGE *output,
 #endif
 
 	// Check that a valid input image has been provided
-	assert(input != NULL);
-	assert(input->type == IMAGE_TYPE_WAVELET);
-	assert(input->band[0] != NULL);
-	assert(input->band[1] != NULL);
-	assert(input->band[2] != NULL);
-	assert(input->band[3] != NULL);
+	//assert(input != NULL);
+	if (input == NULL) return;
+
+	//assert(input->type == IMAGE_TYPE_WAVELET);
+	if (input->type != IMAGE_TYPE_WAVELET) return;
+	//assert(input->band[0] != NULL);
+	if (input->band[0] == NULL) return;
+	//assert(input->band[1] != NULL);
+	if (input->band[1] == NULL) return;
+	//assert(input->band[2] != NULL);
+	if (input->band[2] == NULL) return;
+	//assert(input->band[3] != NULL);
+	if (input->band[3] == NULL) return;
+	
+	// Check that the spatial highpass band coefficients are 16 bits
+	//assert(input->pixel_type[1] == PIXEL_TYPE_16S);
+	if (input->pixel_type[1] != PIXEL_TYPE_16S) return;
+
 
 	// Check that the output image is a gray image or a lowpass wavelet band
-	assert(output->type == IMAGE_TYPE_GRAY || output->type == IMAGE_TYPE_WAVELET);
-	assert(output->band[0] != NULL);
-
-	// Check that the spatial highpass band coefficients are 16 bits
-	assert(input->pixel_type[1] == PIXEL_TYPE_16S);
+	//assert(output->type == IMAGE_TYPE_GRAY || output->type == IMAGE_TYPE_WAVELET);
+	if (output->type != IMAGE_TYPE_GRAY && output->type != IMAGE_TYPE_WAVELET) return;
+	//assert(output->band[0] != NULL);
+	if (output->band[0] == NULL) return;
 
 #if (0 && DEBUG)
 	sprintf(name, "Input%02d-", count);

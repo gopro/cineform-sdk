@@ -109,6 +109,8 @@ typedef enum codec_error
 	CODEC_ERROR_NULLPTR,				// Unexpected null pointer
 	CODEC_ERROR_UNEXPECTED,				// Unexpected condition
 
+	CODEC_ERROR_INVALID_PRECICION,		// Bitdepth unknown
+
 
 	/***** Reserve a block of error codes for bitstream errors *****/
 

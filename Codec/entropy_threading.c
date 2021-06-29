@@ -191,7 +191,7 @@ void DecodeEntropy(DECODER *decoder, int work_index, int thread_index, FSM *fsm,
 		DeQuantFSM(fsm, quant);
 
 		//Do stuff
-		if(level)
+		if(level && peaks)
 		{
 			result = DecodeBandFSM16sNoGapWithPeaks(fsm, stream, (PIXEL16S *)rowptr,
 				width, height, pitch, peaks, level, 1);
@@ -455,7 +455,7 @@ THREAD_PROC(ParallelThreadProc, lpParam)
 
 					// Get the type of sample
 					segment = GetTagValue(input);
-					assert(segment.tuple.tag == CODEC_TAG_SAMPLE);
+					//assert(segment.tuple.tag == CODEC_TAG_SAMPLE);
 					if (!IsValidSegment(input, segment, CODEC_TAG_SAMPLE)) {
 						decoder->error = CODEC_ERROR_BITSTREAM;
 					}

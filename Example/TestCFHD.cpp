@@ -275,7 +275,6 @@ CFHD_Error DecodeFrame(void **frameDecBuffer,
 
 
 		printf("\nDecode Res.:  %dx%d\n", actualWidth, actualHeight*scaleHeight);
-
 				
 		if (CFHD_ERROR_OKAY == CFHD_GetSampleInfo(decoderRef,
 			sampleBuffer,
@@ -430,6 +429,9 @@ CFHD_Error DecodeFrame(void **frameDecBuffer,
 			ExportPPM(outputname, NULL, *frameDecBuffer, actualWidth, actualHeight*scaleHeight, actualPitch, pixelFormat);
 #endif
 	}
+
+	if (error)
+		return error;
 
 	return CFHD_ERROR_OKAY;
 }

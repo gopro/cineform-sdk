@@ -515,9 +515,9 @@ TAGWORD GetValue(BITSTREAM *stream, int tag)
 {
 	TAGVALUE segment = GetTagValue(stream);
 
-	assert(stream->error == BITSTREAM_ERROR_OKAY);
+	//assert(stream->error == BITSTREAM_ERROR_OKAY);
 	if (stream->error == BITSTREAM_ERROR_OKAY) {
-		assert(segment.tuple.tag == tag);
+		//assert(segment.tuple.tag == tag);
 		if (segment.tuple.tag == tag) {
 			return segment.tuple.value;
 		}
@@ -561,8 +561,8 @@ int GetWord16s(BITSTREAM *stream)
 	assert(stream->nBitsFree == BITSTREAM_LONG_SIZE);
 
 	// Check that there is something in the block
-	assert(nWordsUsed >= nWordsPerValue);
-	if (nWordsUsed >= nWordsPerValue)
+	//assert(nWordsUsed >= nWordsPerValue);
+	if (nWordsUsed >= nWordsPerValue && nWordsUsed < stream->dwBlockLength)
 	{
 		// Get the first byte from the bitstream
 		value = *(lpCurrentWord++);
@@ -1517,8 +1517,12 @@ void AlignBitsTag(BITSTREAM *stream)
 	}
 
 	// Check that the bitstream is long word aligned
-	assert(((uintptr_t)lpCurrentWord & BITSTREAM_LONG_MASK) == (unsigned)offset);
-	assert(((uintptr_t)nWordsUsed & BITSTREAM_LONG_MASK) == 0);
+	//assert(((uintptr_t)lpCurrentWord & BITSTREAM_LONG_MASK) == (unsigned)offset);
+	//assert(((uintptr_t)nWordsUsed & BITSTREAM_LONG_MASK) == 0);
+	if (((uintptr_t)lpCurrentWord & BITSTREAM_LONG_MASK) != (unsigned)offset)
+		stream->error = 1;
+	if (((uintptr_t)nWordsUsed & BITSTREAM_LONG_MASK) != 0)
+		stream->error = 1;
 
 	// Update the bitstream pointer
 	stream->lpCurrentWord = lpCurrentWord;

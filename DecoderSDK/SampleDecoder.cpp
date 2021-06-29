@@ -936,7 +936,7 @@ CSampleDecoder::PrepareDecoder(int outputWidth,
 				// The frame dimensions must be obtained from the encoded sample
 				if (header.width == 0 || header.height == 0)
 				{
-					assert(0);
+					//assert(0);
 					errorCode = CFHD_ERROR_BADSAMPLE;
 					goto finish;
 				}
@@ -1585,7 +1585,7 @@ CSampleDecoder::DecodeSample(void *samplePtr,
 		}
 
 		if (!result) {
-			assert(0);
+			//assert(0);
 			return CFHD_ERROR_CODEC_ERROR;
 		}
 

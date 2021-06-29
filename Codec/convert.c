@@ -10727,7 +10727,7 @@ void ConvertRow16uToDitheredRGB(DECODER *decoder, uint8_t *planar_output[], int 
 		saturate = 1;
 		break;
 
-	default: assert(0);
+	default:// assert(0);
 	case COLOR_SPACE_CG_709:
 		y_offset = 16;
 		ymult = 128*149;	//7bit 1.164

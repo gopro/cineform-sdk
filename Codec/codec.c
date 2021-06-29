@@ -1974,7 +1974,7 @@ int FindNextSample(BITSTREAM *stream)
 		return SAMPLE_TYPE_NONE;
 
 	// Return null sample if that tag does not specify the sample type
-	assert(segment.tuple.tag == CODEC_TAG_SAMPLE);
+	//assert(segment.tuple.tag == CODEC_TAG_SAMPLE);
 	if (segment.tuple.tag != CODEC_TAG_SAMPLE)
 		return SAMPLE_TYPE_NONE;
 
@@ -2020,8 +2020,8 @@ CODEC_ERROR DecodeFrameHeader(BITSTREAM *stream, FRAME_HEADER *header, int sampl
 	{
 	case SAMPLE_TYPE_NONE:		// Caller has not read the bitstream marker
 		segment = GetTagValue(stream);
-		assert(segment.tuple.tag == CODEC_TAG_SAMPLE);
-		assert(segment.tuple.value == SAMPLE_TYPE_FRAME);
+		//assert(segment.tuple.tag == CODEC_TAG_SAMPLE);
+		//assert(segment.tuple.value == SAMPLE_TYPE_FRAME);
 		if (!IsTagValue(segment, CODEC_TAG_SAMPLE, SAMPLE_TYPE_FRAME)) {
 			error = CODEC_ERROR_FRAME_START_MARKER;
 			return error;
@@ -2609,8 +2609,8 @@ CODEC_ERROR DecodeBandTrailer(BITSTREAM *stream, BAND_TRAILER *trailer)
 #if (_CODEC_MARKERS && CODEC_BAND_END_CODE)
 	// Read the debugging marker
 	segment = GetTagValue(stream);
-	assert(segment.tuple.tag == CODEC_TAG_BAND_TRAILER);
-	assert(segment.tuple.value == 0);
+	//assert(segment.tuple.tag == CODEC_TAG_BAND_TRAILER);
+	//assert(segment.tuple.value == 0);
 	if (!IsTagValue(segment, CODEC_TAG_BAND_TRAILER, 0)) {
 		error = CODEC_ERROR_BAND_END_MARKER;
 		return error;

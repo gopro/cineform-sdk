@@ -148,10 +148,10 @@ extern void FastSharpeningBlurVW13A(short *Aptr,
 #ifdef SATURATE
 #undef SATURATE
 #endif
-#define SATURATE(x)			(assert(PIXEL_MIN <= (x) && (x) <= PIXEL_MAX), (x))
-#define SATURATE8S(x)		(assert(PIXEL8S_MIN <= (x) && (x) <= PIXEL8S_MAX), (x))
-//#define SATURATE8S(x)		SATURATE_8S(x)
-//#define SATURATE(x) (x)
+//#define SATURATE(x)			(assert(PIXEL_MIN <= (x) && (x) <= PIXEL_MAX), (x))
+//#define SATURATE8S(x)		(assert(PIXEL8S_MIN <= (x) && (x) <= PIXEL8S_MAX), (x))
+#define SATURATE8S(x)		SATURATE_8S(x)
+#define SATURATE(x)			(x)
 
 // Enable or disable function inlining
 #if 1	//DEBUG
@@ -1965,8 +1965,12 @@ static bool CanSkipChannel(DECODER *decoder, int resolution)
 		const uint32_t decoded_subband_mask_half = 0x7F;
 		const uint32_t decoded_subband_mask_quarter = 0x0F;
 
-		assert(transform_type == TRANSFORM_TYPE_SPATIAL);
-
+		//assert(transform_type == TRANSFORM_TYPE_SPATIAL);
+		if (transform_type != TRANSFORM_TYPE_SPATIAL)
+		{
+			decoder->error = CODEC_ERROR_BAD_FRAME;
+			return true;
+		}
 		switch (resolution)
 		{
 		case DECODED_RESOLUTION_HALF:
@@ -2042,18 +2046,18 @@ static bool AllBandsValid(IMAGE *wavelet)
 	return (wavelet != NULL && BANDS_ALL_VALID(wavelet));
 }
 
-#if DEBUG
+#if DEBUG || 1
 static bool AllTransformBandsValid(TRANSFORM *transform_array[], int num_channels, int frame_index)
 {
 	int channel;
 
 	if (!(1 <= num_channels && num_channels <= TRANSFORM_MAX_CHANNELS)) {
-		assert(0);
+		//assert(0);
 		return false;
 	}
 
 	if (!(0 <= frame_index && frame_index < TRANSFORM_MAX_FRAMES)) {
-		assert(0);
+		//assert(0);
 		return false;
 	}
 
@@ -2120,7 +2124,7 @@ ComputeFrameDimensionsFromFirstWavelet(int transform_type,
 			break;
 
 		default:
-			assert(0);
+			//assert(0);
 			return false;
 	}
 
@@ -2142,7 +2146,7 @@ bool ParseSampleHeader(BITSTREAM *input, SAMPLE_HEADER *header)
 	uint32_t channel_size[TRANSFORM_MAX_CHANNELS];
 
 	// Number of channels in the group index
-	int channel_count;
+	int channel_count = 0;
 
 	// Values used for computing the frame width and height (if necessary)
 	int transform_type = -1;
@@ -2193,7 +2197,7 @@ bool ParseSampleHeader(BITSTREAM *input, SAMPLE_HEADER *header)
 
 	// Get the type of sample (should be the first tag value pair)
 	segment = GetTagValue(input);
-	assert(segment.tuple.tag == CODEC_TAG_SAMPLE);
+	//assert(segment.tuple.tag == CODEC_TAG_SAMPLE);
 	if (!IsValidSegment(input, segment, CODEC_TAG_SAMPLE)) {
 		header->error = CodecErrorBitstream(input);
 		return false;
@@ -2369,74 +2373,97 @@ bool ParseSampleHeader(BITSTREAM *input, SAMPLE_HEADER *header)
 			}
 			else
 			{
+				TAGWORD value = segment.tuple.value;
 				switch (segment.tuple.tag)
 				{
 				 case CODEC_TAG_VERSION:			// Version number of the encoder used in each GOP.
-					header->encoder_version =	(((segment.tuple.value>>12) & 0xf)<<16) |
-												(((segment.tuple.value>>8) & 0xf)<<8) |
-												((segment.tuple.value) & 0xff);
+					header->encoder_version =	(((value>>12) & 0xf)<<16) |
+												(((value>>8) & 0xf)<<8) |
+												((value) & 0xff);
 					break;
 				case CODEC_TAG_INDEX:
 					// Get the number of channels in the index to skip
-					channel_count = segment.tuple.value;
-					DecodeGroupIndex(input, (uint32_t *)&channel_size[0], channel_count);
+					channel_count = value;
+					if (channel_count <= TRANSFORM_MAX_CHANNELS)
+						DecodeGroupIndex(input, (uint32_t*)&channel_size[0], channel_count);
+					else
+						return false;
+
 					break;
 
 				case CODEC_TAG_FRAME_WIDTH:
 					// Record the frame width in the sample header
-					header->width = segment.tuple.value;
+					if (value > 0 && value <= 32768)
+						header->width = value;
+					else
+						return false;
 					break;
 
 				case CODEC_TAG_FRAME_HEIGHT:
 					// Record the frame height in the sample header
-					header->height = segment.tuple.value;
+					if (value > 0 && value <= 32768)
+						header->height = value;
+					else
+						return false;
 					break;
 
 				case CODEC_TAG_FRAME_DISPLAY_HEIGHT:
-					display_height = segment.tuple.value;
+					if (value > 0 && value <= 32768)
+						display_height = value;
+					else
+						return false;
 					break;
 
 				case CODEC_TAG_LOWPASS_WIDTH:
 					// Save the width of the smallest wavelet for computing the frame dimensions
-					first_wavelet_width = segment.tuple.value;
+					if (value > 0 && value < (int)header->width / 4)
+						first_wavelet_width = value;
+					else
+						return false;
 					break;
 
 				case CODEC_TAG_LOWPASS_HEIGHT:
 					// Save the height of the smallest wavelet for computing the frame dimensions
-					first_wavelet_height = segment.tuple.value;
+					if (value > 0 && value < (int)header->height / 4)
+						first_wavelet_height = value;
+					else
+						return false;
 					break;
 
 				case CODEC_TAG_TRANSFORM_TYPE:
 					// Save the type of transform for computing the frame dimensions (if necessary)
-					transform_type = segment.tuple.value;
+					if (TRANSFORM_TYPE_FIRST <= value && value <= TRANSFORM_TYPE_LAST)
+						transform_type = value;
+					else
+						return false;
 					break;
 
 				case CODEC_TAG_INPUT_FORMAT:
 					// Record the original format of the encoded frames
-					header->input_format = (COLOR_FORMAT)segment.tuple.value;
+					header->input_format = (COLOR_FORMAT)value;
 					break;
 
 				case CODEC_TAG_ENCODED_FORMAT:
 				case CODEC_TAG_OLD_ENCODED_FORMAT:
 					// Record the encoded format (internal representation)
-					header->encoded_format = (ENCODED_FORMAT)segment.tuple.value;
+					header->encoded_format = (ENCODED_FORMAT)value;
 					if(header->encoded_format == ENCODED_FORMAT_RGBA_4444 && channel_count == 3)
 						header->encoded_format = ENCODED_FORMAT_RGB_444;
 					break;
 
 				case CODEC_TAG_FRAME_NUMBER:
 					// Record the frame number for debugging
-					header->frame_number = segment.tuple.value;
+					header->frame_number = value;
 					break;
 
 				case CODEC_TAG_INTERLACED_FLAGS:
 					// Record the flags that indicate the field type
-					header->interlaced_flags = segment.tuple.value;
+					header->interlaced_flags = value;
 					break;
 
 				case CODEC_TAG_SAMPLE_FLAGS:
 					// The sample flags specify progressive versus interlaced decoding
-					header->hdr_progressive = !!(segment.tuple.value & SAMPLE_FLAGS_PROGRESSIVE);
+					header->hdr_progressive = !!(value & SAMPLE_FLAGS_PROGRESSIVE);
 					if (header->hdr_progressive) {
 						// Clear the interlaced flags
 						header->interlaced_flags = 0;
@@ -2444,7 +2471,7 @@ bool ParseSampleHeader(BITSTREAM *input, SAMPLE_HEADER *header)
 					break;
 
 				case CODEC_TAG_LOWPASS_SUBBAND:
-					if(segment.tuple.value == 0) // low pass band
+					if(value == 0) // low pass band
 					{
 						int count = 8;
 						uint32_t *lptr = (uint32_t *)input->lpCurrentWord;
@@ -2470,21 +2497,23 @@ bool ParseSampleHeader(BITSTREAM *input, SAMPLE_HEADER *header)
 				case CODEC_TAG_ENCODED_CHANNELS:
 					if(header->videoChannels == 1)
 					{
-						header->videoChannels = segment.tuple.value;
+						header->videoChannels = value;
 						if(header->videoChannels < 1)
 							header->videoChannels = 1;
+						if (header->videoChannels > 2)
+							return false;
 					}
 					break;
 					
 
 				case CODEC_TAG_QUALITY_L:		//
 					header->encode_quality &= 0xffff0000;
-					header->encode_quality |= segment.tuple.value;
+					header->encode_quality |= value;
 					break;
 
 				case CODEC_TAG_QUALITY_H:		//
 					header->encode_quality &= 0xffff;
-					header->encode_quality |= segment.tuple.value<<16;
+					header->encode_quality |= value<<16;
 					break;
 
 				}
@@ -2550,11 +2579,12 @@ bool ParseSampleHeader(BITSTREAM *input, SAMPLE_HEADER *header)
 	}
 
 	if (header->width == 0 || header->height == 0) {
-		assert(0);
+		//assert(0);
+		return false;
 	}
 
 	// Fill in the encoded format if it was not present in the header
-	if (header->encoded_format == ENCODED_FORMAT_UNKNOWN) {
+	if (header->encoded_format == ENCODED_FORMAT_UNKNOWN && channel_count > 0) {
 		header->encoded_format = GetEncodedFormat(header->input_format, header->encode_quality, channel_count);
 	}
 
@@ -10943,7 +10973,7 @@ bool DecodeSample(DECODER *decoder, BITSTREAM *input, uint8_t *output, int pitch
 
 			// Get the type of sample
 			segment = GetTagValue(input);
-			assert(segment.tuple.tag == CODEC_TAG_SAMPLE);
+			//assert(segment.tuple.tag == CODEC_TAG_SAMPLE);
 			if (!IsValidSegment(input, segment, CODEC_TAG_SAMPLE)) {
 				decoder->error = CODEC_ERROR_BITSTREAM;
 				STOP(tk_decompress);
@@ -11015,7 +11045,7 @@ bool DecodeSample(DECODER *decoder, BITSTREAM *input, uint8_t *output, int pitch
 			{
 				// Get the type of sample
 				segment = GetTagValue(input);
-				assert(segment.tuple.tag == CODEC_TAG_SAMPLE);
+				//assert(segment.tuple.tag == CODEC_TAG_SAMPLE);
 				if (!IsValidSegment(input, segment, CODEC_TAG_SAMPLE)) {
 					local_decoder->error = CODEC_ERROR_BITSTREAM;
 					STOP(tk_decompress);
@@ -11187,8 +11217,7 @@ bool DecodeSampleGroup(DECODER *decoder, BITSTREAM *input, uint8_t *output, int 
 			// Use the tag value pair to update the codec state
 			error = UpdateCodecState(decoder, input, codec, tag, value);
 
-			assert(error == CODEC_ERROR_OKAY);
-
+			//assert(error == CODEC_ERROR_OKAY);
 			if (error != CODEC_ERROR_OKAY)
 			{
 				decoder->error = error;
@@ -11562,7 +11591,7 @@ bool DecodeSampleIntraFrame(DECODER *decoder, BITSTREAM *input, uint8_t *output,
 		
 		// Read the next tag value pair from the bitstream
 		segment = GetSegment(input);
-		assert(input->error == BITSTREAM_ERROR_OKAY);
+		//assert(input->error == BITSTREAM_ERROR_OKAY);
 		if (input->error != BITSTREAM_ERROR_OKAY) {
 			decoder->error = CODEC_ERROR_BITSTREAM;
 			result = false;
@@ -11576,7 +11605,7 @@ bool DecodeSampleIntraFrame(DECODER *decoder, BITSTREAM *input, uint8_t *output,
 			// Use the tag value pair to update the codec state
 			error = UpdateCodecState(decoder, input, codec, tag, value);
 
-			assert(error == CODEC_ERROR_OKAY);
+			//assert(error == CODEC_ERROR_OKAY);
 
 			if (error != CODEC_ERROR_OKAY) {
 				decoder->error = error;
@@ -11803,12 +11832,17 @@ bool DecodeSampleChannelHeader(DECODER *decoder, BITSTREAM *input)
 
 	// Decode the rest of the channel header
 	error = DecodeChannelHeader(input, &header, SAMPLE_TYPE_CHANNEL);
-	assert(error == CODEC_ERROR_OKAY);
+	//assert(error == CODEC_ERROR_OKAY);
 	decoder->error = error;
 	if (error != CODEC_ERROR_OKAY) return false;
 	
 	// The decoder is not able to skip channels
-	assert(header.channel == channel);
+	//assert(header.channel == channel);
+	if (header.channel != channel)
+	{
+		decoder->error = CODEC_ERROR_BAD_FRAME;
+		return false;
+	}
 
 	// Initialize the next transform using the previous one
 	next_transform = decoder->transform[channel];
@@ -11906,7 +11940,7 @@ bool DecodeSampleSubband(DECODER *decoder, BITSTREAM *input, int subband)
 	}
 
 	// Is this a highpass band?
-	else if (subband > 0)
+	else if (subband > 0 && subband < CODEC_MAX_SUBBANDS)
 	{
 		// Decode a highpass band
 
@@ -12493,8 +12527,12 @@ bool DecodeSampleHighPassBand(DECODER *decoder, BITSTREAM *stream, IMAGE *wavele
 	bool result = true;
 
 	// Check that the band index is in range
-	assert(0 <= band && band <= codec->max_subband);
-
+	//assert(0 <= band && band <= codec->max_subband);
+	if (!(0 <= band && band <= codec->max_subband))
+	{
+		decoder->error = CODEC_ERROR_BAD_FRAME;
+		return false;
+	}
 	// Encoded coefficients start on a tag boundary
 	AlignBitsTag(stream);
 
@@ -12555,7 +12593,12 @@ bool DecodeSampleHighPassBand(DECODER *decoder, BITSTREAM *stream, IMAGE *wavele
 	else
 	{
 		// Must use the runlength encoding method
-		assert(codec->band.encoding == BAND_ENCODING_RUNLENGTHS);
+		//assert(codec->band.encoding == BAND_ENCODING_RUNLENGTHS);
+		if (codec->band.encoding != BAND_ENCODING_RUNLENGTHS)
+		{
+			decoder->error = CODEC_ERROR_BAD_FRAME;
+			return false;
+		}
 #if 0
 		// This code attempts to not decode various subbands for 1/4 res decodes.
 		// Unforuntately playback would stop after 5 seonds with this code (but not in debug mode.)
@@ -12596,7 +12639,7 @@ bool DecodeSampleHighPassBand(DECODER *decoder, BITSTREAM *stream, IMAGE *wavele
 	// Decode the band trailer
 	error = DecodeBandTrailer(stream, NULL);
 	decoder->error = error;
-	assert(error == CODEC_ERROR_OKAY);
+	//assert(error == CODEC_ERROR_OKAY);
 	if (error != CODEC_ERROR_OKAY) {
 #if (0 && DEBUG)
 		if (logfile) {
@@ -12927,7 +12970,12 @@ void ReconstructWaveletBand(DECODER *decoder, TRANSFORM *transform, int channel,
 		if(!allocations_only)
 		{
 			// Check that all of the wavelet bands have been decoded
-			assert(BANDS_ALL_VALID(wavelet));
+			//assert(BANDS_ALL_VALID(wavelet));
+			if (!BANDS_ALL_VALID(wavelet))
+			{
+				decoder->error = CODEC_ERROR_BAD_FRAME;
+				return;
+			}
 
 			// Has this wavelet already been reconstructed?
 			if ((lowpass->band_valid_flags & BAND_VALID_MASK(0)) == 0)
@@ -12987,7 +13035,12 @@ void ReconstructWaveletBand(DECODER *decoder, TRANSFORM *transform, int channel,
 			assert((lowpass->band_valid_flags & BAND_VALID_MASK(0)) == 0);
 
 			// Check that all of the wavelet bands have been decoded
-			assert(BANDS_ALL_VALID(wavelet));
+			//assert(BANDS_ALL_VALID(wavelet));
+			if (!BANDS_ALL_VALID(wavelet))
+			{
+				decoder->error = CODEC_ERROR_BAD_FRAME;
+				return;
+			}
 
 			// Perform the inverse spatial transform before decoding the next wavelet
 			STOP(tk_decoding);
@@ -13042,7 +13095,12 @@ void ReconstructWaveletBand(DECODER *decoder, TRANSFORM *transform, int channel,
 			assert((highpass->band_valid_flags & BAND_VALID_MASK(1)) == 0);
 
 			// Check that all of the wavelet bands have been decoded
-			assert(BANDS_ALL_VALID(wavelet));
+			//assert(BANDS_ALL_VALID(wavelet));
+			if (!BANDS_ALL_VALID(wavelet))
+			{
+				decoder->error = CODEC_ERROR_BAD_FRAME;
+				return;
+			}
 
 			// Perform the inverse spatial transform before decoding the next wavelet
 			STOP(tk_decoding);
@@ -13076,7 +13134,12 @@ void ReconstructWaveletBand(DECODER *decoder, TRANSFORM *transform, int channel,
 		frame[1] = transform->wavelet[1];
 
 		// Check that the temporal wavelet is valid
-		assert(temporal->num_bands == 2 && temporal->wavelet_type == WAVELET_TYPE_TEMPORAL);
+		//assert(temporal->num_bands == 2 && temporal->wavelet_type == WAVELET_TYPE_TEMPORAL);
+		if (!(temporal->num_bands == 2 && temporal->wavelet_type == WAVELET_TYPE_TEMPORAL))
+		{
+			decoder->error = CODEC_ERROR_BAD_FRAME;
+			return;
+		}
 
 #if _THREADED_DECODER
 		// Allocate (or reallocate) the frame wavelets with thread safety
@@ -19374,6 +19437,8 @@ bool DecodeBandFSM16sNoGap(FSM *fsm, BITSTREAM *stream, PIXEL16S *image, int wid
 
 	// Reset the decoder
 	ResetFSM(fsm);
+	if (fsm->InitizedRestore != 1 && fsm->InitizedRestore != 0)
+		return false;
 
 #if (0 && DEBUG)
 	DebugOutputFSM(fsm);
@@ -19401,7 +19466,7 @@ bool DecodeBandFSM16sNoGap(FSM *fsm, BITSTREAM *stream, PIXEL16S *image, int wid
 #endif
 
 	fastendptr = bandendptr;
-	fastendptr -= 500;
+	fastendptr -= 644; // two 320 zero runs with 4 zeros after is the maximum step size per loop.
 
 	// Decode runs and magnitude values until the entire band is decoded
 	while(rowptr < fastendptr)
@@ -19423,13 +19488,13 @@ bool DecodeBandFSM16sNoGap(FSM *fsm, BITSTREAM *stream, PIXEL16S *image, int wid
 		UpdateFSM(fsm, (int)entryfast->next_state);
 
 		// Skip the decoded zero runs
-		rowptr = &rowptr[entryfast->pre_post_skip & 0xfff];
+		rowptr = &rowptr[entryfast->pre_post_skip & 0x1ff];
 
 		// Write down the first decoded magnitude
 		*((uint32_t *)rowptr) = entryfast->values;
 
 		// Skip the appropriate distance
-		rowptr = &rowptr[entryfast->pre_post_skip >> 12];
+		rowptr = &rowptr[(entryfast->pre_post_skip >> 12) & 0x7];
 
 		// decode the second 4-bit chunk
 		index = byte & ((1<<FSM_INDEX_SIZE)-1);
@@ -19445,13 +19510,13 @@ bool DecodeBandFSM16sNoGap(FSM *fsm, BITSTREAM *stream, PIXEL16S *image, int wid
 		UpdateFSM(fsm, (int)entryfast->next_state);
 
 		// Skip the decoded zero runs
-		rowptr = &rowptr[entryfast->pre_post_skip & 0xfff];
+		rowptr = &rowptr[entryfast->pre_post_skip & 0x1ff];
 
 		// Write down the first decoded magnitude
 		*((uint32_t *)rowptr) = entryfast->values;
 
 		// Skip the decoded zero runs
-		rowptr = &rowptr[entryfast->pre_post_skip >> 12];
+		rowptr = &rowptr[(entryfast->pre_post_skip >> 12) & 0x7];
 	}
 
 	offset = CurrentWord - startCurrentWord;
@@ -19477,7 +19542,7 @@ bool DecodeBandFSM16sNoGap(FSM *fsm, BITSTREAM *stream, PIXEL16S *image, int wid
 
 		// Read a byte from the bitstream
 #if ERROR_TOLERANT
-		if(stream->nWordsUsed)
+		if(stream->nWordsUsed > 0)
 		{
 			byte = GetFastByte(stream);
 		}
@@ -19516,20 +19581,26 @@ bool DecodeBandFSM16sNoGap(FSM *fsm, BITSTREAM *stream, PIXEL16S *image, int wid
 		UpdateFSM(fsm, (int)entry->next_state);
 
 		// Skip the decoded zero runs
-		rowptr = &rowptr[entry->pre_post_skip & 0xfff];
+		rowptr = &rowptr[entry->pre_post_skip & 0x1ff]; // max zero run is 320 pre-skip
 
 		// Write down the first decoded magnitude
 		if ((value = entry->value0)) {
-			rowptr[0] = value;//SATURATE(value);
+#if ERROR_TOLERANT
+			if (bandendptr > rowptr)
+#endif
+				rowptr[0] = value;//SATURATE(value);
 		}
 
 		// Write down the second decoded magnitude
 		if ((value = entry->value1)) {
-			rowptr[1] = value;//SATURATE(value);
+#if ERROR_TOLERANT
+			if (bandendptr > rowptr+1)
+#endif
+				rowptr[1] = value;//SATURATE(value);
 		}
 
 		// Skip the appropriate distance
-		rowptr = &rowptr[entry->pre_post_skip >> 12];
+		rowptr = &rowptr[(entry->pre_post_skip >> 12) & 0x7];// max zero post-skip 4 (nibble of zeros in the FSM)
 
 		// decode the second 4-bit chunk
 		index = byte & ((1<<FSM_INDEX_SIZE)-1);
@@ -19558,20 +19629,26 @@ bool DecodeBandFSM16sNoGap(FSM *fsm, BITSTREAM *stream, PIXEL16S *image, int wid
 		UpdateFSM(fsm, (int)entry->next_state);
 
 		// Skip the decoded zero runs
-		rowptr = &rowptr[entry->pre_post_skip & 0xfff];
+		rowptr = &rowptr[entry->pre_post_skip & 0x1ff]; // max zero run is 320 pre-skip
 
 		// Write down the first decoded magnitude
 		if ((value = entry->value0)) {
-			rowptr[0] = value;//SATURATE(value);
+#if ERROR_TOLERANT
+			if (bandendptr > rowptr)
+#endif
+				rowptr[0] = value;//SATURATE(value);
 		}
 
 		// Write down the second decoded magnitude
 		if ((value = entry->value1)) {
-			rowptr[1] = value;//SATURATE(value);
+#if ERROR_TOLERANT
+			if (bandendptr > rowptr+1)
+#endif
+				rowptr[1] = value;//SATURATE(value);
 		}
 
 		// Skip the decoded zero runs
-		rowptr = &rowptr[entry->pre_post_skip >> 12];
+		rowptr = &rowptr[(entry->pre_post_skip >> 12) & 0x7];// max zero post-skip 4 (nibble of zeros in the FSM)
 	}
 
 #if ERROR_TOLERANT
@@ -20469,24 +20546,34 @@ bool DecodeFastRunsFSM16s(DECODER *decoder, BITSTREAM *stream, IMAGE *wavelet,
 	decoder->codec.difference_coding = 0; //reset state for next subband
 
 	// Must have a valid wavelet
-	assert(wavelet != NULL);
+	//assert(wavelet != NULL);
 	if (wavelet == NULL) return false;
 
 	//Must have a valid FSM
-	assert(fsm != NULL);
+	//assert(fsm != NULL);
 	if(fsm == NULL) return false;
+
+	if(width==0 || height == 0) return false;
+
+	if (fsm->InitizedRestore != 0 && fsm->InitizedRestore != 1)
+		return false;
 
 	// All rows are treated as one long row that covers the entire band
 	size = fsm->table.num_states;
 
-	assert(size > 0);
+	//assert(size > 0);
 	if (size == 0) {
 		decoder->error = CODEC_ERROR_RUN_DECODE;
 		return false;
 	}
 
 	// Check if the band is intended for 8-bit pixels
-	assert(wavelet->pixel_type[band_index] == PIXEL_TYPE_16S);
+	//assert(wavelet->pixel_type[band_index] == PIXEL_TYPE_16S);
+	if(wavelet->pixel_type[band_index] != PIXEL_TYPE_16S)
+	{
+		decoder->error = CODEC_ERROR_BAD_FRAME;
+		return false;
+	}
 
 	START(tk_fastruns);
 
@@ -20590,7 +20677,7 @@ continuesearch:
 	{
 		DeQuantFSM(fsm, quant);
 
-		if (peaklevel)
+		if (peaklevel && peakbase)
 		{
 			result = DecodeBandFSM16sNoGapWithPeaks(fsm, stream, (PIXEL16S *)rowptr, width, height, pitch, peakbase, peaklevel, 1);
 		}
@@ -20626,7 +20713,7 @@ continuesearch:
 		}
 	}
 
-	assert(result == true);
+	//assert(result == true);
 	if (result != true) {
 		decoder->error = CODEC_ERROR_RUN_DECODE;
 		return false;
@@ -23144,7 +23231,7 @@ CODEC_ERROR UpdateCodecState(DECODER *decoder, BITSTREAM *input, CODEC_STATE *co
 	switch (tag)
 	{
 	case CODEC_TAG_ZERO:				// Used internally
-		assert(0);						// Should not occur in the bitstream
+		//assert(0);						// Should not occur in the bitstream
 		error = CODEC_ERROR_INVALID_BITSTREAM;
 		break;
 
@@ -23163,19 +23250,25 @@ CODEC_ERROR UpdateCodecState(DECODER *decoder, BITSTREAM *input, CODEC_STATE *co
 	case CODEC_TAG_INDEX:				// Sample index table
 		//assert(0);					// Need to figure out how to return the group index
 		{
-			int count = value;
-			uint32_t *index = (uint32_t *)(&codec->channel_size[0]);
-			DecodeGroupIndex(input, index, count);
-			codec->num_channels = count;
+			uint32_t count = (uint32_t)value;
+			if (count <= TRANSFORM_MAX_CHANNELS)
+			{
+				uint32_t* index = (uint32_t*)(&codec->channel_size[0]);
+				DecodeGroupIndex(input, index, count);
+				codec->num_channels = count;
+			}
+			else
+				error = CODEC_ERROR_SAMPLE_INDEX;
 		}
 		break;
 
 	case CODEC_TAG_SUBBAND:			// Has the decoder encountered a subband?
+		if(value>=0 && value < CODEC_MAX_SUBBANDS) 
 		{							// This tag is obsolete and not used in modern streams
 			int subband = value;
 
 			// Check that the subband number makes sense
-			assert(0 <= subband && subband <= codec->max_subband);
+			//assert(0 <= subband && subband <= codec->max_subband);
 			if (! (0 <= subband && subband <= codec->max_subband))
 			{
 				error = CODEC_ERROR_DECODING_SUBBAND;
@@ -23189,6 +23282,8 @@ CODEC_ERROR UpdateCodecState(DECODER *decoder, BITSTREAM *input, CODEC_STATE *co
 			else
 				error = CODEC_ERROR_OKAY;
 		}
+		else
+			error = CODEC_ERROR_DECODING_SUBBAND;
 		break;
 
 	case CODEC_TAG_BAND_HEADER: //CODEC_TAG_BAND_DIVISOR:		// Band divisor. this is last TAG before subband data so act.
@@ -23208,7 +23303,8 @@ CODEC_ERROR UpdateCodecState(DECODER *decoder, BITSTREAM *input, CODEC_STATE *co
 		break;
 
 	case CODEC_TAG_ENTRY:				// Entry in sample index
-		assert(0);						// Need to figure out how to return the group index
+		//assert(0);						// Need to figure out how to return the group index
+		error = CODEC_ERROR_BAD_FRAME;
 		break;
 
 	case CODEC_TAG_MARKER:				// Bitstream marker
@@ -23240,27 +23336,32 @@ CODEC_ERROR UpdateCodecState(DECODER *decoder, BITSTREAM *input, CODEC_STATE *co
 		break;
 
 	case CODEC_TAG_VERSION_MAJOR:		// Version
-		assert(0);
+		//assert(0);
+		error = CODEC_ERROR_BAD_FRAME;
 		break;
 
 	case CODEC_TAG_VERSION_MINOR:		// Minor version number
-		assert(0);
+		//assert(0);
+		error = CODEC_ERROR_BAD_FRAME;
 		break;
 
 	case CODEC_TAG_VERSION_REVISION:	// Revision number
-		assert(0);
+		//assert(0);
+		error = CODEC_ERROR_BAD_FRAME;
 		break;
 
 	case CODEC_TAG_VERSION_EDIT:		// Edit number
-		assert(0);
+		//assert(0);
+		error = CODEC_ERROR_BAD_FRAME;
 		break;
 
 	case CODEC_TAG_SEQUENCE_FLAGS:		// Video sequence flags
-		assert(0);
+		//assert(0);
+		error = CODEC_ERROR_BAD_FRAME;
 		break;
 
 	case CODEC_TAG_TRANSFORM_TYPE:		// Type of transform
-		assert(TRANSFORM_TYPE_FIRST <= value && value <= TRANSFORM_TYPE_LAST);
+		//assert(TRANSFORM_TYPE_FIRST <= value && value <= TRANSFORM_TYPE_LAST);
 		if (TRANSFORM_TYPE_FIRST <= value && value <= TRANSFORM_TYPE_LAST)
 		{
 			int i;
@@ -23281,7 +23382,7 @@ CODEC_ERROR UpdateCodecState(DECODER *decoder, BITSTREAM *input, CODEC_STATE *co
 		break;
 
 	case CODEC_TAG_NUM_FRAMES:			// Number of frames in the group
-		assert(0 <= value && value <= TRANSFORM_NUM_FRAMES);
+		//assert(0 <= value && value <= TRANSFORM_NUM_FRAMES);
 		if (0 <= value && value <= TRANSFORM_NUM_FRAMES)
 			codec->num_frames = value;
 		else
@@ -23289,7 +23390,7 @@ CODEC_ERROR UpdateCodecState(DECODER *decoder, BITSTREAM *input, CODEC_STATE *co
 		break;
 
 	case CODEC_TAG_NUM_CHANNELS:		// Number of channels in the transform
-		assert(value <= CODEC_MAX_CHANNELS);
+		//assert(value <= CODEC_MAX_CHANNELS);
 		if (value <= CODEC_MAX_CHANNELS)
 			codec->num_channels = value;
 		else
@@ -23297,7 +23398,7 @@ CODEC_ERROR UpdateCodecState(DECODER *decoder, BITSTREAM *input, CODEC_STATE *co
 		break;
 
 	case CODEC_TAG_NUM_WAVELETS:		// Number of wavelets in the transform
-		assert(0 < value && value <= TRANSFORM_NUM_WAVELETS);
+		//assert(0 < value && value <= TRANSFORM_NUM_WAVELETS);
 		if (0 < value && value <= TRANSFORM_NUM_WAVELETS)
 			codec->num_wavelets = value;
 		else
@@ -23305,7 +23406,7 @@ CODEC_ERROR UpdateCodecState(DECODER *decoder, BITSTREAM *input, CODEC_STATE *co
 		break;
 
 	case CODEC_TAG_NUM_SUBBANDS:		// Number of encoded subbands
-		assert(0 < value && value <= TRANSFORM_NUM_SUBBANDS);
+		//assert(0 < value && value <= TRANSFORM_NUM_SUBBANDS);
 		if (0 < value && value <= TRANSFORM_NUM_SUBBANDS)
 			codec->num_subbands = value;
 		else
@@ -23313,7 +23414,7 @@ CODEC_ERROR UpdateCodecState(DECODER *decoder, BITSTREAM *input, CODEC_STATE *co
 		break;
 
 	case CODEC_TAG_NUM_SPATIAL:			// Number of spatial levels
-		assert(0 < value && value <= TRANSFORM_NUM_SPATIAL);
+		//assert(0 < value && value <= TRANSFORM_NUM_SPATIAL);
 		if (0 < value && value <= TRANSFORM_NUM_SPATIAL)
 			codec->num_spatial = value;
 		else
@@ -23321,7 +23422,7 @@ CODEC_ERROR UpdateCodecState(DECODER *decoder, BITSTREAM *input, CODEC_STATE *co
 		break;
 
 	case CODEC_TAG_FIRST_WAVELET:		// Type of the first wavelet
-		assert(value == TRANSFORM_FIRST_WAVELET);
+		//assert(value == TRANSFORM_FIRST_WAVELET);
 		if (value == TRANSFORM_FIRST_WAVELET)
 			codec->first_wavelet = value;
 		else
@@ -23329,7 +23430,8 @@ CODEC_ERROR UpdateCodecState(DECODER *decoder, BITSTREAM *input, CODEC_STATE *co
 		break;
 
 	case CODEC_TAG_CHANNEL_SIZE:		// Number of bytes in each channel
-		assert(0);
+		//assert(0);
+		error = CODEC_ERROR_BAD_FRAME;
 		break;
 
 	case CODEC_TAG_GROUP_TRAILER:		// Group trailer and checksum
@@ -23341,32 +23443,40 @@ CODEC_ERROR UpdateCodecState(DECODER *decoder, BITSTREAM *input, CODEC_STATE *co
 		break;
 
 	case CODEC_TAG_FRAME_WIDTH:			// Width of the frame
-		codec->frame.width = value;
+		if (value > 0 && value <= 32768)
+			codec->frame.width = value;
+		else
+			error = CODEC_ERROR_RESOLUTION;
 		break;
 
 	case CODEC_TAG_FRAME_HEIGHT:		// Height of the frame
-		codec->frame.height = value;
-
-		//DAN20080729 -- Initialize the default colorspace based on clip resolution
-		if ((decoder->frame.colorspace & COLORSPACE_MASK) == COLOR_SPACE_UNDEFINED)
+		if (value > 0 && value <= 32768)
 		{
-			int internalheight = value;
-			int internalwidth = codec->frame.width;
-			if(decoder->codec.encoded_format == ENCODED_FORMAT_BAYER)
-			{
-				internalwidth *= 2;
-				internalheight *= 2;
-			}
+			codec->frame.height = value;
 
-			if(internalheight > 576 || internalwidth > 720)
-				decoder->frame.colorspace |= COLOR_SPACE_CG_709;
-			else
-				decoder->frame.colorspace |= COLOR_SPACE_CG_601;
+			//DAN20080729 -- Initialize the default colorspace based on clip resolution
+			if ((decoder->frame.colorspace & COLORSPACE_MASK) == COLOR_SPACE_UNDEFINED)
+			{
+				int internalheight = value;
+				int internalwidth = codec->frame.width;
+				if (decoder->codec.encoded_format == ENCODED_FORMAT_BAYER)
+				{
+					internalwidth *= 2;
+					internalheight *= 2;
+				}
+
+				if (internalheight > 576 || internalwidth > 720)
+					decoder->frame.colorspace |= COLOR_SPACE_CG_709;
+				else
+					decoder->frame.colorspace |= COLOR_SPACE_CG_601;
+			}
+			//if(decoder->frame.colorspace_filedefault)
+			//	decoder->frame.colorspace = decoder->frame.colorspace_filedefault;
+			if (decoder->frame.colorspace_override)
+				decoder->frame.colorspace = decoder->frame.colorspace_override;
 		}
-		//if(decoder->frame.colorspace_filedefault)
-		//	decoder->frame.colorspace = decoder->frame.colorspace_filedefault;
-		if(decoder->frame.colorspace_override)
-			decoder->frame.colorspace = decoder->frame.colorspace_override;
+		else
+			error = CODEC_ERROR_RESOLUTION;
 		break;
 
 	case CODEC_TAG_ENCODED_COLORSPACE: //DAN20080729
@@ -23394,7 +23504,8 @@ CODEC_ERROR UpdateCodecState(DECODER *decoder, BITSTREAM *input, CODEC_STATE *co
 		break;
 
 	case CODEC_TAG_FRAME_FORMAT:		// Format of the encoded pixels (GRAY, YUV, RGB, RGBA)
-		assert(0);
+		//assert(0);
+		error = CODEC_ERROR_BAD_FRAME;
 		break;
 
 	case CODEC_TAG_INPUT_FORMAT:		// Format of the original pixels
@@ -23406,9 +23517,14 @@ CODEC_ERROR UpdateCodecState(DECODER *decoder, BITSTREAM *input, CODEC_STATE *co
 
 	case CODEC_TAG_ENCODED_FORMAT:		// Internal format of the encoded data
 	case CODEC_TAG_OLD_ENCODED_FORMAT:
-		codec->encoded_format = value;	
-		if(codec->encoded_format == ENCODED_FORMAT_RGBA_4444 && codec->num_channels == 3)
-			codec->encoded_format = ENCODED_FORMAT_RGB_444;
+		if (value >= ENCODED_FORMAT_MINIMUM && value <= ENCODED_FORMAT_MAXIMUM)
+		{
+			codec->encoded_format = value;
+			if (codec->encoded_format == ENCODED_FORMAT_RGBA_4444 && codec->num_channels == 3)
+				codec->encoded_format = ENCODED_FORMAT_RGB_444;
+		}
+		else
+			error = CODEC_ERROR_BADFORMAT;
 		break;
 
 	case CODEC_TAG_FRAME_INDEX:			// Position of frame within the group
@@ -23425,15 +23541,24 @@ CODEC_ERROR UpdateCodecState(DECODER *decoder, BITSTREAM *input, CODEC_STATE *co
 		break;
 
 	case CODEC_TAG_NUM_LEVELS:			// Number of wavelet levels
-		codec->lowpass.level = value;
+		if(value > 0 && value <= 4)
+			codec->lowpass.level = value;
+		else
+			error = CODEC_ERROR_BAD_FRAME;
 		break;
 
 	case CODEC_TAG_LOWPASS_WIDTH:		// Width of the lowpass band
-		codec->lowpass.width = value;
+		if(value > 0 && value < codec->frame.width/4)
+			codec->lowpass.width = value;
+		else
+			error = CODEC_ERROR_RESOLUTION;
 		break;
 
 	case CODEC_TAG_LOWPASS_HEIGHT:		// Height of the lowpass band
-		codec->lowpass.height = value;
+		if (value > 0 && value < codec->frame.height/4)
+			codec->lowpass.height = value;
+		else
+			error = CODEC_ERROR_RESOLUTION;
 		break;
 
 	case CODEC_TAG_MARGIN_TOP:			// Margins that define the encoded subset
@@ -23457,39 +23582,64 @@ CODEC_ERROR UpdateCodecState(DECODER *decoder, BITSTREAM *input, CODEC_STATE *co
 		break;
 
 	case CODEC_TAG_QUANTIZATION:		// Quantization divisor used during encoding
-		codec->lowpass.quantization = value;
+		if(value > 0)
+			codec->lowpass.quantization = value;
+		else
+			error = CODEC_ERROR_BAD_FRAME;
 		break;
 
 	case CODEC_TAG_PIXEL_DEPTH:			// Number of bits per pixel
-		codec->lowpass.bits_per_pixel = value;
+		if(value >=8 && value <= 16)
+			codec->lowpass.bits_per_pixel = value;
+		else
+			error = CODEC_ERROR_BAD_FRAME;
 		break;
 
 	case CODEC_TAG_LOWPASS_TRAILER:		// Lowpass trailer
-		assert(0);
+		//assert(0);
+		error = CODEC_ERROR_BAD_FRAME;
 		break;
 
 	case CODEC_TAG_WAVELET_TYPE:		// Type of wavelet
-		codec->highpass.wavelet_type = value;
+		if(value >= 1 && value <= WAVELET_TYPE_HIGHEST)
+			codec->highpass.wavelet_type = value;
+		else
+			error = CODEC_ERROR_BAD_FRAME;
 		break;
 
 	case CODEC_TAG_WAVELET_NUMBER:		// Number of the wavelet in the transform
-		codec->highpass.wavelet_number = value;
+		if (value >= 0 && value <= 6)
+			codec->highpass.wavelet_number = value;
+		else
+			error = CODEC_ERROR_NUM_WAVELETS;
 		break;
 
 	case CODEC_TAG_WAVELET_LEVEL:		// Level of the wavelet in the transform
-		codec->highpass.wavelet_level = value;
+		if (value >= 0 && value <= 4)
+			codec->highpass.wavelet_level = value;
+		else
+			error = CODEC_ERROR_NUM_WAVELETS;
 		break;
 
 	case CODEC_TAG_NUM_BANDS:			// Number of wavelet bands
-		codec->highpass.num_bands = value;
+		if (value >= 0 && value <= 4)
+			codec->highpass.num_bands = value; 
+		else
+			error = CODEC_ERROR_NUM_SUBBANDS;
 		break;
 
 	case CODEC_TAG_HIGHPASS_WIDTH:		// Width of each highpass band
-		codec->highpass.width = value;
+		if (value > 0 && value <= codec->frame.width / 2)
+			codec->highpass.width = value;
+		else
+			error = CODEC_ERROR_RESOLUTION;
 		break;
 
 	case CODEC_TAG_HIGHPASS_HEIGHT:		// Height of each highpass band
-		codec->highpass.height = value;
+		if (value > 0 && value <= codec->frame.height / 2)
+			codec->highpass.height = value;
+		else
+			error = CODEC_ERROR_RESOLUTION;
 		break;
 
 	case CODEC_TAG_LOWPASS_BORDER:		// Dimensions of lowpass border (obsolete)
@@ -23509,32 +23659,50 @@ CODEC_ERROR UpdateCodecState(DECODER *decoder, BITSTREAM *input, CODEC_STATE *co
 		break;
 
 	case CODEC_TAG_HIGHPASS_TRAILER:	// Highpass trailer
-		assert(0);
+		//assert(0);
+		error = CODEC_ERROR_BAD_FRAME;
 		break;
 
 	case CODEC_TAG_BAND_NUMBER:			// Identifying number of a wavelet band
-		codec->band.number = value;
+		if (value < IMAGE_NUM_BANDS)
+			codec->band.number = value;
+		else
+			error = CODEC_ERROR_BAND_NUMBER;
 		break;
 
 	case CODEC_TAG_BAND_WIDTH:			// Band data width
-		codec->band.width = value;
+		if (value > 0 && value <= codec->frame.width / 2)
+			codec->band.width = value;
+		else
+			error = CODEC_ERROR_RESOLUTION;
 		break;
 
 	case CODEC_TAG_BAND_HEIGHT:			// Band data height
-		codec->band.height = value;
+		if (value > 0 && value <= codec->frame.height / 2)
+			codec->band.height = value;
+		else
+			error = CODEC_ERROR_RESOLUTION;
 		break;
 
 	case CODEC_TAG_BAND_SUBBAND:		// Subband number of this wavelet band
-		codec->band.subband = value;
-		//assert(value != 255);
+		if (value == 0xff || (value >= 0 && value < CODEC_MAX_SUBBANDS))
+			codec->band.subband = value;
+		else
+			error = CODEC_ERROR_BAND_NUMBER;
 		break;
 
 	case CODEC_TAG_BAND_ENCODING:		// Encoding method for this band
-		codec->band.encoding = value;
+		if(value >= BAND_ENCODING_ZEROTREE && value <= BAND_ENCODING_LOSSLESS)
+			codec->band.encoding = value;
+		else
+			error = CODEC_ERROR_BAD_FRAME;
 		break;
 
 	case CODEC_TAG_BAND_QUANTIZATION:	// Quantization applied to band
-		codec->band.quantization = value;
+		if (value >= 1)
+			codec->band.quantization = value;
+		else
+			error = CODEC_ERROR_BAD_FRAME;
 		break;
 
 	case CODEC_TAG_BAND_SCALE:			// Band scale factor
@@ -23542,37 +23710,43 @@ CODEC_ERROR UpdateCodecState(DECODER *decoder, BITSTREAM *input, CODEC_STATE *co
 		break;
 
 	case CODEC_TAG_BAND_TRAILER:		// Band trailer
-		assert(0);
+		//assert(0);
+		error = CODEC_ERROR_BAD_FRAME;
 		break;
 
 	case CODEC_TAG_NUM_ZEROVALUES:		// Number of zero values
-		assert(0);
+		//assert(0);
+		error = CODEC_ERROR_BAD_FRAME;
 		break;
 
 	case CODEC_TAG_NUM_ZEROTREES:		// Number of zerotrees
-		assert(0);
+		//assert(0);
+		error = CODEC_ERROR_BAD_FRAME;
 		break;
 
 	case CODEC_TAG_NUM_POSITIVES:		// Number of positive values
-		assert(0);
+		//assert(0);
+		error = CODEC_ERROR_BAD_FRAME;
 		break;
 
 	case CODEC_TAG_NUM_NEGATIVES:		// Number of negative values
-		assert(0);
+		//assert(0);
+		error = CODEC_ERROR_BAD_FRAME;
 		break;
 
 	case CODEC_TAG_NUM_ZERONODES:		// Number of zerotree nodes
-		assert(0);
+		//assert(0);
+		error = CODEC_ERROR_BAD_FRAME;
 		break;
 
 	case CODEC_TAG_CHANNEL:				// Channel number
-		assert(0);
+		//assert(0);
+		error = CODEC_ERROR_BAD_FRAME;
 		break;
 
 	case CODEC_TAG_INTERLACED_FLAGS:	// Interlaced structure of the video stream
 		//assert(0);
 		break;
-		//assert(0);
 
 	case CODEC_TAG_PROTECTION_FLAGS:	// Copy protection bits
 		//assert(0);
@@ -23600,19 +23774,26 @@ CODEC_ERROR UpdateCodecState(DECODER *decoder, BITSTREAM *input, CODEC_STATE *co
 	// This TAG is now support as part of the universal decoder.
 	// Only Prospect HD builds can decode 10bit.
 	case CODEC_TAG_PRECISION:			// Number of bits in the video source
-		codec->precision = value;
+		if (value == CODEC_PRECISION_8BIT ||
+			value == CODEC_PRECISION_10BIT ||
+			value == CODEC_PRECISION_12BIT)
 		{
-			int i;
-
-			for(i=0;i<TRANSFORM_MAX_CHANNELS;i++)
+			codec->precision = value;
 			{
-				TRANSFORM *transform = decoder->transform[i];
-				if(transform)
+				int i;
+
+				for (i = 0; i < TRANSFORM_MAX_CHANNELS; i++)
 				{
-					GetTransformPrescale(transform, codec->transform_type, codec->precision);
+					TRANSFORM* transform = decoder->transform[i];
+					if (transform)
+					{
+						GetTransformPrescale(transform, codec->transform_type, codec->precision);
+					}
 				}
 			}
 		}
+		else
+			error = CODEC_ERROR_INVALID_PRECICION;
 		break;
 
 	case CODEC_TAG_PRESCALE_TABLE:
@@ -23652,6 +23833,8 @@ CODEC_ERROR UpdateCodecState(DECODER *decoder, BITSTREAM *input, CODEC_STATE *co
 
 	case CODEC_TAG_BAND_CODING_FLAGS:
 		codec->active_codebook = value & 0xf; // 0-15 valid code books
+		if(codec->active_codebook > CODEC_NUM_CODESETS)
+			error = CODEC_ERROR_BAD_FRAME;
 		codec->difference_coding = (value>>4) & 1;
 		break;
 
@@ -23690,7 +23873,8 @@ CODEC_ERROR UpdateCodecState(DECODER *decoder, BITSTREAM *input, CODEC_STATE *co
 #if (1 && DEBUG)
 
 	case CODEC_TAG_SAMPLE_END:			// Marks the end of the sample (for debugging only)
-		assert(0);
+		//assert(0);
+		error = CODEC_ERROR_BAD_FRAME;
 		break;
 
 #endif
@@ -23734,7 +23918,7 @@ CODEC_ERROR UpdateCodecState(DECODER *decoder, BITSTREAM *input, CODEC_STATE *co
 			}
 		}
 
-		assert(optional);
+		//assert(optional);
 		if(!optional)
 		{
 			error = CODEC_ERROR_UNKNOWN_REQUIRED_TAG;
