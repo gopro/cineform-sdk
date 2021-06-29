@@ -611,7 +611,7 @@ CFHD_Error FuzzMOVIE(char* filename, char* ext)
 
 			//int essencefuzzchanges = 300;
 			//int start_run = 365;
-			int essencefuzzchanges = 1;
+			int essencefuzzchanges = 100;
 			int start_run = 0;
 
 			fuzzloopcount -= start_run;
