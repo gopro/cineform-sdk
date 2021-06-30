@@ -2402,14 +2402,14 @@ bool ParseSampleHeader(BITSTREAM *input, SAMPLE_HEADER *header)
 
 				case CODEC_TAG_FRAME_HEIGHT:
 					// Record the frame height in the sample header
-					if (value > 0 && value <= 32768)
+					if (value > 0 && value <= header->width)
 						header->height = value;
 					else
 						return false;
 					break;
 
 				case CODEC_TAG_FRAME_DISPLAY_HEIGHT:
-					if (value > 0 && value <= 32768)
+					if (value > 0 && value <= header->height)
 						display_height = value;
 					else
 						return false;
@@ -11663,6 +11663,12 @@ bool DecodeSampleIntraFrame(DECODER *decoder, BITSTREAM *input, uint8_t *output,
 				int wavelet_index = 2;
 				TRANSFORM *transform = decoder->transform[channel];
 				IMAGE *wavelet = transform->wavelet[wavelet_index];
+
+				if (wavelet == NULL) {
+					decoder->error = CODEC_ERROR_BAD_FRAME;
+					result = false;
+					break;
+				}
 
 #if _THREADED_DECODER
 				// Ready to invert this wavelet to get the lowpass band in the lower wavelet?

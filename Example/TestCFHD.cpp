@@ -668,7 +668,8 @@ CFHD_Error FuzzMOVIE(char* filename, char* ext)
 						{
 							uint8_t* byteptr = (uint8_t*)payload;
 							int offset = (rand() + (rand() << 16)) % payloadsize;
-							byteptr[offset] = rand() & 0xff;
+							uint8_t newval = rand() & 0xff;
+							byteptr[offset] = newval;
 						}
 					}
 
