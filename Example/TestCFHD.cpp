@@ -611,8 +611,10 @@ CFHD_Error FuzzMOVIE(char* filename, char* ext)
 
 			//int essencefuzzchanges = 300;
 			//int start_run = 365;
-			int essencefuzzchanges = 100;
+			int essencefuzzchanges = 40;
 			int start_run = 0;
+			int position = -1;
+			int randomfuzz = 1;
 
 			fuzzloopcount -= start_run;
 
@@ -658,18 +660,51 @@ CFHD_Error FuzzMOVIE(char* filename, char* ext)
 
 					sprintf(outputname, "%s-%s-%c%c%c%c-%04d.ppm", filename, restxt, (pixelFormat >> 24) & 0xff, (pixelFormat >> 16) & 0xff, (pixelFormat >> 8) & 0xff, (pixelFormat >> 0) & 0xff, frame);
 #endif
-
-					srand((resetfuzzloopcount - fuzzloopcount) + essencefuzzchanges);
-					if (essencefuzzchanges && fuzzloopcount)
+					if (randomfuzz)
 					{
-						int seed = essencefuzzchanges * resetfuzzloopcount + (resetfuzzloopcount - fuzzloopcount) + essencefuzzchanges;
-						srand(seed);
-						for (int times = 0; times < essencefuzzchanges; times++)
+						srand((resetfuzzloopcount - fuzzloopcount) + essencefuzzchanges);
+						if (essencefuzzchanges && fuzzloopcount)
 						{
-							uint8_t* byteptr = (uint8_t*)payload;
-							int offset = (rand() + (rand() << 16)) % payloadsize;
-							uint8_t newval = rand() & 0xff;
-							byteptr[offset] = newval;
+							int times;
+							int seed = essencefuzzchanges * resetfuzzloopcount + (resetfuzzloopcount - fuzzloopcount) + essencefuzzchanges;
+							srand(seed);
+							for (times = 0; times < essencefuzzchanges; times++)
+							{
+								uint8_t* byteptr = (uint8_t*)payload;
+								int offset = (rand() + (rand() << 16)) % payloadsize;
+								uint8_t newval = rand() & 0xff;
+								if (position == -1 || position == times)
+									byteptr[offset] = newval;
+							}
+							if (position >= 0)
+							{
+								printf("(%d)", position);
+								position++;
+
+								if (position >= essencefuzzchanges)
+								{
+									fuzzloopcount++;
+									position = 0;
+								}
+							}
+						}
+					}
+					else
+					{
+						if (position == -1)
+						{
+							resetfuzzloopcount = payloadsize;
+							fuzzloopcount = payloadsize - start_run;
+							position = 0;
+						}
+						uint8_t* byteptr = (uint8_t*)payload;
+
+						byteptr[payloadsize - fuzzloopcount] = position;
+						position++;
+						if (position > 0xff)
+						{
+							position = 0;
+							fuzzloopcount--;
 						}
 					}
 
@@ -679,7 +714,19 @@ CFHD_Error FuzzMOVIE(char* filename, char* ext)
 						if (fuzzloopcount == 0)
 							goto cleanup;
 						else
-							printf("error run %d\n", (resetfuzzloopcount - fuzzloopcount));
+						{
+							
+							if (randomfuzz)
+								printf("error run %d ", (resetfuzzloopcount - fuzzloopcount));
+							else 
+								printf("error offset %d (%d)", (resetfuzzloopcount - fuzzloopcount), position);
+							printf("\n");
+						}
+					}
+					else
+					{
+						if (randomfuzz == 0 && position == 0)
+							printf("off %d", (resetfuzzloopcount - fuzzloopcount));
 					}
 
 					printf(".");
@@ -704,7 +751,8 @@ CFHD_Error FuzzMOVIE(char* filename, char* ext)
 				decoderRef = NULL;
 				metadataDecRef = NULL;
 
-				fuzzloopcount--;
+				if (position == -1)
+					fuzzloopcount--;
 			} while (fuzzloopcount > 0);
 		}
 	}

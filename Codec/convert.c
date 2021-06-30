@@ -3258,7 +3258,7 @@ void ConvertV210RowToYUV16(uint8_t *input, PIXEL16U *y_output, PIXEL16U *u_outpu
 	(void) buffer;
 
 	// Must have an integer number of four word groups
-	assert((length % 6) == 0);
+	//assert((length % 6) == 0);
 	length -= length % 6; //DAN03252004 -- fix a memory overflow.
 
 	for (; column < length; column += 6)

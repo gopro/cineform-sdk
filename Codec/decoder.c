@@ -2402,14 +2402,14 @@ bool ParseSampleHeader(BITSTREAM *input, SAMPLE_HEADER *header)
 
 				case CODEC_TAG_FRAME_HEIGHT:
 					// Record the frame height in the sample header
-					if (value > 0 && value <= header->width)
+					if (value > 0 && value <= (int)header->width)
 						header->height = value;
 					else
 						return false;
 					break;
 
 				case CODEC_TAG_FRAME_DISPLAY_HEIGHT:
-					if (value > 0 && value <= header->height)
+					if (value > 0 && value <= (int)header->height)
 						display_height = value;
 					else
 						return false;
@@ -11471,7 +11471,7 @@ bool DecodeSampleFrame(DECODER *decoder, BITSTREAM *input, uint8_t *output, int 
 		// Read the next tag value pair from the bitstream
 		//TAGVALUE segment = GetTagValue(input);
 		TAGVALUE segment = GetSegment(input);
-		assert(input->error == BITSTREAM_ERROR_OKAY);
+		//assert(input->error == BITSTREAM_ERROR_OKAY);
 		if (input->error != BITSTREAM_ERROR_OKAY) {
 			decoder->error = CODEC_ERROR_BITSTREAM;
 			result = false;
@@ -23711,14 +23711,14 @@ CODEC_ERROR UpdateCodecState(DECODER *decoder, BITSTREAM *input, CODEC_STATE *co
 		break;
 
 	case CODEC_TAG_BAND_WIDTH:			// Band data width
-		if (value > 0 && value <= codec->frame.width / 2)
+		if (value > 0 && (codec->frame.width / value) <= 16 && (codec->frame.width / value) * value == codec->frame.width) // true for a 3 level wavelet (with 4:2:2 sampling)
 			codec->band.width = value;
 		else
 			error = CODEC_ERROR_RESOLUTION;
 		break;
 
 	case CODEC_TAG_BAND_HEIGHT:			// Band data height
-		if (value > 0 && value <= codec->frame.height / 2)
+		if (value > 0 && (codec->frame.height / value) <= 16 && (codec->frame.height / value) * value == codec->frame.height) // true for a 3 level wavelet (with 4:2:2 sampling)
 			codec->band.height = value;
 		else
 			error = CODEC_ERROR_RESOLUTION;
