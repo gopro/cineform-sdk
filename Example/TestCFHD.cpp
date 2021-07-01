@@ -138,24 +138,24 @@ CFHD_DecodedResolution TestResolution[] =
 {
 	CFHD_DECODED_RESOLUTION_FULL,
 	CFHD_DECODED_RESOLUTION_HALF,
-	CFHD_DECODED_RESOLUTION_QUARTER,
+//	CFHD_DECODED_RESOLUTION_QUARTER,
 //	CFHD_DECODED_RESOLUTION_THUMBNAIL,
 	CFHD_DECODED_RESOLUTION_UNKNOWN  // Stop at this
 };
 
 CFHD_PixelFormat TestDecodeOnlyPixelFormat[] =
 {
-	CFHD_PIXEL_FORMAT_RG24,
-	CFHD_PIXEL_FORMAT_BGRA,
 	CFHD_PIXEL_FORMAT_YUY2,
-	CFHD_PIXEL_FORMAT_YU64,
-	CFHD_PIXEL_FORMAT_RG48,
-	CFHD_PIXEL_FORMAT_B64A,
-
-	CFHD_PIXEL_FORMAT_R210,
-	CFHD_PIXEL_FORMAT_DPX0,
-	CFHD_PIXEL_FORMAT_AB10,
-	CFHD_PIXEL_FORMAT_AR10,
+	CFHD_PIXEL_FORMAT_RG24,
+//	CFHD_PIXEL_FORMAT_BGRA,
+//	CFHD_PIXEL_FORMAT_YU64,
+//	CFHD_PIXEL_FORMAT_RG48,
+//	CFHD_PIXEL_FORMAT_B64A,
+//
+//	CFHD_PIXEL_FORMAT_R210,
+//	CFHD_PIXEL_FORMAT_DPX0,
+//	CFHD_PIXEL_FORMAT_AB10,
+//	CFHD_PIXEL_FORMAT_AR10,
 
 	//10-bit YUV 422 - 2 - TODO support
 	//	CFHD_PIXEL_FORMAT_V210,
@@ -609,8 +609,6 @@ CFHD_Error FuzzMOVIE(char* filename, char* ext)
 			int fuzzloopcount = 100000;
 			int resetfuzzloopcount = fuzzloopcount;
 
-			//int essencefuzzchanges = 300;
-			//int start_run = 365;
 			int essencefuzzchanges = 40;
 			int start_run = 0;
 			int position = -1;
@@ -620,6 +618,7 @@ CFHD_Error FuzzMOVIE(char* filename, char* ext)
 
 			do
 			{
+				int errcount = 0;
 				frame = decmode = resmode = 0;
 
 				error = CFHD_OpenDecoder(&decoderRef, NULL);
@@ -683,7 +682,7 @@ CFHD_Error FuzzMOVIE(char* filename, char* ext)
 
 								if (position >= essencefuzzchanges)
 								{
-									fuzzloopcount++;
+									fuzzloopcount--;
 									position = 0;
 								}
 							}
@@ -700,48 +699,54 @@ CFHD_Error FuzzMOVIE(char* filename, char* ext)
 						uint8_t* byteptr = (uint8_t*)payload;
 
 						byteptr[payloadsize - fuzzloopcount] = position;
-						position++;
-						if (position > 0xff)
-						{
-							position = 0;
-							fuzzloopcount--;
-						}
 					}
 
 					error = DecodeFrame(&frameDecBuffer, decoderRef, metadataDecRef, payload, (int)payloadsize, CFHD_ENCODED_FORMAT_UNKNOWN, pixelFormat, decode_res, outputname, &dec_us);
 					if (error)
 					{
+						errcount++;
 						if (fuzzloopcount == 0)
 							goto cleanup;
-						else
-						{
-							
-							if (randomfuzz)
-								printf("error run %d ", (resetfuzzloopcount - fuzzloopcount));
-							else 
-								printf("error offset %d (%d)", (resetfuzzloopcount - fuzzloopcount), position);
-							printf("\n");
-						}
-					}
-					else
-					{
-						if (randomfuzz == 0 && position == 0)
-							printf("off %d", (resetfuzzloopcount - fuzzloopcount));
 					}
 
 					printf(".");
 					{
-						dec_tot_us = 0;
-
 						frame = 0;
 						decmode++;
-						if (TestDecodeOnlyPixelFormat[decmode] == CFHD_PIXEL_FORMAT_UNKNOWN && TestResolution[resmode + 1] != CFHD_DECODED_RESOLUTION_UNKNOWN)
+						if (TestDecodeOnlyPixelFormat[decmode] == CFHD_PIXEL_FORMAT_UNKNOWN)
 						{
 							resmode++;
 							decmode = 0;
+							if (TestResolution[resmode] == CFHD_DECODED_RESOLUTION_UNKNOWN)
+							{
+								resmode = 0;
+								if (randomfuzz)
+								{
+									if (errcount)
+										printf("run %d\n", (resetfuzzloopcount - fuzzloopcount));
+									errcount = 0;
+									fuzzloopcount--;
+
+								}
+								else
+								{
+									if(error)
+										printf("offset %d (%d)\n", (resetfuzzloopcount - fuzzloopcount), position);
+
+									if (position >= 0)
+									{
+										position++;
+										if (position == 0x100)
+										{
+											position = 0;
+											fuzzloopcount--;
+										}
+									}
+								}
+							}
 						}
 					}
-				} while (0 && TestDecodeOnlyPixelFormat[decmode] != CFHD_PIXEL_FORMAT_UNKNOWN && TestResolution[resmode] != CFHD_DECODED_RESOLUTION_UNKNOWN);
+				} while (TestDecodeOnlyPixelFormat[decmode] != CFHD_PIXEL_FORMAT_UNKNOWN && TestResolution[resmode] != CFHD_DECODED_RESOLUTION_UNKNOWN);
 
 				if (frameDecBuffer) _mm_free(frameDecBuffer);
 				if (decoderRef) CFHD_CloseDecoder(decoderRef);

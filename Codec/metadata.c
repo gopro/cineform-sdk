@@ -496,11 +496,16 @@ void *MetaDataFindFirst(void *data,
 				tag = *idata++;
 				typesize = *idata++;
 
-				*rettag = tag;
-				*rettype = (typesize >> 24) & 0xff;
-				*retsize = typesize & 0xffffff;
-				*retchunksize = chunksize*4;
-				return (void *)idata;
+				if (chunksize * 4 < pinput->nWordsUsed)
+				{
+					*rettag = tag;
+					*rettype = (typesize >> 24) & 0xff;
+					*retsize = typesize & 0xffffff;
+					*retchunksize = chunksize * 4;
+					return (void*)idata;
+				}
+				else
+					return NULL;
 			}
 
 			if((tag & 0xff00) == 0x2200) //sample size

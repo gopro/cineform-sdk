@@ -8534,7 +8534,7 @@ void ConvertLowpass16sToRGBNoIPPFast(IMAGE *images[], uint8_t *output_buffer, in
 		saturate = 1;
 		break;
 
-	default: assert(0);
+	default:// assert(0);
 	case COLOR_SPACE_CG_709:
 		y_offset = 16;
 		ymult = 128*149;	//7bit 1.164

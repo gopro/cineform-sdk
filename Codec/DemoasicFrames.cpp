@@ -5328,19 +5328,24 @@ void UpdateCFHDDATA(DECODER *decoder, unsigned char *ptr, int len, int delta, in
 			if (!found)
 			{
 		#if _ALLOCATOR
-				if(decoder->mdc[decoder->metadatachunks])
+				if (decoder->mdc[decoder->metadatachunks])
+				{
 					Free(decoder->allocator, decoder->mdc[decoder->metadatachunks]);
+					decoder->mdc_size[decoder->metadatachunks] = NULL;
+				}
 				decoder->mdc[decoder->metadatachunks] = (unsigned char *)Alloc(decoder->allocator, len);
 		#else
 				if(decoder->mdc[decoder->metadatachunks])
 					MEMORY_FREE(decoder->mdc[decoder->metadatachunks]);
 				decoder->mdc[decoder->metadatachunks] = (unsigned char *)MEMORY_ALLOC(len);
 		#endif
-				if(decoder->mdc[decoder->metadatachunks])
+				if (decoder->mdc[decoder->metadatachunks])
+				{
 					memcpy(decoder->mdc[decoder->metadatachunks], ptr, len);
-				decoder->mdc_size[decoder->metadatachunks] = len;
-		
-				decoder->metadatachunks++;
+					decoder->mdc_size[decoder->metadatachunks] = len;
+
+					decoder->metadatachunks++;
+				}
 			}
 		}
 

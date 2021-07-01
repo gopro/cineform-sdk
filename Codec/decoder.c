@@ -2388,8 +2388,10 @@ bool ParseSampleHeader(BITSTREAM *input, SAMPLE_HEADER *header)
 					if (channel_count <= TRANSFORM_MAX_CHANNELS)
 						DecodeGroupIndex(input, (uint32_t*)&channel_size[0], channel_count);
 					else
+					{
+						header->width = header->height = 0;
 						return false;
-
+					}
 					break;
 
 				case CODEC_TAG_FRAME_WIDTH:
@@ -2397,22 +2399,31 @@ bool ParseSampleHeader(BITSTREAM *input, SAMPLE_HEADER *header)
 					if (value > 0 && value <= 32768)
 						header->width = value;
 					else
+					{
+						header->width = header->height = 0;
 						return false;
+					}
 					break;
 
 				case CODEC_TAG_FRAME_HEIGHT:
 					// Record the frame height in the sample header
-					if (value > 0 && value <= (int)header->width)
+					if (value > 0 && value <= 32768)
 						header->height = value;
 					else
+					{
+						header->width = header->height = 0;
 						return false;
+					}
 					break;
 
 				case CODEC_TAG_FRAME_DISPLAY_HEIGHT:
-					if (value > 0 && value <= (int)header->height)
+					if (value > 0 && (int)value >= (int)header->height-16 && (int)value <= (int)header->height)
 						display_height = value;
 					else
+					{
+						header->width = header->height = 0;
 						return false;
+					}
 					break;
 
 				case CODEC_TAG_LOWPASS_WIDTH:
@@ -2420,7 +2431,10 @@ bool ParseSampleHeader(BITSTREAM *input, SAMPLE_HEADER *header)
 					if (value > 0 && value < (int)header->width / 4)
 						first_wavelet_width = value;
 					else
+					{
+						header->width = header->height = 0;
 						return false;
+					}
 					break;
 
 				case CODEC_TAG_LOWPASS_HEIGHT:
@@ -2428,7 +2442,10 @@ bool ParseSampleHeader(BITSTREAM *input, SAMPLE_HEADER *header)
 					if (value > 0 && value < (int)header->height / 4)
 						first_wavelet_height = value;
 					else
+					{
+						header->width = header->height = 0;
 						return false;
+					}
 					break;
 
 				case CODEC_TAG_TRANSFORM_TYPE:
@@ -2436,7 +2453,10 @@ bool ParseSampleHeader(BITSTREAM *input, SAMPLE_HEADER *header)
 					if (TRANSFORM_TYPE_FIRST <= value && value <= TRANSFORM_TYPE_LAST)
 						transform_type = value;
 					else
+					{
+						header->width = header->height = 0;
 						return false;
+					}
 					break;
 
 				case CODEC_TAG_INPUT_FORMAT:
@@ -2502,7 +2522,10 @@ bool ParseSampleHeader(BITSTREAM *input, SAMPLE_HEADER *header)
 						if(header->videoChannels < 1)
 							header->videoChannels = 1;
 						if (header->videoChannels > 2)
+						{
+							header->width = header->height = 0;
 							return false;
+						}
 					}
 					break;
 					
@@ -11268,12 +11291,19 @@ bool DecodeSampleGroup(DECODER *decoder, BITSTREAM *input, uint8_t *output, int 
 				// Compute the bitstream position after the current channel
 				int channel = codec->channel;
 				uint32_t channel_size = codec->channel_size[channel];
-				uint8_t  *position = codec->channel_position + channel_size;
+				uint8_t* position = codec->channel_position + channel_size;
 
 				// Get the temporal wavelet
 				int temporal_index = 2;
-				TRANSFORM *transform = decoder->transform[channel];
-				IMAGE *wavelet = transform->wavelet[temporal_index];
+				TRANSFORM* transform = decoder->transform[channel];
+				IMAGE* wavelet = transform->wavelet[temporal_index];
+
+				if (wavelet == NULL)
+				{
+					decoder->error = CODEC_ERROR_BAD_FRAME;
+					result = false;
+					break;
+				}
 
 #if (0 && DEBUG)
 				if (IsBandValid(wavelet, HIGHPASS_BAND))
@@ -11561,6 +11591,7 @@ bool DecodeSampleIntraFrame(DECODER *decoder, BITSTREAM *input, uint8_t *output,
 	int32_t frame_size = decoder->frame.height * pitch;
 	int resolution = decoder->frame.resolution;
 	bool result = true;
+	int skipchan = 0;
 
 	static int subband_wavelet_index[] = {2, 2, 2, 2, 1, 1, 1, 0, 0, 0};
 	static int subband_band_index[] = {0, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3};
@@ -11625,6 +11656,14 @@ bool DecodeSampleIntraFrame(DECODER *decoder, BITSTREAM *input, uint8_t *output,
 		// Skip the rest of the current channel?
 		if (CanSkipChannel(decoder, resolution))
 		{
+			skipchan++;
+			if(skipchan > 5)
+			{
+				decoder->error = CODEC_ERROR_BAD_FRAME;
+				result = false;
+				break;
+			}
+
 			if(codec->channel == 3 && (decoder->frame.format == DECODED_FORMAT_YUYV || decoder->frame.format == DECODED_FORMAT_UYVY))
 			{
 				int channel = codec->channel;
@@ -11657,6 +11696,13 @@ bool DecodeSampleIntraFrame(DECODER *decoder, BITSTREAM *input, uint8_t *output,
 				// Compute the bitstream position after the current channel
 				int channel = codec->channel;
 				uint32_t channel_size = codec->channel_size[channel];
+
+				if (channel_size == 0) {
+					decoder->error = CODEC_ERROR_BAD_FRAME;
+					result = false;
+					break;
+				}
+
 				uint8_t  *position = codec->channel_position + channel_size;
 
 				// Get the highest wavelet in the pyramid
@@ -13493,7 +13539,11 @@ void ReconstructSampleFrameToBuffer(DECODER *decoder, int frame, uint8_t *output
 
 				wavelet = transform_array[0]->wavelet[0];
 				// Get the decoded frame dimensions
-				assert(wavelet != NULL);
+				//assert(wavelet != NULL);
+				if (wavelet == NULL) {
+					decoder->error = CODEC_ERROR_RESOLUTION;
+					return;
+				}
 				wavelet_width = wavelet->width;
 				wavelet_height = wavelet->height;
 				decoded_width = 2 * wavelet_width;
@@ -13510,7 +13560,11 @@ void ReconstructSampleFrameToBuffer(DECODER *decoder, int frame, uint8_t *output
 
 				wavelet = transform_array[0]->wavelet[0];
 				// Get the decoded frame dimensions
-				assert(wavelet != NULL);
+				//assert(wavelet != NULL);
+				if (wavelet == NULL) {
+					decoder->error = CODEC_ERROR_RESOLUTION;
+					return;
+				}
 				wavelet_width = wavelet->width;
 				wavelet_height = wavelet->height;
 				decoded_width = wavelet_width;
@@ -13527,7 +13581,11 @@ void ReconstructSampleFrameToBuffer(DECODER *decoder, int frame, uint8_t *output
 
 				wavelet = transform_array[0]->wavelet[0];
 				// Get the decoded frame dimensions
-				assert(wavelet != NULL);
+				//assert(wavelet != NULL);
+				if (wavelet == NULL) {
+					decoder->error = CODEC_ERROR_RESOLUTION;
+					return;
+				}
 				wavelet_width = wavelet->width;
 				wavelet_height = wavelet->height;
 				decoded_width = wavelet_width;
@@ -13552,7 +13610,11 @@ void ReconstructSampleFrameToBuffer(DECODER *decoder, int frame, uint8_t *output
 				}
 				
 				// Get the decoded frame dimensions
-				assert(wavelet != NULL);
+				//assert(wavelet != NULL);
+				if(wavelet == NULL) {
+					decoder->error = CODEC_ERROR_RESOLUTION;
+					return;
+				}
 				wavelet_width = wavelet->width;
 				wavelet_height = wavelet->height;
 				decoded_width = wavelet_width;
@@ -13565,7 +13627,11 @@ void ReconstructSampleFrameToBuffer(DECODER *decoder, int frame, uint8_t *output
 					wavelet = transform_array[0]->wavelet[2];
 				
 				// Get the decoded frame dimensions
-				assert(wavelet != NULL);
+				//assert(wavelet != NULL);
+				if (wavelet == NULL) {
+					decoder->error = CODEC_ERROR_RESOLUTION;
+					return;
+				}
 				wavelet_width = wavelet->width;
 				wavelet_height = wavelet->height;
 				decoded_width = wavelet_width;
@@ -13691,6 +13757,11 @@ void ReconstructSampleFrameToBuffer(DECODER *decoder, int frame, uint8_t *output
 	}
 	else
 	{
+		if (decoder->codec.num_channels < 3 || decoder->codec.num_channels > 4)
+		{
+			decoder->error = CODEC_ERROR_BAD_FRAME;
+			return;
+		}
 		// Call the appropriate routine for the encoded format
 		switch (decoder->codec.encoded_format)
 		{
@@ -16954,10 +17025,21 @@ void ConvertQuarterFrameToBuffer(DECODER *decoder, TRANSFORM **transform_array, 
 		IMAGE *wavelet = transform_array[channel]->wavelet[wavelet_index];
 
 		// The wavelet should have been reconstructed
-		assert(wavelet != NULL);
+		//assert(wavelet != NULL);
+		if (wavelet == NULL)
+		{
+			decoder->error = CODEC_ERROR_BAD_FRAME;
+			return;
+		}
 
 		// The lowpass band should be valid
-		assert((wavelet->band_valid_flags & BAND_VALID_MASK(0)) != 0);
+		//assert((wavelet->band_valid_flags & BAND_VALID_MASK(0)) != 0);
+
+		if((wavelet->band_valid_flags & BAND_VALID_MASK(0)) == 0)
+		{
+			decoder->error = CODEC_ERROR_BAD_FRAME;
+			return;
+		}
 
 		// Get the pointers to the first row in each lowpass band
 		input_row_ptr[channel] = wavelet->band[0];
@@ -20618,6 +20700,13 @@ bool DecodeFastRunsFSM16s(DECODER *decoder, BITSTREAM *stream, IMAGE *wavelet,
 	START(tk_fastruns);
 
 	rowptr = (PIXEL *)wavelet->band[band_index];
+
+	if (rowptr == NULL) {
+		decoder->error = CODEC_ERROR_BAD_FRAME;
+		return false;
+	}
+
+
 	//pitch = wavelet->pitch8s;		// Use the 8-bit pitch
 	pitch = wavelet->pitch;
 
@@ -23293,8 +23382,15 @@ CODEC_ERROR UpdateCodecState(DECODER *decoder, BITSTREAM *input, CODEC_STATE *co
 			uint32_t count = (uint32_t)value;
 			if (count <= TRANSFORM_MAX_CHANNELS)
 			{
+				int i;
 				uint32_t* index = (uint32_t*)(&codec->channel_size[0]);
 				DecodeGroupIndex(input, index, count);
+
+				for (i = 0; i < (int)count; i++)
+				{
+					if(index[i] > (uint32_t)input->dwBlockLength)
+						error = CODEC_ERROR_SAMPLE_INDEX;
+				}
 				codec->num_channels = count;
 			}
 			else
@@ -27281,7 +27377,13 @@ void TransformInverseSpatialSectionToOutput(DECODER *decoder, int thread_index,
 
 	// Check for enough space in the local array allocations
 //	assert(num_channels <= CODEC_NUM_CHANNELS);
-	assert(num_channels <= TRANSFORM_MAX_CHANNELS);
+//	assert(num_channels <= TRANSFORM_MAX_CHANNELS);
+	if(num_channels < 3 || num_channels > TRANSFORM_MAX_CHANNELS)
+	{
+		decoder->error = CODEC_ERROR_BAD_FRAME;
+		return;
+	}
+
 
 	// Divide the buffer space between the four threads
 	buffer_size /= decoder->worker_thread.pool.thread_count;  // used to assume max of 4

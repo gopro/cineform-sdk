@@ -12712,6 +12712,10 @@ void Row16uQuarter2OutputFormat(DECODER *decoder, FRAME_INFO *info, int thread_i
 	scanline2 = scanline;
 	scanline2+= info->width*4;
 
+	if (channeldata[0] == NULL) {
+		decoder->error = CODEC_ERROR_BAD_FRAME;
+		return;
+	}
 
 	for (;;)
 	{
