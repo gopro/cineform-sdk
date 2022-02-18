@@ -32,6 +32,7 @@ if (OPENMP_FOUND)
 	add_definitions(-DHAVE_OPENMP=1)
 	SET(ADDITIONAL_LIBS "${ADDITIONAL_LIBS} ${OpenMP_CXX_FLAGS}")
 endif (OPENMP_FOUND)
+string(STRIP ${ADDITIONAL_LIBS} ADDITIONAL_LIBS)
 
 include_directories("Common" "Tables" "Codec" "ConvertLib" "WarpLib" "Example")
 file(GLOB CODEC_SOURCES "Codec/*.c" "Codec/*.h" "Codec/*.cpp" "WarpLib/*.c" "WarpLib/*.h" )
