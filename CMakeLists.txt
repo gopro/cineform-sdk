@@ -19,18 +19,18 @@ endif (WIN32)
 
 if (UNIX)
 	SET(COMPILER_FLAGS -fPIC)
-	SET(ADDITIONAL_LIBS "-luuid -lpthread")
+	SET(ADDITIONAL_LIBS -luuid -lpthread)
 	SET(TOY_LIBS "-lm")
 endif (UNIX)
 
 if (APPLE)
 	SET(COMPILER_FLAGS -fvisibility=hidden)
-	SET(ADDITIONAL_LIBS "-lpthread")
+	SET(ADDITIONAL_LIBS -lpthread)
 endif (APPLE)
 
 if (OPENMP_FOUND)
 	add_definitions(-DHAVE_OPENMP=1)
-	SET(ADDITIONAL_LIBS "${ADDITIONAL_LIBS} ${OpenMP_CXX_FLAGS}")
+	SET(ADDITIONAL_LIBS ${ADDITIONAL_LIBS} ${OpenMP_CXX_FLAGS})
 endif (OPENMP_FOUND)
 string(STRIP ${ADDITIONAL_LIBS} ADDITIONAL_LIBS)
 
@@ -49,18 +49,18 @@ if (BUILD_LIBS)
 			add_library(CFHDEncoderStatic STATIC ${CODEC_SOURCES} ${ENCODER_SOURCES})
 			add_library(CFHDDecoderStatic STATIC ${CODEC_SOURCES} ${DECODER_SOURCES})
 			target_compile_options(CFHDEncoderStatic PUBLIC ${COMPILER_FLAGS})
-			target_compile_options(CFHDDecoderStatic PUBLIC ${COMPILER_FLAGS})		
+			target_compile_options(CFHDDecoderStatic PUBLIC ${COMPILER_FLAGS})
 			target_link_libraries (CFHDEncoderStatic)
 			target_link_libraries (CFHDDecoderStatic)
 		else (BUILD_SEPARATED)
 			add_library(CFHDCodecStatic STATIC ${CODEC_SOURCES} ${ENCODER_SOURCES} ${DECODER_SOURCES})
 			target_compile_options(CFHDCodecStatic PUBLIC ${COMPILER_FLAGS})
-		
+
 			set_target_properties(CFHDCodecStatic PROPERTIES POSITION_INDEPENDENT_CODE ON)
 			if (UNIX)
 				set_target_properties(CFHDCodecStatic PROPERTIES OUTPUT_NAME CFHDCodec)
 			endif (UNIX)
-		
+
 			target_link_libraries(CFHDCodecStatic)
 		endif (BUILD_SEPARATED)
 	else (BUILD_STATIC)
@@ -120,6 +120,7 @@ set(EXEC_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX} CACHE PATH "Installation prefix 
 set(BIN_INSTALL_DIR ${EXEC_INSTALL_PREFIX}/bin CACHE PATH "Installation prefix for user executables" FORCE)
 set(LIB_INSTALL_DIR ${EXEC_INSTALL_PREFIX}/lib${LIB_SUFFIX} CACHE PATH "Installation prefix for object code libraries" FORCE)
 set(INCLUDE_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/include/cineformsdk CACHE PATH "Installation prefix for header files" FORCE)
+string(REPLACE ";" " " ADDITIONAL_LIBS "${ADDITIONAL_LIBS}")
 
 # System wide installation
 if (BUILD_STATIC)
