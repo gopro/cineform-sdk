@@ -18,6 +18,7 @@
 #include <vector>
 #include <cstring>
 #include <cmath>
+#include <cstdint>
 
 #include <motioncam/Decoder.hpp>
 #include <audiofile/AudioFile.h>
@@ -56,6 +57,271 @@ static inline int bayerColor(BayerPattern pattern, int x, int y) {
         default: return 1;
     }
 }
+
+// Minimal MP4 writer (single video track, CFHD samples)
+namespace {
+struct Mp4Buffer {
+    std::vector<uint8_t> data;
+};
+
+static inline void mp4WriteU8(Mp4Buffer& b, uint8_t v) { b.data.push_back(v); }
+static inline void mp4WriteU16(Mp4Buffer& b, uint16_t v) {
+    b.data.push_back(static_cast<uint8_t>((v >> 8) & 0xff));
+    b.data.push_back(static_cast<uint8_t>(v & 0xff));
+}
+static inline void mp4WriteU32(Mp4Buffer& b, uint32_t v) {
+    b.data.push_back(static_cast<uint8_t>((v >> 24) & 0xff));
+    b.data.push_back(static_cast<uint8_t>((v >> 16) & 0xff));
+    b.data.push_back(static_cast<uint8_t>((v >> 8) & 0xff));
+    b.data.push_back(static_cast<uint8_t>(v & 0xff));
+}
+static inline void mp4WriteU64(Mp4Buffer& b, uint64_t v) {
+    mp4WriteU32(b, static_cast<uint32_t>((v >> 32) & 0xffffffffu));
+    mp4WriteU32(b, static_cast<uint32_t>(v & 0xffffffffu));
+}
+static inline void mp4WriteFourCC(Mp4Buffer& b, const char cc[4]) {
+    mp4WriteU8(b, static_cast<uint8_t>(cc[0]));
+    mp4WriteU8(b, static_cast<uint8_t>(cc[1]));
+    mp4WriteU8(b, static_cast<uint8_t>(cc[2]));
+    mp4WriteU8(b, static_cast<uint8_t>(cc[3]));
+}
+static inline size_t mp4StartAtom(Mp4Buffer& b, const char cc[4]) {
+    size_t start = b.data.size();
+    mp4WriteU32(b, 0); // placeholder for size
+    mp4WriteFourCC(b, cc);
+    return start;
+}
+static inline void mp4EndAtom(Mp4Buffer& b, size_t start) {
+    size_t size = b.data.size() - start;
+    b.data[start + 0] = static_cast<uint8_t>((size >> 24) & 0xff);
+    b.data[start + 1] = static_cast<uint8_t>((size >> 16) & 0xff);
+    b.data[start + 2] = static_cast<uint8_t>((size >> 8) & 0xff);
+    b.data[start + 3] = static_cast<uint8_t>(size & 0xff);
+}
+
+static Mp4Buffer buildMoov(uint32_t timescale,
+                           uint32_t duration,
+                           uint32_t width,
+                           uint32_t height,
+                           const std::vector<uint32_t>& sampleSizes,
+                           const std::vector<uint32_t>& sampleOffsets)
+{
+    Mp4Buffer b;
+
+    size_t moov = mp4StartAtom(b, "moov");
+
+    // mvhd
+    {
+        size_t mvhd = mp4StartAtom(b, "mvhd");
+        mp4WriteU32(b, 0); // version/flags
+        mp4WriteU32(b, 0); // creation
+        mp4WriteU32(b, 0); // modification
+        mp4WriteU32(b, timescale);
+        mp4WriteU32(b, duration);
+        mp4WriteU32(b, 0x00010000); // rate 1.0
+        mp4WriteU16(b, 0x0100);     // volume 1.0
+        mp4WriteU16(b, 0);          // reserved
+        mp4WriteU32(b, 0);
+        mp4WriteU32(b, 0);
+        // matrix (identity)
+        mp4WriteU32(b, 0x00010000);
+        mp4WriteU32(b, 0);
+        mp4WriteU32(b, 0);
+        mp4WriteU32(b, 0);
+        mp4WriteU32(b, 0x00010000);
+        mp4WriteU32(b, 0);
+        mp4WriteU32(b, 0);
+        mp4WriteU32(b, 0);
+        mp4WriteU32(b, 0x40000000);
+        // pre-defined
+        for (int i = 0; i < 6; i++) mp4WriteU32(b, 0);
+        mp4WriteU32(b, 1); // next track id
+        mp4EndAtom(b, mvhd);
+    }
+
+    // trak
+    {
+        size_t trak = mp4StartAtom(b, "trak");
+
+        // tkhd
+        {
+            size_t tkhd = mp4StartAtom(b, "tkhd");
+            mp4WriteU32(b, 0x00000007); // version/flags
+            mp4WriteU32(b, 0); // creation
+            mp4WriteU32(b, 0); // modification
+            mp4WriteU32(b, 1); // track id
+            mp4WriteU32(b, 0); // reserved
+            mp4WriteU32(b, duration);
+            mp4WriteU32(b, 0);
+            mp4WriteU32(b, 0);
+            mp4WriteU16(b, 0); // layer
+            mp4WriteU16(b, 0); // alternate group
+            mp4WriteU16(b, 0); // volume
+            mp4WriteU16(b, 0); // reserved
+            // matrix
+            mp4WriteU32(b, 0x00010000);
+            mp4WriteU32(b, 0);
+            mp4WriteU32(b, 0);
+            mp4WriteU32(b, 0);
+            mp4WriteU32(b, 0x00010000);
+            mp4WriteU32(b, 0);
+            mp4WriteU32(b, 0);
+            mp4WriteU32(b, 0);
+            mp4WriteU32(b, 0x40000000);
+            mp4WriteU32(b, width << 16);
+            mp4WriteU32(b, height << 16);
+            mp4EndAtom(b, tkhd);
+        }
+
+        // mdia
+        {
+            size_t mdia = mp4StartAtom(b, "mdia");
+
+            // mdhd
+            {
+                size_t mdhd = mp4StartAtom(b, "mdhd");
+                mp4WriteU32(b, 0); // version/flags
+                mp4WriteU32(b, 0); // creation
+                mp4WriteU32(b, 0); // modification
+                mp4WriteU32(b, timescale);
+                mp4WriteU32(b, duration);
+                mp4WriteU16(b, 0x55c4); // und
+                mp4WriteU16(b, 0);
+                mp4EndAtom(b, mdhd);
+            }
+
+            // hdlr
+            {
+                size_t hdlr = mp4StartAtom(b, "hdlr");
+                mp4WriteU32(b, 0); // version/flags
+                mp4WriteU32(b, 0); // pre-defined
+                mp4WriteFourCC(b, "vide");
+                mp4WriteU32(b, 0);
+                mp4WriteU32(b, 0);
+                mp4WriteU32(b, 0);
+                const char name[] = "VideoHandler";
+                for (size_t i = 0; i < sizeof(name); i++) mp4WriteU8(b, static_cast<uint8_t>(name[i]));
+                mp4EndAtom(b, hdlr);
+            }
+
+            // minf
+            {
+                size_t minf = mp4StartAtom(b, "minf");
+
+                // vmhd
+                {
+                    size_t vmhd = mp4StartAtom(b, "vmhd");
+                    mp4WriteU32(b, 0x00000001); // version/flags
+                    mp4WriteU16(b, 0); // graphics mode
+                    mp4WriteU16(b, 0);
+                    mp4WriteU16(b, 0);
+                    mp4WriteU16(b, 0);
+                    mp4EndAtom(b, vmhd);
+                }
+
+                // dinf
+                {
+                    size_t dinf = mp4StartAtom(b, "dinf");
+                    size_t dref = mp4StartAtom(b, "dref");
+                    mp4WriteU32(b, 0); // version/flags
+                    mp4WriteU32(b, 1); // entry count
+                    size_t url = mp4StartAtom(b, "url ");
+                    mp4WriteU32(b, 0x00000001); // version/flags (self-contained)
+                    mp4EndAtom(b, url);
+                    mp4EndAtom(b, dref);
+                    mp4EndAtom(b, dinf);
+                }
+
+                // stbl
+                {
+                    size_t stbl = mp4StartAtom(b, "stbl");
+
+                    // stsd
+                    {
+                        size_t stsd = mp4StartAtom(b, "stsd");
+                        mp4WriteU32(b, 0); // version/flags
+                        mp4WriteU32(b, 1); // entry count
+
+                        size_t cfhd = mp4StartAtom(b, "CFHD");
+                        // sample entry (video)
+                        for (int i = 0; i < 6; i++) mp4WriteU8(b, 0);
+                        mp4WriteU16(b, 1); // data reference index
+                        mp4WriteU16(b, 0);
+                        mp4WriteU16(b, 0);
+                        mp4WriteU32(b, 0);
+                        mp4WriteU32(b, 0);
+                        mp4WriteU32(b, 0);
+                        mp4WriteU16(b, static_cast<uint16_t>(width));
+                        mp4WriteU16(b, static_cast<uint16_t>(height));
+                        mp4WriteU32(b, 0x00480000); // horiz resolution 72dpi
+                        mp4WriteU32(b, 0x00480000); // vert resolution
+                        mp4WriteU32(b, 0);
+                        mp4WriteU16(b, 1); // frame count
+                        mp4WriteU8(b, 0); // compressor name length
+                        for (int i = 0; i < 31; i++) mp4WriteU8(b, 0);
+                        mp4WriteU16(b, 0x0018); // depth
+                        mp4WriteU16(b, 0xffff); // pre-defined
+                        mp4EndAtom(b, cfhd);
+                        mp4EndAtom(b, stsd);
+                    }
+
+                    // stts
+                    {
+                        size_t stts = mp4StartAtom(b, "stts");
+                        mp4WriteU32(b, 0); // version/flags
+                        mp4WriteU32(b, 1); // entry count
+                        mp4WriteU32(b, static_cast<uint32_t>(sampleSizes.size()));
+                        uint32_t sampleDuration = (sampleSizes.empty()) ? 0 : (duration / static_cast<uint32_t>(sampleSizes.size()));
+                        mp4WriteU32(b, sampleDuration);
+                        mp4EndAtom(b, stts);
+                    }
+
+                    // stsc
+                    {
+                        size_t stsc = mp4StartAtom(b, "stsc");
+                        mp4WriteU32(b, 0); // version/flags
+                        mp4WriteU32(b, 1); // entry count
+                        mp4WriteU32(b, 1); // first chunk
+                        mp4WriteU32(b, 1); // samples per chunk
+                        mp4WriteU32(b, 1); // sample desc index
+                        mp4EndAtom(b, stsc);
+                    }
+
+                    // stsz
+                    {
+                        size_t stsz = mp4StartAtom(b, "stsz");
+                        mp4WriteU32(b, 0); // version/flags
+                        mp4WriteU32(b, 0); // sample size (0 = varies)
+                        mp4WriteU32(b, static_cast<uint32_t>(sampleSizes.size()));
+                        for (uint32_t s : sampleSizes) mp4WriteU32(b, s);
+                        mp4EndAtom(b, stsz);
+                    }
+
+                    // stco
+                    {
+                        size_t stco = mp4StartAtom(b, "stco");
+                        mp4WriteU32(b, 0); // version/flags
+                        mp4WriteU32(b, static_cast<uint32_t>(sampleOffsets.size()));
+                        for (uint32_t o : sampleOffsets) mp4WriteU32(b, o);
+                        mp4EndAtom(b, stco);
+                    }
+
+                    mp4EndAtom(b, stbl);
+                }
+
+                mp4EndAtom(b, minf);
+            }
+
+            mp4EndAtom(b, mdia);
+        }
+
+        mp4EndAtom(b, trak);
+    }
+
+    mp4EndAtom(b, moov);
+    return b;
+}
+} // namespace
 
 // Apply white balance to raw bayer data
 void applyWhiteBalance(const uint16_t* input, uint16_t* output,
@@ -484,6 +750,13 @@ int main(int argc, const char * argv[]) {
     // Open decoder
     CFHD_EncoderRef encoderRef = nullptr;
     FILE* mp4File = nullptr;
+    std::vector<uint32_t> mp4SampleSizes;
+    std::vector<uint32_t> mp4SampleOffsets;
+    long mp4MdatSizePos = 0;
+    uint32_t mp4Timescale = 30000;
+    double mp4Fps = 30.0;
+    uint32_t mp4Width = 0;
+    uint32_t mp4Height = 0;
 
     try {
         motioncam::Decoder d(inputPath);
@@ -512,6 +785,8 @@ int main(int argc, const char * argv[]) {
 
             int width = metadata["width"];
             int height = metadata["height"];
+            mp4Width = static_cast<uint32_t>(width);
+            mp4Height = static_cast<uint32_t>(height);
 
             std::cout << "Encoding to CineForm " << width << "x" << height << " 4:2:2 10-bit" << std::endl;
 
@@ -536,13 +811,29 @@ int main(int argc, const char * argv[]) {
                 return -1;
             }
 
-            // Create output file
+            // Create output file and write minimal MP4 header
             mp4File = std::fopen(cineformOutput.c_str(), "wb");
             if(!mp4File) {
                 std::cerr << "Failed to create output file: " << cineformOutput << std::endl;
                 CFHD_CloseEncoder(encoderRef);
                 return -1;
             }
+
+            // ftyp
+            {
+                uint32_t ftypSize = 24;
+                uint8_t ftyp[24] = {
+                    0x00,0x00,0x00,0x18,'f','t','y','p',
+                    'q','t',' ',' ',0x00,0x00,0x02,0x00,
+                    'q','t',' ',' ','i','s','o','m'
+                };
+                std::fwrite(ftyp, 1, ftypSize, mp4File);
+            }
+
+            // mdat header (size patched later)
+            mp4MdatSizePos = std::ftell(mp4File);
+            uint8_t mdatHeader[8] = {0,0,0,0,'m','d','a','t'};
+            std::fwrite(mdatHeader, 1, 8, mp4File);
         }
 
         // Write audio
@@ -560,6 +851,9 @@ int main(int argc, const char * argv[]) {
             int width = metadata["width"];
             int height = metadata["height"];
             std::vector<float> asShotNeutral = metadata["asShotNeutral"];
+            if (i == 0 && metadata.contains("frameRate") && metadata["frameRate"].is_number()) {
+                mp4Fps = metadata["frameRate"].get<double>();
+            }
 
             if(encodeCineform) {
                 // Encode to CineForm
@@ -577,7 +871,18 @@ int main(int argc, const char * argv[]) {
                     break;
                 }
 
-                // Write encoded frame to file (simple raw format)
+                // Write encoded frame to file (MP4 mdat)
+                long sampleOffset = std::ftell(mp4File);
+                if (sampleOffset < 0) {
+                    std::cerr << "Failed to get file position" << std::endl;
+                    break;
+                }
+                if (sampleOffset > 0xffffffffL) {
+                    std::cerr << "MP4 sample offset exceeds 32-bit stco limit" << std::endl;
+                    break;
+                }
+                mp4SampleOffsets.push_back(static_cast<uint32_t>(sampleOffset));
+                mp4SampleSizes.push_back(static_cast<uint32_t>(encodedFrame.size()));
                 std::fwrite(encodedFrame.data(), 1, encodedFrame.size(), mp4File);
 
                 std::cout << "Encoded frame " << (i+1) << "/" << endFrame
@@ -588,6 +893,35 @@ int main(int argc, const char * argv[]) {
                 std::snprintf(path, sizeof(path), "frame_%06d.dng", i);
                 std::cout << "Writing " << path << std::endl;
                 writeDng(std::string(path), data, metadata, containerMetadata);
+            }
+        }
+
+        // Finalize MP4 (patch mdat size, write moov)
+        if (encodeCineform && mp4File) {
+            long mdatEnd = std::ftell(mp4File);
+            if (mdatEnd >= 0) {
+                uint32_t mdatSize = static_cast<uint32_t>(mdatEnd - mp4MdatSizePos);
+                std::fseek(mp4File, mp4MdatSizePos, SEEK_SET);
+                uint8_t sizeBuf[4] = {
+                    static_cast<uint8_t>((mdatSize >> 24) & 0xff),
+                    static_cast<uint8_t>((mdatSize >> 16) & 0xff),
+                    static_cast<uint8_t>((mdatSize >> 8) & 0xff),
+                    static_cast<uint8_t>(mdatSize & 0xff)
+                };
+                std::fwrite(sizeBuf, 1, 4, mp4File);
+
+                // Append moov
+                std::fseek(mp4File, mdatEnd, SEEK_SET);
+                uint32_t frameCount = static_cast<uint32_t>(mp4SampleSizes.size());
+                if (frameCount > 0) {
+                    if (mp4Fps <= 0.0) mp4Fps = 30.0;
+                    uint32_t sampleDuration = static_cast<uint32_t>(std::llround(mp4Timescale / mp4Fps));
+                    if (sampleDuration == 0) sampleDuration = 1;
+                    uint32_t duration = sampleDuration * frameCount;
+                    Mp4Buffer moov = buildMoov(mp4Timescale, duration, mp4Width,
+                                               mp4Height, mp4SampleSizes, mp4SampleOffsets);
+                    std::fwrite(moov.data.data(), 1, moov.data.size(), mp4File);
+                }
             }
         }
 
