@@ -23,7 +23,7 @@
 
 #if _RECURSIVE
 
-#include <emmintrin.h>		// SSE2 intrinsics
+#include <simde/x86/sse2.h>		// SSE2 intrinsics
 
 #include "recursive.h"
 #include "encoder.h"

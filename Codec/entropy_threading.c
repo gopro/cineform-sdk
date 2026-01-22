@@ -40,7 +40,7 @@
 
 #include <stdio.h>
 #include <assert.h>
-#include <emmintrin.h>			// Intel aligned alloc and free
+#include <simde/x86/sse2.h>			// Intel aligned alloc and free
 
 #include "config.h"
 #include "dump.h"

@@ -9,7 +9,7 @@ option(BUILD_STATIC "Build static component" ON)
 option(BUILD_SEPARATED "Build a separate de/encoder libraries" OFF)
 
 set(CMAKE_CONFIGURATION_TYPES "Debug;Release")
-add_definitions(-D_ALLOCATOR=1 -DWARPSTUFF=1)
+add_definitions(-D_ALLOCATOR=1 -DWARPSTUFF=1 -DSIMDE_ENABLE_NATIVE_ALIASES=1)
 
 find_package(OpenMP)
 
@@ -34,7 +34,7 @@ if (OPENMP_FOUND)
 endif (OPENMP_FOUND)
 string(STRIP ${ADDITIONAL_LIBS} ADDITIONAL_LIBS)
 
-include_directories("Common" "Tables" "Codec" "ConvertLib" "WarpLib" "Example")
+include_directories("Common" "Tables" "Codec" "ConvertLib" "WarpLib" "Example" "third_party/simde")
 file(GLOB CODEC_SOURCES "Codec/*.c" "Codec/*.h" "Codec/*.cpp" "WarpLib/*.c" "WarpLib/*.h" )
 file(GLOB ENCODER_SOURCES "EncoderSDK/*.cpp" "Common/*.h")
 file(GLOB DECODER_SOURCES "DecoderSDK/*.cpp" "Common/*.h" "WarpLib/*.c" "WarpLib/*.h" "ConvertLib/*.cpp" "ConvertLib/*.h" )

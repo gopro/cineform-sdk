@@ -31,7 +31,7 @@
 #define TIMING (1 && _TIMING)
 #define XMMOPT (1 && _XMMOPT)
 
-#include <emmintrin.h>
+#include <simde/x86/sse2.h>
 
 #if (DEBUG && _WIN32)
 #include <tchar.h>		// For printing debug string in the console window

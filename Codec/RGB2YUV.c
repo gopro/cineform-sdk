@@ -20,7 +20,7 @@
 */
 #include <stdint.h>
 #include <stdbool.h>
-#include <emmintrin.h>		// SSE2 intrinsics
+#include <simde/x86/sse2.h>		// SSE2 intrinsics
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>

@@ -28,7 +28,7 @@
 #include "macdefs.h"
 #endif
 
-#include <emmintrin.h>		// SSE2 intrinsics
+#include <simde/x86/sse2.h>		// SSE2 intrinsics
 
 #ifndef DEBUG
 #define DEBUG  (1 && _DEBUG)
