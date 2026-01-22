@@ -5101,7 +5101,7 @@ float *LoadCube64_3DLUT(DECODER *decoder, CFHDDATA *cfhddata, int *lutsize)
 		sprintf_s(crcname, sizeof(crcname), "%s/%08X.cflook", decoder->LUTsPathStr, (uint32_t)cfhddata->user_look_CRC);
 		err = fopen_s(&fp, crcname, "rb");
 #else
-		sprintf(crcname,"%s/%08X.cflook", decoder->LUTsPathStr, (uint32_t)cfhddata->user_look_CRC);
+		snprintf(crcname, sizeof(crcname), "%s/%08X.cflook", decoder->LUTsPathStr, (uint32_t)cfhddata->user_look_CRC);
 		fp = fopen(crcname, "rb");
 #endif
 
@@ -5331,7 +5331,7 @@ void UpdateCFHDDATA(DECODER *decoder, unsigned char *ptr, int len, int delta, in
 				if (decoder->mdc[decoder->metadatachunks])
 				{
 					Free(decoder->allocator, decoder->mdc[decoder->metadatachunks]);
-					decoder->mdc_size[decoder->metadatachunks] = NULL;
+					decoder->mdc_size[decoder->metadatachunks] = 0;
 				}
 				decoder->mdc[decoder->metadatachunks] = (unsigned char *)Alloc(decoder->allocator, len);
 		#else

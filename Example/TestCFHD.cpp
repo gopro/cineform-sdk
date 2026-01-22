@@ -748,7 +748,11 @@ CFHD_Error FuzzMOVIE(char* filename, char* ext)
 					}
 				} while (TestDecodeOnlyPixelFormat[decmode] != CFHD_PIXEL_FORMAT_UNKNOWN && TestResolution[resmode] != CFHD_DECODED_RESOLUTION_UNKNOWN);
 
+#ifdef __APPLE__
+				if (frameDecBuffer) free(frameDecBuffer);
+#else
 				if (frameDecBuffer) _mm_free(frameDecBuffer);
+#endif
 				if (decoderRef) CFHD_CloseDecoder(decoderRef);
 				if (metadataDecRef) CFHD_CloseMetadata(metadataDecRef);
 
