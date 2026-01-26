@@ -25,7 +25,8 @@
 #include <memory.h>
 #include <assert.h>
 #include "config.h"
-#include <emmintrin.h>				// Include support for SSE2 intrinsics
+#include <simde/x86/sse2.h>				// Include support for SSE2 intrinsics
+#include "sse2_runtime_shift.h"			// Runtime shift helpers for ARM/NEON
 
 // The codec SDK and the codec library use the same memory allocator
 #include "../Common/CFHDAllocator.h"

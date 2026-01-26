@@ -24,7 +24,7 @@
 #endif
 
 #include <assert.h>
-#include <emmintrin.h>
+#include <simde/x86/sse2.h>
 #include "codebooks.h"
 #include "codec.h"
 #include "vlc.h"

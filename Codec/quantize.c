@@ -34,7 +34,7 @@
 
 #include <assert.h>
 #include <memory.h>
-#include <emmintrin.h>
+#include <simde/x86/sse2.h>
 #include "quantize.h"
 #include "filter.h"
 #include "encoder.h"

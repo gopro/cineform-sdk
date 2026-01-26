@@ -32,8 +32,8 @@
 #include <assert.h>
 #include <math.h>
 #include <limits.h>
-#include <mmintrin.h>		// MMX intrinsics
-#include <emmintrin.h>		// SSE2 intrinsics
+#include <simde/x86/sse2.h>		// SSE2 intrinsics
+#include "sse2_runtime_shift.h"	// Runtime shift helpers for ARM/NEON
 
 #include "spatial.h"
 #include "filter.h"			// Declarations of filter routines

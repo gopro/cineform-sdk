@@ -31,7 +31,7 @@
 
 #include <assert.h>
 #include <limits.h>
-#include <emmintrin.h>		// SSE2 intrinsics
+#include <simde/x86/sse2.h>		// SSE2 intrinsics
 
 #include "temporal.h"
 #include "filter.h"			// Declarations of filter routines

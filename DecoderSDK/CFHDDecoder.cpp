@@ -26,11 +26,6 @@
 #include "StdAfx.h"
 #include <string.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-
 #if _WIN32
 
 // Export the interface to the decoder
@@ -91,6 +86,10 @@ extern "C" {
 	}
     #endif
 #else
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 void _splitpath( const char * fullPath, char * drive, char * dir, char * fname, char * ext)
 {
@@ -838,13 +837,7 @@ CFHD_CloseDecoder(CFHD_DecoderRef decoderRef)
 
 
 
-// Return the pathname of the LUT directory and the filename of the database directory
-extern void InitGetLUTPaths(char *pPathStr,	//!< Pathname to the LUT directory
-	size_t pathSize,	//!< Size of the LUT pathname (in bytes)
-	char *pDBStr,		//!< Filename of the database directory
-	size_t DBSize		//!< Size of the database filename (in bytes)
-);
-
+// InitGetLUTPaths is declared in SampleMetadata.h (included at line 68)
 
 
 #define BUFSIZE	1024

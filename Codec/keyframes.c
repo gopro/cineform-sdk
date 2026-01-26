@@ -32,7 +32,7 @@
 #include <memory.h>
 #include <assert.h>
 #include <limits.h>
-#include <emmintrin.h>
+#include <simde/x86/sse2.h>
 #include <math.h>
 #if __APPLE__
 #include <dlfcn.h>

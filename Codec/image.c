@@ -39,7 +39,7 @@
 #include <memory.h>
 #include <assert.h>
 #include <limits.h>
-#include <emmintrin.h>
+#include <simde/x86/sse2.h>
 
 #include "image.h"
 //#include "ipp.h"		// Use Intel Performance Primitives
